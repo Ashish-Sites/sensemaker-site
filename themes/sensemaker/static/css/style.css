@@ -468,7 +468,7 @@ th {
 
 /* Entry page layout */
 .entry-page {
-  max-width: 1240px;
+  max-width: none;
   --entry-sticky-top: 6.2rem;
   --entry-lineage-top: 24.5rem;
 }
@@ -817,7 +817,7 @@ th {
 
 /* Homepage */
 .homepage {
-  max-width: 1100px;
+  max-width: none;
 }
 
 .hero {
