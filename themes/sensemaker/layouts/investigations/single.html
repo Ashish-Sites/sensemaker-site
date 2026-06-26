@@ -20,7 +20,27 @@
       <h3>Questions</h3>
       <ul class="questions-list">
         {{ range .Params.questions }}
-          <li>{{ . }}</li>
+          <li>
+            <a href="{{ relURL (print "/questions/" (urlize .) "/") }}">{{ . }}</a>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+
+  {{ $invSlug := .File.BaseFileName }}
+  {{ $articles := where (where .Site.RegularPages "Type" "articles") ".Params.investigation" "eq" $invSlug }}
+  {{ if $articles }}
+    <div class="related-section">
+      <h3>Attached Articles</h3>
+      <ul class="related-list">
+        {{ range $articles }}
+          <li>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ if .Params.article_type }}
+              <span class="status-badge-small status-{{ lower .Params.article_type }}">{{ .Params.article_type }}</span>
+            {{ end }}
+          </li>
         {{ end }}
       </ul>
     </div>
@@ -57,7 +77,7 @@
       <h4>Tags</h4>
       <div class="tags">
         {{ range .Params.tags }}
-          <span class="tag tag-regular">#{{ . }}</span>
+          <a href="{{ relURL (print "/tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
         {{ end }}
       </div>
     </div>

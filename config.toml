@@ -14,6 +14,7 @@ removePathAccents = true
   area = "areas"
   topic = "topics"
   tag = "tags"
+  question = "questions"
 
 # Menu navigation
 [[menu.main]]
@@ -37,9 +38,19 @@ removePathAccents = true
   weight = 4
 
 [[menu.main]]
+  name = "Questions"
+  url = "/questions/"
+  weight = 5
+
+[[menu.main]]
+  name = "Articles"
+  url = "/articles/"
+  weight = 6
+
+[[menu.main]]
   name = "Search"
   url = "/search/"
-  weight = 5
+  weight = 7
 
 # Markdown rendering
 [markup]

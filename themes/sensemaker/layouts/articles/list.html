@@ -1,0 +1,35 @@
+{{ define "content" }}
+<div class="investigations-list">
+  <h1>Articles</h1>
+  <p class="subtitle">Attachable notes that extend investigations: idea, subsection, comment.</p>
+
+  {{ if .Pages }}
+    <div class="investigations-grid">
+      {{ range .Pages }}
+        <div class="investigation-card">
+          <div class="card-header">
+            <div class="status-badge status-{{ lower (default "idea" .Params.article_type) }}">
+              {{ default "idea" .Params.article_type }}
+            </div>
+            <span class="updated">{{ with .Params.created }}{{ dateFormat "02-Jan-2006" (time .) }}{{ else }}{{ dateFormat "02-Jan-2006" .Date }}{{ end }}</span>
+          </div>
+
+          <h2 class="card-title">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </h2>
+
+          {{ if .Params.investigation }}
+            <div class="card-preview">
+              <p>Investigation: {{ .Params.investigation }}</p>
+            </div>
+          {{ end }}
+
+          <a href="{{ .RelPermalink }}" class="card-link">Read →</a>
+        </div>
+      {{ end }}
+    </div>
+  {{ else }}
+    <p class="empty-state">No articles yet.</p>
+  {{ end }}
+</div>
+{{ end }}

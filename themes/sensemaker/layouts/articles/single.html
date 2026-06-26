@@ -1,0 +1,45 @@
+{{ define "content" }}
+<article class="investigation">
+  <div class="investigation-meta">
+    <div class="status-badge status-{{ lower (default "idea" .Params.article_type) }}">
+      {{ default "idea" .Params.article_type }}
+    </div>
+
+    <div class="meta-info">
+      <span class="created">Created: {{ with .Params.created }}{{ dateFormat "02-Jan-2006" (time .) }}{{ else }}{{ dateFormat "02-Jan-2006" .Date }}{{ end }}</span>
+    </div>
+  </div>
+
+  <h1 class="investigation-title">{{ .Title }}</h1>
+
+  {{ if .Params.investigation }}
+    {{ $target := .Params.investigation }}
+    {{ $match := first 1 (where (where .Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+    <div class="taxonomy-section">
+      <h4>Attached To Investigation</h4>
+      {{ if $match }}
+        {{ range $match }}
+          <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+        {{ end }}
+      {{ else }}
+        <span class="tag tag-regular">{{ $target }}</span>
+      {{ end }}
+    </div>
+  {{ end }}
+
+  <div class="investigation-content">
+    {{ .Content }}
+  </div>
+
+  {{ if .Params.tags }}
+    <div class="taxonomy-section">
+      <h4>Tags</h4>
+      <div class="tags">
+        {{ range .Params.tags }}
+          <a href="{{ relURL (print "/tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
+</article>
+{{ end }}
