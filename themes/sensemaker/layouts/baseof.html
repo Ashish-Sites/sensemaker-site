@@ -16,12 +16,26 @@
     <div class="container">
       <div class="header-content">
         <h1 class="logo"><a href="{{ "" | absURL }}">{{ .Site.Title }}</a></h1>
-        <nav class="nav">
-          {{ range .Site.Menus.main }}
-            <a href="{{ .URL | absURL }}" class="nav-link {{ if hasSuffix $.RelPermalink .URL }}active{{ end }}">
-              {{ .Name }}
-            </a>
-          {{ end }}
+        <nav class="nav" aria-label="Primary">
+          <details class="nav-group">
+            <summary class="nav-group-trigger">Investigate</summary>
+            <div class="nav-dropdown">
+              <a href="{{ "investigations/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/investigations/" }}active{{ end }}">Investigations</a>
+              <a href="{{ "articles/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/articles/" }}active{{ end }}">Articles</a>
+            </div>
+          </details>
+
+          <details class="nav-group">
+            <summary class="nav-group-trigger">Map</summary>
+            <div class="nav-dropdown">
+              <a href="{{ "areas/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/areas/" }}active{{ end }}">Areas</a>
+              <a href="{{ "topics/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/topics/" }}active{{ end }}">Topics</a>
+              <a href="{{ "tags/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/tags/" }}active{{ end }}">Tags</a>
+              <a href="{{ "questions/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/questions/" }}active{{ end }}">Questions</a>
+            </div>
+          </details>
+
+          <a href="{{ "search/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/search/" }}active{{ end }}">Search</a>
           <a href="{{ "admin/" | absURL }}" class="nav-link">Admin</a>
           <a href="https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml" class="nav-link" target="_blank" rel="noopener noreferrer">Publish</a>
           <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">🌙</button>

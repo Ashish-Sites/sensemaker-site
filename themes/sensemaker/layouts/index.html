@@ -3,100 +3,125 @@
   <div class="hero">
     <h1>{{ .Site.Title }}</h1>
     <p class="tagline">{{ .Site.Params.description }}</p>
-    <a href="{{ "investigations/" | absURL }}" class="cta-button">Explore Investigations →</a>
+    <div class="hero-actions">
+      <a href="{{ "investigations/" | absURL }}" class="cta-button">Explore Investigations →</a>
+      <a href="{{ "search/" | absURL }}" class="cta-secondary">Find a thread</a>
+    </div>
   </div>
 
-  <div class="homepage-sections">
-    <!-- Recently Updated -->
-    <section class="home-section">
-      <h2>Recently Updated</h2>
-      {{ $recent := where .Site.RegularPages "Type" "investigations" }}
-      {{ $recent := sort $recent "Lastmod" "desc" }}
-      {{ range first 5 $recent }}
-        {{ $createdDate := .Date }}
-        {{ with .Params.created }}{{ $createdDate = time . }}{{ end }}
-        <div class="home-item">
-          <div class="item-header">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
-          </div>
-          <p class="item-meta">Updated {{ dateFormat "02-Jan-2006" $createdDate }}</p>
-        </div>
-      {{ end }}
-    </section>
+  {{ $allInvestigations := where .Site.RegularPages "Type" "investigations" }}
+  {{ $recent := sort $allInvestigations "Lastmod" "desc" }}
+  {{ $newest := sort $allInvestigations "Date" "desc" }}
+  {{ $open := where $allInvestigations ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring" "Model Emerging") }}
+  {{ $stable := where $allInvestigations ".Params.status" "eq" "Stable" }}
 
-    <!-- Recently Created -->
-    <section class="home-section">
-      <h2>Recently Created</h2>
-      {{ $new := sort (where .Site.RegularPages "Type" "investigations") "Date" "desc" }}
-      {{ range first 5 $new }}
-        {{ $createdDate := .Date }}
-        {{ with .Params.created }}{{ $createdDate = time . }}{{ end }}
-        <div class="home-item">
-          <div class="item-header">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
-          </div>
-          <p class="item-meta">Created {{ dateFormat "02-Jan-2006" $createdDate }}</p>
-        </div>
-      {{ end }}
-    </section>
+  <section class="quick-stats" aria-label="Site snapshot">
+    <a href="{{ "investigations/" | absURL }}" class="stat-card">
+      <span class="stat-label">Investigations</span>
+      <span class="stat-value">{{ len $allInvestigations }}</span>
+    </a>
+    <a href="{{ "areas/" | absURL }}" class="stat-card">
+      <span class="stat-label">Areas</span>
+      <span class="stat-value">{{ len .Site.Taxonomies.areas }}</span>
+    </a>
+    <a href="{{ "topics/" | absURL }}" class="stat-card">
+      <span class="stat-label">Topics</span>
+      <span class="stat-value">{{ len .Site.Taxonomies.topics }}</span>
+    </a>
+    <a href="{{ "questions/" | absURL }}" class="stat-card">
+      <span class="stat-label">Questions</span>
+      <span class="stat-value">{{ len .Site.Taxonomies.questions }}</span>
+    </a>
+  </section>
 
-    <!-- Areas -->
-    <section class="home-section">
-      <h2>Areas of Investigation</h2>
-      <div class="areas-list">
-        {{ range .Site.Taxonomies.areas.ByCount }}
-          <a href="{{ .Page.RelPermalink }}" class="area-item">
-            <span class="area-name">{{ .Term }}</span>
-            <span class="area-count">{{ .Count }}</span>
-          </a>
-        {{ end }}
+  <div class="homepage-layout">
+    <section class="home-section section-primary">
+      <div class="section-head">
+        <h2>Active Queue</h2>
+        <a href="{{ "investigations/" | absURL }}">See all</a>
       </div>
-    </section>
-
-    <!-- Topics -->
-    <section class="home-section">
-      <h2>Topics</h2>
-      <div class="topics-list">
-        {{ range $i, $term := .Site.Taxonomies.topics.ByCount }}
-          {{ if lt $i 20 }}
-          <a href="{{ .Page.RelPermalink }}" class="topic-item">
-            <span>{{ .Term }}</span>
-            <span class="count">({{ .Count }})</span>
-          </a>
-          {{ end }}
-        {{ end }}
-      </div>
-    </section>
-
-    <!-- Open Investigations (Seed, Thinking, Reading, Exploring) -->
-    <section class="home-section">
-      <h2>Open Investigations</h2>
-      {{ $open := where (where .Site.RegularPages "Type" "investigations") ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring") }}
-      {{ range first 8 $open }}
-        <div class="home-item">
-          <div class="item-header">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+      {{ if gt (len $open) 0 }}
+        {{ range first 6 $open }}
+          <div class="home-item">
+            <div class="item-header">
+              <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+            </div>
+            <p class="item-meta">Updated {{ dateFormat "02-Jan-2006" .Lastmod }}</p>
           </div>
-        </div>
+        {{ end }}
+      {{ else }}
+        <p class="empty-state compact">No active investigations yet.</p>
       {{ end }}
     </section>
 
-    <!-- Stable Investigations (Ready for reference) -->
-    <section class="home-section">
+    <aside class="home-rail">
+      <section class="home-section">
+        <div class="section-head">
+          <h2>Recently Updated</h2>
+          <a href="{{ "investigations/" | absURL }}">Timeline</a>
+        </div>
+        {{ range first 4 $recent }}
+          <div class="home-item">
+            <div class="item-header">
+              <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+              <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+            </div>
+            <p class="item-meta">Updated {{ dateFormat "02-Jan-2006" .Lastmod }}</p>
+          </div>
+        {{ end }}
+      </section>
+
+      <section class="home-section">
+        <div class="section-head">
+          <h2>Knowledge Map</h2>
+          <a href="{{ "areas/" | absURL }}">Browse map</a>
+        </div>
+        <div class="map-cluster">
+          <h3>Areas</h3>
+          <div class="chip-grid">
+            {{ range first 6 .Site.Taxonomies.areas.ByCount }}
+              <a href="{{ .Page.RelPermalink }}" class="term-chip">{{ .Page.Title }} <span>{{ .Count }}</span></a>
+            {{ end }}
+          </div>
+        </div>
+        <div class="map-cluster">
+          <h3>Topics</h3>
+          <div class="chip-grid">
+            {{ range first 8 .Site.Taxonomies.topics.ByCount }}
+              <a href="{{ .Page.RelPermalink }}" class="term-chip">{{ .Page.Title }} <span>{{ .Count }}</span></a>
+            {{ end }}
+          </div>
+        </div>
+        <div class="map-cluster">
+          <h3>Tags</h3>
+          <div class="chip-grid">
+            {{ range first 8 .Site.Taxonomies.tags.ByCount }}
+              <a href="{{ .Page.RelPermalink }}" class="term-chip">#{{ .Page.Title }} <span>{{ .Count }}</span></a>
+            {{ end }}
+          </div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <section class="home-section stable-strip">
+    <div class="section-head">
       <h2>Stable Investigations</h2>
-      {{ $stable := where (where .Site.RegularPages "Type" "investigations") ".Params.status" "eq" "Stable" }}
-      {{ range first 8 $stable }}
-        <div class="home-item">
-          <div class="item-header">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <a href="{{ "investigations/" | absURL }}">View archive</a>
+    </div>
+    {{ if gt (len $stable) 0 }}
+      <div class="stable-list">
+        {{ range first 6 $stable }}
+          <a href="{{ .RelPermalink }}" class="stable-item">
+            <span>{{ .Title }}</span>
             <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
-          </div>
-        </div>
-      {{ end }}
-    </section>
-  </div>
+          </a>
+        {{ end }}
+      </div>
+    {{ else }}
+      <p class="empty-state compact">No stable investigations yet.</p>
+    {{ end }}
+  </section>
 </div>
 {{ end }}
