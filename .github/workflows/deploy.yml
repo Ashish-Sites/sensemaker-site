@@ -23,7 +23,7 @@ jobs:
           extended: true
 
       - name: Build
-        run: hugo --minify --baseURL "https://ashish-sites.github.io/sensemaker-site/"
+        run: hugo --minify --cleanDestinationDir --baseURL "https://ashish-sites.github.io/sensemaker-site/"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

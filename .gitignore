@@ -12,3 +12,6 @@ hugo.exe
 # Dependencies
 node_modules/
 *.lock
+
+# Generated Hugo output
+public/
