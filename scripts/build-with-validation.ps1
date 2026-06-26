@@ -16,6 +16,19 @@ if (Get-Command "pwsh" -ErrorAction SilentlyContinue) {
     throw "Neither 'pwsh' nor 'powershell' is available on PATH."
 }
 
+$hugoCommand = $null
+$localHugo = Join-Path $repoRoot "hugo"
+$localHugoExe = Join-Path $repoRoot "hugo.exe"
+if (Test-Path -LiteralPath $localHugoExe) {
+    $hugoCommand = $localHugoExe
+} elseif (Test-Path -LiteralPath $localHugo) {
+    $hugoCommand = $localHugo
+} elseif (Get-Command "hugo" -ErrorAction SilentlyContinue) {
+    $hugoCommand = "hugo"
+} else {
+    throw "Hugo executable not found. Install Hugo or add it to PATH."
+}
+
 Write-Host "Running taxonomy validation..."
 & $shellCommand -File (Join-Path $PSScriptRoot "validate-taxonomy.ps1")
 
@@ -25,7 +38,7 @@ Write-Host "Running content quality validation..."
 Write-Host "Building Hugo site..."
 Push-Location $repoRoot
 try {
-    & ./hugo --minify --cleanDestinationDir --baseURL $BaseUrl
+    & $hugoCommand --minify --cleanDestinationDir --baseURL $BaseUrl
 } finally {
     Pop-Location
 }
