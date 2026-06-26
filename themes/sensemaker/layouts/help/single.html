@@ -1,0 +1,29 @@
+{{ define "content" }}
+<article class="help-guide">
+  <section class="help-hero">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p>{{ . }}</p>
+    {{ end }}
+  </section>
+
+  <section class="help-grid">
+    <section class="help-card">
+      {{ .Content }}
+    </section>
+
+    <aside class="help-card">
+      <h2>Quick Navigation</h2>
+      <ul>
+        <li><strong>Investigate:</strong> investigations and articles.</li>
+        <li><strong>Map:</strong> areas, topics, tags, questions.</li>
+        <li><strong>Manage:</strong> admin editing and publish workflow.</li>
+        <li><strong>Search:</strong> content lookup across entries.</li>
+        <li><strong>Help:</strong> terminology and usage guide.</li>
+      </ul>
+      <h3>Editing Notes</h3>
+      <p>Use Admin for CMS-based updates. Publishing runs through the workflow link under Manage.</p>
+    </aside>
+  </section>
+</article>
+{{ end }}

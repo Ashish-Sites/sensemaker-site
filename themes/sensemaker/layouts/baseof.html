@@ -35,9 +35,16 @@
             </div>
           </details>
 
+          <details class="nav-group">
+            <summary class="nav-group-trigger">Manage</summary>
+            <div class="nav-dropdown">
+              <a href="{{ "admin/" | absURL }}" class="nav-link">Admin</a>
+              <a href="https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml" class="nav-link" target="_blank" rel="noopener noreferrer">Publish</a>
+            </div>
+          </details>
+
           <a href="{{ "search/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/search/" }}active{{ end }}">Search</a>
-          <a href="{{ "admin/" | absURL }}" class="nav-link">Admin</a>
-          <a href="https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml" class="nav-link" target="_blank" rel="noopener noreferrer">Publish</a>
+          <a href="{{ "help/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/help/" }}active{{ end }}">Help</a>
           <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
         </nav>
       </div>
@@ -45,7 +52,7 @@
   </header>
 
   <main class="main">
-    <div class="container">
+    <div class="container {{ if eq .Type "help" }}container-help{{ end }}">
       {{ block "content" . }}{{ end }}
     </div>
   </main>

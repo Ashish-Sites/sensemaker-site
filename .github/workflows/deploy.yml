@@ -27,6 +27,9 @@ jobs:
       - name: Validate taxonomy content
         run: pwsh -File ./scripts/validate-taxonomy.ps1
 
+      - name: Validate content quality
+        run: pwsh -File ./scripts/validate-content-quality.ps1
+
       - name: Build
         run: hugo --minify --cleanDestinationDir --baseURL "https://ashish-sites.github.io/sensemaker-site/"
 

@@ -155,9 +155,13 @@ th {
 
 /* Layout */
 .container {
-  max-width: 1125px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+}
+
+.container-help {
+  max-width: min(96vw, 1680px);
 }
 
 .header {
@@ -505,10 +509,10 @@ th {
 
 .entry-grid {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 2.7fr) minmax(250px, 0.8fr);
   grid-template-rows: auto auto;
-  gap: var(--spacing-lg);
-  align-items: stretch;
+  gap: var(--spacing-md);
+  align-items: start;
 }
 
 .entry-main,
@@ -522,6 +526,17 @@ th {
 
 .entry-main {
   grid-row: 1 / span 2;
+  overflow: hidden;
+}
+
+.entry-main img,
+.entry-main svg,
+.entry-main video,
+.entry-main canvas,
+.entry-main iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .entry-main > :first-child {
@@ -614,6 +629,14 @@ th {
   color: var(--color-text-muted);
 }
 
+.entry-meta,
+.entry-lineage {
+  position: sticky;
+  top: 6.2rem;
+  max-height: calc(100vh - 7.2rem);
+  overflow: auto;
+}
+
 .trim-name {
   display: inline-block;
   max-width: 15ch;
@@ -621,6 +644,53 @@ th {
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: bottom;
+}
+
+.help-guide {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.help-hero {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--spacing-xl);
+}
+
+.help-hero h1 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+}
+
+.help-hero p {
+  margin-bottom: 0;
+  color: var(--color-text-secondary);
+  max-width: 100ch;
+}
+
+.help-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.help-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+}
+
+.help-card h2,
+.help-card h3 {
+  margin-top: 0;
+}
+
+.help-card p:last-child,
+.help-card ul:last-child,
+.help-card ol:last-child {
+  margin-bottom: 0;
 }
 
 .filter-section {
@@ -1308,9 +1378,21 @@ th {
     grid-row: auto;
   }
 
+  .entry-meta,
+  .entry-lineage {
+    position: static;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
   .entry-meta-list div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
+  }
+
+  .help-grid {
+    grid-template-columns: 1fr;
   }
   
   .homepage-layout {
