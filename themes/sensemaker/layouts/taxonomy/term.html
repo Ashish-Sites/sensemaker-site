@@ -11,10 +11,12 @@
 
   <section class="entry-grid">
     <article class="entry-main prose">
+      {{ with .Params.description }}
+        <p class="entry-description">{{ . }}</p>
+      {{ end }}
+
       {{ if .Content }}
         {{ .Content }}
-      {{ else if .Params.description }}
-        <p>{{ .Params.description }}</p>
       {{ else }}
         <p>No body content yet for this {{ .Data.Singular }} term.</p>
       {{ end }}

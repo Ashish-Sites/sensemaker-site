@@ -5,6 +5,10 @@ theme = "sensemaker"
 pluralizeListTitles = false
 removePathAccents = true
 
+[frontmatter]
+  date = ["date", "created", ":default"]
+  lastmod = ["lastmod", "updated", "date", "created", ":fileModTime", ":default"]
+
 # Output formats
 [outputs]
   home = ["HTML", "JSON"]
