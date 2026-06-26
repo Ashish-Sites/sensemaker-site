@@ -1,7 +1,10 @@
 {{ define "content" }}
 <div class="taxonomy-page">
   <h1>{{ .Title }}</h1>
-  <p class="subtitle">Investigations tagged with "{{ .Title }}"</p>
+  <p class="subtitle">Investigations in this {{ .Data.Singular }}</p>
+  {{ if .Content }}
+    <div class="prose taxonomy-intro">{{ .Content }}</div>
+  {{ end }}
   
   {{ if .Pages }}
     <div class="pages-grid">
