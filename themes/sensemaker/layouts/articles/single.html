@@ -1,55 +1,83 @@
 {{ define "content" }}
-<article class="investigation">
-  <div class="investigation-meta">
-    <div class="status-badge status-{{ lower (default "idea" .Params.article_type) }}">
-      {{ default "idea" .Params.article_type }}
-    </div>
+{{ $createdText := dateFormat "02-Jan-2006" .Date }}
+{{ with .Params.created }}{{ $createdText = dateFormat "02-Jan-2006" (time .) }}{{ end }}
+{{ $targets := default (slice) .Params.investigations }}
+{{ if and (eq (len $targets) 0) .Params.investigation }}
+  {{ $targets = $targets | append .Params.investigation }}
+{{ end }}
 
-    <div class="meta-info">
-      <span class="created">Created: {{ with .Params.created }}{{ dateFormat "02-Jan-2006" (time .) }}{{ else }}{{ dateFormat "02-Jan-2006" .Date }}{{ end }}</span>
-    </div>
-  </div>
+<article class="entry-page entry-page-article">
+  <header class="entry-title-row">
+    <h1 class="investigation-title">{{ .Title }}</h1>
+  </header>
 
-  <h1 class="investigation-title">{{ .Title }}</h1>
-  {{ with .Params.description }}
-    <p class="entry-description">{{ . }}</p>
-  {{ end }}
+  <section class="entry-grid">
+    <div class="entry-main prose">
+      {{ with .Params.description }}
+        <p class="entry-description">{{ . }}</p>
+      {{ end }}
 
-  {{ $targets := default (slice) .Params.investigations }}
-  {{ if and (eq (len $targets) 0) .Params.investigation }}
-    {{ $targets = $targets | append .Params.investigation }}
-  {{ end }}
-  {{ if gt (len $targets) 0 }}
-    <div class="taxonomy-section">
-      <h4>Attached To Investigations</h4>
-      <div class="tags">
-        {{ range $target := $targets }}
-          {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
-          {{ if $match }}
-            {{ range $match }}
-              <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else }}
+        <p>No body content yet for this article.</p>
+      {{ end }}
+
+      {{ if .Params.tags }}
+        <section class="entry-inline-section">
+          <h3>Tags</h3>
+          <div class="tags">
+            {{ range .Params.tags }}
+              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
             {{ end }}
-          {{ else }}
-            <span class="tag tag-regular">{{ $target }}</span>
+          </div>
+        </section>
+      {{ end }}
+    </div>
+
+    <aside class="entry-meta">
+      <h2>Metadata</h2>
+      <dl class="entry-meta-list">
+        <div><dt>Type</dt><dd>article</dd></div>
+        <div><dt>Article type</dt><dd>{{ default "idea" .Params.article_type }}</dd></div>
+        <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
+        <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
+        <div><dt>Lifecycle</dt><dd>{{ default "active" .Params.lifecycle }}</dd></div>
+        <div><dt>Confidence</dt><dd>{{ default "n/a" .Params.confidence }}</dd></div>
+        <div><dt>Tags</dt><dd>{{ len (default (slice) .Params.tags) }}</dd></div>
+        <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+        {{ with .Params.source_link }}
+          <div><dt>Source</dt><dd><a href="{{ . }}" target="_blank" rel="noopener noreferrer">reference</a></dd></div>
+        {{ end }}
+      </dl>
+    </aside>
+
+    <aside class="entry-lineage">
+      <h2>Lineage</h2>
+      <h3>Attached To Investigations</h3>
+      {{ if gt (len $targets) 0 }}
+        <ul class="entry-lineage-list">
+          {{ range $target := $targets }}
+            {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+            {{ if $match }}
+              {{ range $match }}
+                <li>
+                  <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                  <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+                </li>
+              {{ end }}
+            {{ else }}
+              <li>
+                <span>{{ $target }}</span>
+                <span class="entry-lineage-meta">unresolved slug</span>
+              </li>
+            {{ end }}
           {{ end }}
-        {{ end }}
-      </div>
-    </div>
-  {{ end }}
-
-  <div class="investigation-content">
-    {{ .Content }}
-  </div>
-
-  {{ if .Params.tags }}
-    <div class="taxonomy-section">
-      <h4>Tags</h4>
-      <div class="tags">
-        {{ range .Params.tags }}
-          <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
-        {{ end }}
-      </div>
-    </div>
-  {{ end }}
+        </ul>
+      {{ else }}
+        <p class="empty-state">Not attached to an investigation yet.</p>
+      {{ end }}
+    </aside>
+  </section>
 </article>
 {{ end }}

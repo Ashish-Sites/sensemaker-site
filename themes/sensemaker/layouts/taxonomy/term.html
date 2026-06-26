@@ -1,130 +1,53 @@
 {{ define "content" }}
-<div class="taxonomy-page">
-  <h1>{{ .Title }}</h1>
-  <p class="subtitle">Investigations in this {{ .Data.Singular }}</p>
-  {{ with .Params.description }}
-    <p class="entry-description">{{ . }}</p>
-  {{ end }}
-  {{ if .Content }}
-    <div class="prose taxonomy-intro">{{ .Content }}</div>
-  {{ end }}
+{{ $linked := .Pages }}
+{{ $linkedSorted := sort $linked "Lastmod" "desc" }}
+{{ $linkedInvestigations := where $linked ".Type" "investigations" }}
+{{ $linkedArticles := where $linked ".Type" "articles" }}
 
-  {{ $all := .Pages }}
-  {{ $sorted := sort $all "Lastmod" "desc" }}
-  {{ $open := where $all ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring" "Model Emerging") }}
-  {{ $paginator := .Paginate $sorted 12 }}
+<div class="entry-page entry-page-term entry-page-{{ .Data.Plural }}">
+  <header class="entry-title-row">
+    <h1>{{ .Title }}</h1>
+  </header>
 
-  <section class="list-summary">
-    <div class="summary-card">
-      <span class="summary-label">Investigations in term</span>
-      <span class="summary-value">{{ len $all }}</span>
-    </div>
-    <div class="summary-card">
-      <span class="summary-label">Open</span>
-      <span class="summary-value">{{ len $open }}</span>
-    </div>
-    <div class="summary-card">
-      <span class="summary-label">Latest update</span>
-      <span class="summary-value summary-value-small">{{ with index $sorted 0 }}{{ .Title }} · {{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}No updates yet{{ end }}</span>
-    </div>
-    <div class="summary-card">
-      <span class="summary-label">Type</span>
-      <span class="summary-value summary-value-small">{{ .Data.Singular }}</span>
-    </div>
-  </section>
-
-  {{ if gt (len $all) 0 }}
-    <section class="list-table-wrap">
-      <div class="table-toolbar">
-        <input type="text" id="table-filter" class="search-filter" placeholder="Filter investigations in this term...">
-      </div>
-
-      <table class="data-table sortable-table" id="term-investigations-table">
-        <thead>
-          <tr>
-            <th data-sort="string">Title</th>
-            <th data-sort="string">Description</th>
-            <th data-sort="string">Status</th>
-            <th data-sort="string">Questions</th>
-            <th data-sort="date">Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{ range $paginator.Pages }}
-            {{ $desc := .Params.description }}
-            {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 160) }}{{ end }}
-            <tr>
-              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
-              <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
-              <td data-sort-value="{{ lower .Params.status }}"><span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span></td>
-              <td data-sort-value="{{ len (default (slice) .Params.questions) }}">{{ len (default (slice) .Params.questions) }}</td>
-              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
-            </tr>
-          {{ end }}
-        </tbody>
-      </table>
-
-      {{ if gt $paginator.TotalPages 1 }}
-        <nav class="pagination" aria-label="Term investigations pagination">
-          {{ if $paginator.HasPrev }}
-            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
-          {{ end }}
-          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
-          {{ if $paginator.HasNext }}
-            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
-          {{ end }}
-        </nav>
+  <section class="entry-grid">
+    <article class="entry-main prose">
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else if .Params.description }}
+        <p>{{ .Params.description }}</p>
+      {{ else }}
+        <p>No body content yet for this {{ .Data.Singular }} term.</p>
       {{ end }}
-    </section>
-  {{ else }}
-    <p class="empty-state">No investigations with this term.</p>
-  {{ end }}
+    </article>
+
+    <aside class="entry-meta">
+      <h2>Metadata</h2>
+      <dl class="entry-meta-list">
+        <div><dt>Type</dt><dd>{{ .Data.Singular }}</dd></div>
+        <div><dt>Lifecycle</dt><dd>{{ default "active" .Params.lifecycle }}</dd></div>
+        <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+        <div><dt>Linked entries</dt><dd>{{ len $linked }}</dd></div>
+        <div><dt>Investigations</dt><dd>{{ len $linkedInvestigations }}</dd></div>
+        <div><dt>Articles</dt><dd>{{ len $linkedArticles }}</dd></div>
+        <div><dt>Latest update</dt><dd>{{ with index $linkedSorted 0 }}{{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}n/a{{ end }}</dd></div>
+      </dl>
+    </aside>
+
+    <aside class="entry-lineage">
+      <h2>Lineage</h2>
+      {{ if gt (len $linkedSorted) 0 }}
+        <ul class="entry-lineage-list">
+          {{ range first 16 $linkedSorted }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <span class="entry-lineage-meta">{{ .Type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="empty-state">No linked entries yet.</p>
+      {{ end }}
+    </aside>
+  </section>
 </div>
-
-<script>
-  (function() {
-    const table = document.getElementById('term-investigations-table');
-    const filterInput = document.getElementById('table-filter');
-    if (!table) return;
-
-    const tbody = table.querySelector('tbody');
-    const headers = table.querySelectorAll('th[data-sort]');
-
-    headers.forEach((header, index) => {
-      let asc = true;
-      header.addEventListener('click', () => {
-        const type = header.dataset.sort;
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-
-        rows.sort((a, b) => {
-          const aCell = a.children[index];
-          const bCell = b.children[index];
-          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
-          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
-
-          if (type === 'number') {
-            return asc ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
-          }
-          if (type === 'date') {
-            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-          }
-          return asc
-            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
-            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
-        });
-
-        rows.forEach(row => tbody.appendChild(row));
-        asc = !asc;
-      });
-    });
-
-    filterInput?.addEventListener('input', (event) => {
-      const query = event.target.value.toLowerCase().trim();
-      tbody.querySelectorAll('tr').forEach((row) => {
-        const text = row.textContent.toLowerCase();
-        row.style.display = text.includes(query) ? '' : 'none';
-      });
-    });
-  })();
-</script>
 {{ end }}

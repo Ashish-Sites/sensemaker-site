@@ -1,121 +1,141 @@
 {{ define "content" }}
-<article class="investigation">
-  <div class="investigation-meta">
-    <div class="status-badge status-{{ lower .Params.status }}">
-      {{ .Params.status }}
-    </div>
-    
-    <div class="meta-info">
-      <span class="created">Created: {{ dateFormat "02-Jan-2006" .Date }}</span>
-      {{ if gt .Lastmod .Date }}
-        <span class="updated">Updated: {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+{{ $invSlug := .File.BaseFileName }}
+{{ $createdText := dateFormat "02-Jan-2006" .Date }}
+{{ with .Params.created }}{{ $createdText = dateFormat "02-Jan-2006" (time .) }}{{ end }}
+
+{{ $allArticles := where .Site.RegularPages "Type" "articles" }}
+{{ $attached := slice }}
+{{ range $allArticles }}
+  {{ $legacyMatch := eq .Params.investigation $invSlug }}
+  {{ $multiMatch := in (default (slice) .Params.investigations) $invSlug }}
+  {{ $selectedFromInvestigation := in (default (slice) $.Params.attached_articles) .File.BaseFileName }}
+  {{ if or $legacyMatch $multiMatch $selectedFromInvestigation }}
+    {{ $attached = $attached | append . }}
+  {{ end }}
+{{ end }}
+
+{{ $relatedInv := slice }}
+{{ $relatedSlugs := default (slice) .Params.related }}
+{{ range where .Site.RegularPages "Type" "investigations" }}
+  {{ if in $relatedSlugs .File.BaseFileName }}
+    {{ $relatedInv = $relatedInv | append . }}
+  {{ end }}
+{{ end }}
+
+<article class="entry-page entry-page-investigation">
+  <header class="entry-title-row">
+    <h1 class="investigation-title">{{ .Title }}</h1>
+  </header>
+
+  <section class="entry-grid">
+    <div class="entry-main prose">
+      {{ with .Params.description }}
+        <p class="entry-description">{{ . }}</p>
+      {{ end }}
+
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else }}
+        <p>No body content yet for this investigation.</p>
+      {{ end }}
+
+      {{ if .Params.questions }}
+        <section class="entry-inline-section">
+          <h3>Questions</h3>
+          <ul class="questions-list">
+            {{ range $q := .Params.questions }}
+              {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
+              {{ range $.Site.Taxonomies.questions.ByCount }}
+                {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
+                  {{ $questionLink = .Page.RelPermalink }}
+                {{ end }}
+              {{ end }}
+              <li><a href="{{ $questionLink }}">{{ $q }}</a></li>
+            {{ end }}
+          </ul>
+        </section>
+      {{ end }}
+
+      {{ if .Params.areas }}
+        <section class="entry-inline-section">
+          <h3>Areas</h3>
+          <div class="tags">
+            {{ range .Params.areas }}
+              <a href="{{ absURL (print "areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+
+      {{ if .Params.topics }}
+        <section class="entry-inline-section">
+          <h3>Topics</h3>
+          <div class="tags">
+            {{ range .Params.topics }}
+              <a href="{{ absURL (print "topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+
+      {{ if .Params.tags }}
+        <section class="entry-inline-section">
+          <h3>Tags</h3>
+          <div class="tags">
+            {{ range .Params.tags }}
+              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+            {{ end }}
+          </div>
+        </section>
       {{ end }}
     </div>
-  </div>
 
-  <h1 class="investigation-title">{{ .Title }}</h1>
-  {{ with .Params.description }}
-    <p class="entry-description">{{ . }}</p>
-  {{ end }}
+    <aside class="entry-meta">
+      <h2>Metadata</h2>
+      <dl class="entry-meta-list">
+        <div><dt>Type</dt><dd>investigation</dd></div>
+        <div><dt>Status</dt><dd>{{ default "Seed" .Params.status }}</dd></div>
+        <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
+        <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
+        <div><dt>Areas</dt><dd>{{ len (default (slice) .Params.areas) }}</dd></div>
+        <div><dt>Topics</dt><dd>{{ len (default (slice) .Params.topics) }}</dd></div>
+        <div><dt>Questions</dt><dd>{{ len (default (slice) .Params.questions) }}</dd></div>
+        <div><dt>Tags</dt><dd>{{ len (default (slice) .Params.tags) }}</dd></div>
+        <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+      </dl>
+    </aside>
 
-  {{ if .Params.questions }}
-    <div class="questions-section">
-      <h3>Questions</h3>
-      <ul class="questions-list">
-        {{ range $q := .Params.questions }}
-          {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
-          {{ range $.Site.Taxonomies.questions.ByCount }}
-            {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
-              {{ $questionLink = .Page.RelPermalink }}
-            {{ end }}
-          {{ end }}
-          <li>
-            <a href="{{ $questionLink }}">{{ $q }}</a>
-          </li>
-        {{ end }}
-      </ul>
-    </div>
-  {{ end }}
+    <aside class="entry-lineage">
+      <h2>Lineage</h2>
 
-  {{ $invSlug := .File.BaseFileName }}
-  {{ $allArticles := where .Site.RegularPages "Type" "articles" }}
-  {{ $attached := slice }}
-  {{ range $allArticles }}
-    {{ $legacyMatch := eq .Params.investigation $invSlug }}
-    {{ $multiMatch := in (default (slice) .Params.investigations) $invSlug }}
-    {{ $selectedFromInvestigation := in (default (slice) $.Params.attached_articles) .File.BaseFileName }}
-    {{ if or $legacyMatch $multiMatch $selectedFromInvestigation }}
-      {{ $attached = $attached | append . }}
-    {{ end }}
-  {{ end }}
-  {{ if gt (len $attached) 0 }}
-    <div class="related-section">
       <h3>Attached Articles</h3>
-      <ul class="related-list">
-        {{ range $attached }}
-          <li>
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-            {{ if .Params.article_type }}
-              <span class="status-badge-small status-{{ lower .Params.article_type }}">{{ .Params.article_type }}</span>
-            {{ end }}
-          </li>
-        {{ end }}
-      </ul>
-    </div>
-  {{ end }}
-
-  <div class="investigation-content">
-    {{ .Content }}
-  </div>
-
-  {{ if .Params.areas }}
-    <div class="taxonomy-section">
-      <h4>Areas</h4>
-      <div class="tags">
-        {{ range .Params.areas }}
-          <a href="{{ absURL (print "areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
-        {{ end }}
-      </div>
-    </div>
-  {{ end }}
-
-  {{ if .Params.topics }}
-    <div class="taxonomy-section">
-      <h4>Topics</h4>
-      <div class="tags">
-        {{ range .Params.topics }}
-          <a href="{{ absURL (print "topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
-        {{ end }}
-      </div>
-    </div>
-  {{ end }}
-
-  {{ if .Params.tags }}
-    <div class="taxonomy-section">
-      <h4>Tags</h4>
-      <div class="tags">
-        {{ range .Params.tags }}
-          <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
-        {{ end }}
-      </div>
-    </div>
-  {{ end }}
-
-  {{ if .Params.related }}
-    <div class="related-section">
-      <h3>Related Investigations</h3>
-      <ul class="related-list">
-        {{ $related := .Params.related }}
-        {{ range where .Site.RegularPages "Type" "investigations" }}
-          {{ if in $related (.File.BaseFileName | strings.TrimSuffix ".md") }}
+      {{ if gt (len $attached) 0 }}
+        <ul class="entry-lineage-list">
+          {{ range $attached }}
             <li>
               <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-              <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+              <span class="entry-lineage-meta">{{ default "idea" .Params.article_type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
             </li>
           {{ end }}
-        {{ end }}
-      </ul>
-    </div>
-  {{ end }}
+        </ul>
+      {{ else }}
+        <p class="empty-state">No attached articles yet.</p>
+      {{ end }}
+
+      <h3>Related Investigations</h3>
+      {{ if gt (len $relatedInv) 0 }}
+        <ul class="entry-lineage-list">
+          {{ range $relatedInv }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      {{ else }}
+        <p class="empty-state">No related investigations yet.</p>
+      {{ end }}
+    </aside>
+  </section>
 </article>
 {{ end }}
