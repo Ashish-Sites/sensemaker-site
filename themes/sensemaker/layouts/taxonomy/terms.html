@@ -6,25 +6,119 @@
   {{ else }}
     <p class="subtitle">Browse all {{ .Data.Plural }}</p>
   {{ end }}
-  
-  {{ if .Data.Terms }}
-    <div class="pages-grid">
-      {{ range .Data.Terms.ByCount }}
-        <div class="investigation-card">
-          <div class="card-header">
-            <span class="updated">{{ .Count }} investigations</span>
-          </div>
-          
-          <h2 class="card-title">
-            <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a>
-          </h2>
 
-          <a href="{{ .Page.RelPermalink }}" class="card-link">Open term →</a>
-        </div>
-      {{ end }}
+  {{ $terms := .Data.Terms.ByCount }}
+  {{ $termPages := .Pages }}
+  {{ $paginator := .Paginate $termPages 20 }}
+  {{ $termTotal := len $terms }}
+  {{ $assocCount := 0 }}
+  {{ range $terms }}{{ $assocCount = add $assocCount .Count }}{{ end }}
+
+  <section class="list-summary">
+    <div class="summary-card">
+      <span class="summary-label">Total {{ .Data.Plural }}</span>
+      <span class="summary-value">{{ $termTotal }}</span>
     </div>
+    <div class="summary-card">
+      <span class="summary-label">Linked investigations</span>
+      <span class="summary-value">{{ $assocCount }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Most active term</span>
+      <span class="summary-value summary-value-small">{{ with index $terms 0 }}{{ .Page.Title }} ({{ .Count }}){{ else }}None{{ end }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest term update</span>
+      <span class="summary-value summary-value-small">{{ with index $terms 0 }}{{ dateFormat "02-Jan-2006" .Page.Lastmod }}{{ else }}No updates{{ end }}</span>
+    </div>
+  </section>
+
+  {{ if gt $termTotal 0 }}
+    <section class="list-table-wrap">
+      <div class="table-toolbar">
+        <input type="text" id="table-filter" class="search-filter" placeholder="Filter terms...">
+      </div>
+
+      <table class="data-table sortable-table" id="terms-table">
+        <thead>
+          <tr>
+            <th data-sort="string">Term</th>
+            <th data-sort="number">Investigations</th>
+            <th data-sort="date">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $paginator.Pages }}
+            <tr>
+              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ len .Pages }}">{{ len .Pages }}</td>
+              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="Terms pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
+          {{ end }}
+          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </section>
   {{ else }}
     <p class="empty-state">No terms found.</p>
   {{ end }}
 </div>
+
+<script>
+  (function() {
+    const table = document.getElementById('terms-table');
+    const filterInput = document.getElementById('table-filter');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+
+    headers.forEach((header, index) => {
+      let asc = true;
+      header.addEventListener('click', () => {
+        const type = header.dataset.sort;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.children[index];
+          const bCell = b.children[index];
+          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
+          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
+
+          if (type === 'number') {
+            return asc ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+          }
+          if (type === 'date') {
+            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
+          return asc
+            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
+            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        asc = !asc;
+      });
+    });
+
+    filterInput?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      tbody.querySelectorAll('tr').forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  })();
+</script>
 {{ end }}

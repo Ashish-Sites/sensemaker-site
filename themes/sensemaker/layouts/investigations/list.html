@@ -3,71 +3,120 @@
   <h1>Investigations</h1>
   <p class="subtitle">{{ .Site.Params.description }}</p>
 
-  {{ if .Pages }}
-    <div class="filter-section">
-      <input type="text" id="list-search" class="search-filter" placeholder="Filter investigations...">
+  {{ $all := where .Site.RegularPages "Type" "investigations" }}
+  {{ $sorted := sort $all "Lastmod" "desc" }}
+  {{ $open := where $all ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring" "Model Emerging") }}
+  {{ $stable := where $all ".Params.status" "eq" "Stable" }}
+  {{ $paginator := .Paginate $sorted 12 }}
+
+  <section class="list-summary">
+    <div class="summary-card">
+      <span class="summary-label">Total investigations</span>
+      <span class="summary-value">{{ len $all }}</span>
     </div>
+    <div class="summary-card">
+      <span class="summary-label">Open investigations</span>
+      <span class="summary-value">{{ len $open }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Stable investigations</span>
+      <span class="summary-value">{{ len $stable }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest change</span>
+      <span class="summary-value summary-value-small">
+        {{ with index $sorted 0 }}{{ .Title }} · {{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}No updates yet{{ end }}
+      </span>
+    </div>
+  </section>
 
-    <div class="investigations-grid">
-      {{ range .Pages }}
-        <div class="investigation-card" data-title="{{ .Title }}" data-areas="{{ delimit .Params.areas "," }}" data-topics="{{ delimit .Params.topics "," }}" data-status="{{ lower .Params.status }}">
-          <div class="card-header">
-            <div class="status-badge status-{{ lower .Params.status }}">
-              {{ .Params.status }}
-            </div>
-            <span class="updated">{{ dateFormat "02-Jan-2006" .Lastmod }}</span>
-          </div>
-          
-          <h2 class="card-title">
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          </h2>
+  {{ if gt (len $all) 0 }}
+    <section class="list-table-wrap">
+      <div class="table-toolbar">
+        <input type="text" id="table-filter" class="search-filter" placeholder="Filter by title, status, area, topic...">
+      </div>
 
-          {{ if .Params.areas }}
-            <div class="card-areas">
-              {{ range first 2 .Params.areas }}
-                <span class="area-badge">{{ . }}</span>
-              {{ end }}
-            </div>
+      <table class="data-table sortable-table" id="investigations-table">
+        <thead>
+          <tr>
+            <th data-sort="string">Title</th>
+            <th data-sort="string">Status</th>
+            <th data-sort="string">Areas</th>
+            <th data-sort="string">Topics</th>
+            <th data-sort="date">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $paginator.Pages }}
+            <tr>
+              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower .Params.status }}"><span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span></td>
+              <td data-sort-value="{{ lower (delimit (default (slice) .Params.areas) ", ") }}">{{ delimit (default (slice) .Params.areas) ", " }}</td>
+              <td data-sort-value="{{ lower (delimit (default (slice) .Params.topics) ", ") }}">{{ delimit (default (slice) .Params.topics) ", " }}</td>
+              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
+            </tr>
           {{ end }}
+        </tbody>
+      </table>
 
-          {{ if .Params.topics }}
-            <div class="card-topics">
-              {{ range first 3 .Params.topics }}
-                <span class="topic-badge">{{ . }}</span>
-              {{ end }}
-            </div>
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="Investigations pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
           {{ end }}
-
-          {{ if .Params.questions }}
-            <div class="card-preview">
-              <strong>Questions:</strong>
-              {{ range first 1 .Params.questions }}
-                <p>{{ . }}</p>
-              {{ end }}
-            </div>
+          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
           {{ end }}
-
-          <a href="{{ .RelPermalink }}" class="card-link">Explore →</a>
-        </div>
+        </nav>
       {{ end }}
-    </div>
+    </section>
   {{ else }}
     <p class="empty-state">No investigations yet. Start by creating your first one.</p>
   {{ end }}
 </div>
 
 <script>
-  document.getElementById('list-search')?.addEventListener('keyup', function(e) {
-    const query = e.target.value.toLowerCase();
-    document.querySelectorAll('.investigation-card').forEach(card => {
-      const title = card.dataset.title.toLowerCase();
-      const areas = card.dataset.areas.toLowerCase();
-      const topics = card.dataset.topics.toLowerCase();
-      const status = card.dataset.status;
-      
-      const matches = title.includes(query) || areas.includes(query) || topics.includes(query) || status.includes(query);
-      card.style.display = matches ? '' : 'none';
+  (function() {
+    const table = document.getElementById('investigations-table');
+    const filterInput = document.getElementById('table-filter');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+
+    headers.forEach((header, index) => {
+      let asc = true;
+      header.addEventListener('click', () => {
+        const type = header.dataset.sort;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.children[index];
+          const bCell = b.children[index];
+          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
+          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
+
+          if (type === 'date') {
+            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
+          return asc
+            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
+            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        asc = !asc;
+      });
     });
-  });
+
+    filterInput?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      tbody.querySelectorAll('tr').forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  })();
 </script>
 {{ end }}

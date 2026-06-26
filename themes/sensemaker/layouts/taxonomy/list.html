@@ -4,36 +4,119 @@
   {{ if .Content }}
     <div class="prose taxonomy-intro">{{ .Content }}</div>
   {{ end }}
-  
-  {{ if .Pages }}
-    <div class="pages-grid">
-      {{ range .Pages }}
-        <div class="investigation-card">
-          <div class="card-header">
-            <div class="status-badge status-{{ lower .Params.status }}">
-              {{ .Params.status }}
-            </div>
-            <span class="updated">{{ dateFormat "02-Jan-2006" .Lastmod }}</span>
-          </div>
-          
-          <h2 class="card-title">
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          </h2>
 
-          {{ if .Params.questions }}
-            <div class="card-preview">
-              {{ range first 1 .Params.questions }}
-                <p>{{ . }}</p>
-              {{ end }}
-            </div>
-          {{ end }}
+  {{ $all := .Pages }}
+  {{ $sorted := sort $all "Lastmod" "desc" }}
+  {{ $open := where $all ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring" "Model Emerging") }}
+  {{ $paginator := .Paginate $sorted 12 }}
 
-          <a href="{{ .RelPermalink }}" class="card-link">View →</a>
-        </div>
-      {{ end }}
+  <section class="list-summary">
+    <div class="summary-card">
+      <span class="summary-label">Investigations in term</span>
+      <span class="summary-value">{{ len $all }}</span>
     </div>
+    <div class="summary-card">
+      <span class="summary-label">Open</span>
+      <span class="summary-value">{{ len $open }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest update</span>
+      <span class="summary-value summary-value-small">{{ with index $sorted 0 }}{{ .Title }} · {{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}No updates yet{{ end }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Type</span>
+      <span class="summary-value summary-value-small">{{ .Data.Singular }}</span>
+    </div>
+  </section>
+
+  {{ if gt (len $all) 0 }}
+    <section class="list-table-wrap">
+      <div class="table-toolbar">
+        <input type="text" id="table-filter" class="search-filter" placeholder="Filter investigations in this term...">
+      </div>
+
+      <table class="data-table sortable-table" id="taxonomy-list-table">
+        <thead>
+          <tr>
+            <th data-sort="string">Title</th>
+            <th data-sort="string">Status</th>
+            <th data-sort="string">Questions</th>
+            <th data-sort="date">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $paginator.Pages }}
+            <tr>
+              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower .Params.status }}"><span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span></td>
+              <td data-sort-value="{{ len (default (slice) .Params.questions) }}">{{ len (default (slice) .Params.questions) }}</td>
+              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="Taxonomy pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
+          {{ end }}
+          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </section>
   {{ else }}
     <p class="empty-state">No investigations in this {{ .Data.Singular }}.</p>
   {{ end }}
 </div>
+
+<script>
+  (function() {
+    const table = document.getElementById('taxonomy-list-table');
+    const filterInput = document.getElementById('table-filter');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+
+    headers.forEach((header, index) => {
+      let asc = true;
+      header.addEventListener('click', () => {
+        const type = header.dataset.sort;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.children[index];
+          const bCell = b.children[index];
+          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
+          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
+
+          if (type === 'number') {
+            return asc ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+          }
+          if (type === 'date') {
+            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
+          return asc
+            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
+            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        asc = !asc;
+      });
+    });
+
+    filterInput?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      tbody.querySelectorAll('tr').forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  })();
+</script>
 {{ end }}

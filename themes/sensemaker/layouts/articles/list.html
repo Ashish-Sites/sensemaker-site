@@ -3,37 +3,125 @@
   <h1>Articles</h1>
   <p class="subtitle">Attachable notes that extend investigations: idea, subsection, comment.</p>
 
-  {{ if .Pages }}
-    <div class="investigations-grid">
-      {{ range .Pages }}
-        <div class="investigation-card">
-          <div class="card-header">
-            <div class="status-badge status-{{ lower (default "idea" .Params.article_type) }}">
-              {{ default "idea" .Params.article_type }}
-            </div>
-            <span class="updated">{{ with .Params.created }}{{ dateFormat "02-Jan-2006" (time .) }}{{ else }}{{ dateFormat "02-Jan-2006" .Date }}{{ end }}</span>
-          </div>
+  {{ $all := where .Site.RegularPages "Type" "articles" }}
+  {{ $sorted := sort $all "Lastmod" "desc" }}
+  {{ $ideas := where $all ".Params.article_type" "eq" "idea" }}
+  {{ $comments := where $all ".Params.article_type" "eq" "comment" }}
+  {{ $paginator := .Paginate $sorted 12 }}
 
-          <h2 class="card-title">
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          </h2>
-
-          {{ $linkedInv := default (slice) .Params.investigations }}
-          {{ if and (eq (len $linkedInv) 0) .Params.investigation }}
-            {{ $linkedInv = $linkedInv | append .Params.investigation }}
-          {{ end }}
-          {{ if gt (len $linkedInv) 0 }}
-            <div class="card-preview">
-              <p>Investigations attached: {{ len $linkedInv }}</p>
-            </div>
-          {{ end }}
-
-          <a href="{{ .RelPermalink }}" class="card-link">Read →</a>
-        </div>
-      {{ end }}
+  <section class="list-summary">
+    <div class="summary-card">
+      <span class="summary-label">Total articles</span>
+      <span class="summary-value">{{ len $all }}</span>
     </div>
+    <div class="summary-card">
+      <span class="summary-label">Ideas</span>
+      <span class="summary-value">{{ len $ideas }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Comments</span>
+      <span class="summary-value">{{ len $comments }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest change</span>
+      <span class="summary-value summary-value-small">
+        {{ with index $sorted 0 }}{{ .Title }} · {{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}No updates yet{{ end }}
+      </span>
+    </div>
+  </section>
+
+  {{ if gt (len $all) 0 }}
+    <section class="list-table-wrap">
+      <div class="table-toolbar">
+        <input type="text" id="table-filter" class="search-filter" placeholder="Filter by title, type, linked investigations...">
+      </div>
+
+      <table class="data-table sortable-table" id="articles-table">
+        <thead>
+          <tr>
+            <th data-sort="string">Title</th>
+            <th data-sort="string">Type</th>
+            <th data-sort="number">Linked Investigations</th>
+            <th data-sort="date">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $paginator.Pages }}
+            {{ $linkedInv := default (slice) .Params.investigations }}
+            {{ if and (eq (len $linkedInv) 0) .Params.investigation }}
+              {{ $linkedInv = $linkedInv | append .Params.investigation }}
+            {{ end }}
+            <tr>
+              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower (default "idea" .Params.article_type) }}"><span class="status-badge-small status-{{ lower (default "idea" .Params.article_type) }}">{{ default "idea" .Params.article_type }}</span></td>
+              <td data-sort-value="{{ len $linkedInv }}">{{ len $linkedInv }}</td>
+              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="Articles pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
+          {{ end }}
+          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </section>
   {{ else }}
     <p class="empty-state">No articles yet.</p>
   {{ end }}
 </div>
+
+<script>
+  (function() {
+    const table = document.getElementById('articles-table');
+    const filterInput = document.getElementById('table-filter');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+
+    headers.forEach((header, index) => {
+      let asc = true;
+      header.addEventListener('click', () => {
+        const type = header.dataset.sort;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.children[index];
+          const bCell = b.children[index];
+          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
+          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
+
+          if (type === 'number') {
+            return asc ? Number(aValue) - Number(bValue) : Number(bValue) - Number(aValue);
+          }
+          if (type === 'date') {
+            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
+          return asc
+            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
+            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        asc = !asc;
+      });
+    });
+
+    filterInput?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      tbody.querySelectorAll('tr').forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  })();
+</script>
 {{ end }}
