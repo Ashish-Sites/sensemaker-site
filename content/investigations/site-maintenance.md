@@ -14,6 +14,7 @@ related:
   - site-maintenance
 attached_articles:
   - site-maintenance
+  - site-enhancements
 draft: false
 ---
 About site maintenance
