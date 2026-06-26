@@ -24,7 +24,7 @@
         <div class="entry-context-group">
           <span class="entry-context-label">Primary Area</span>
           <div class="tags">
-            <a href="{{ absURL (print "areas/" (urlize .Params.primary_area) "/") }}" class="tag tag-area">{{ .Params.primary_area }}</a>
+            <a href="{{ absURL (print "areas/" (urlize .Params.primary_area) "/") }}" class="tag tag-area trim-name" title="{{ .Params.primary_area }}">{{ .Params.primary_area }}</a>
           </div>
         </div>
       {{ end }}
@@ -34,7 +34,7 @@
           <span class="entry-context-label">Related Topics</span>
           <div class="tags">
             {{ range $relatedTopics }}
-              <a href="{{ .RelPermalink }}" class="tag tag-topic">{{ .Title }}</a>
+              <a href="{{ .RelPermalink }}" class="tag tag-topic trim-name" title="{{ .Title }}">{{ .Title }}</a>
             {{ end }}
           </div>
         </div>
@@ -74,7 +74,7 @@
         <ul class="entry-lineage-list">
           {{ range first 16 $linkedSorted }}
             <li>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
               <span class="entry-lineage-meta">{{ .Type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
             </li>
           {{ end }}

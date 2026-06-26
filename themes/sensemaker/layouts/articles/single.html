@@ -18,7 +18,7 @@
           <span class="entry-context-label">Tags</span>
           <div class="tags">
             {{ range .Params.tags }}
-              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular trim-name" title="#{{ . }}">#{{ . }}</a>
             {{ end }}
           </div>
         </div>
@@ -32,10 +32,10 @@
               {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
               {{ if $match }}
                 {{ range $match }}
-                  <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+                  <a href="{{ .RelPermalink }}" class="tag tag-area trim-name" title="{{ .Title }}">{{ .Title }}</a>
                 {{ end }}
               {{ else }}
-                <span class="tag tag-regular">{{ $target }}</span>
+                <span class="tag tag-regular trim-name" title="{{ $target }}">{{ $target }}</span>
               {{ end }}
             {{ end }}
           </div>
@@ -85,13 +85,13 @@
             {{ if $match }}
               {{ range $match }}
                 <li>
-                  <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                  <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
                   <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
                 </li>
               {{ end }}
             {{ else }}
               <li>
-                <span>{{ $target }}</span>
+                <span class="trim-name" title="{{ $target }}">{{ $target }}</span>
                 <span class="entry-lineage-meta">unresolved slug</span>
               </li>
             {{ end }}

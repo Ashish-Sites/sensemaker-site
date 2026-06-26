@@ -34,7 +34,7 @@
           <span class="entry-context-label">Areas</span>
           <div class="tags">
             {{ range .Params.areas }}
-              <a href="{{ absURL (print "areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
+              <a href="{{ absURL (print "areas/" (urlize .) "/") }}" class="tag tag-area trim-name" title="{{ . }}">{{ . }}</a>
             {{ end }}
           </div>
         </div>
@@ -45,7 +45,7 @@
           <span class="entry-context-label">Topics</span>
           <div class="tags">
             {{ range .Params.topics }}
-              <a href="{{ absURL (print "topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
+              <a href="{{ absURL (print "topics/" (urlize .) "/") }}" class="tag tag-topic trim-name" title="{{ . }}">{{ . }}</a>
             {{ end }}
           </div>
         </div>
@@ -56,7 +56,7 @@
           <span class="entry-context-label">Tags</span>
           <div class="tags">
             {{ range .Params.tags }}
-              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular trim-name" title="#{{ . }}">#{{ . }}</a>
             {{ end }}
           </div>
         </div>
@@ -118,7 +118,7 @@
         <ul class="entry-lineage-list">
           {{ range $attached }}
             <li>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
               <span class="entry-lineage-meta">{{ default "idea" .Params.article_type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
             </li>
           {{ end }}
@@ -132,7 +132,7 @@
         <ul class="entry-lineage-list">
           {{ range $relatedInv }}
             <li>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
               <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
             </li>
           {{ end }}

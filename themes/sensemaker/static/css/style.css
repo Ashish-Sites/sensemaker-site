@@ -348,6 +348,7 @@ th {
   color: var(--color-text-secondary);
   font-size: 1rem;
   max-width: 72ch;
+  font-style: italic;
 }
 
 .investigation-content {
@@ -482,6 +483,7 @@ th {
   background-color: var(--color-bg-secondary);
   display: grid;
   gap: var(--spacing-md);
+  font-size: 0.88rem;
 }
 
 .entry-context-group {
@@ -494,6 +496,11 @@ th {
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.entry-meta,
+.entry-lineage {
+  font-size: 0.88rem;
 }
 
 .entry-grid {
@@ -547,7 +554,7 @@ th {
 .entry-lineage h3 {
   margin-top: var(--spacing-lg);
   margin-bottom: var(--spacing-sm);
-  font-size: 0.92rem;
+  font-size: 0.84rem;
   color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -603,8 +610,17 @@ th {
 .entry-lineage-meta {
   display: block;
   margin-top: 0.2rem;
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   color: var(--color-text-muted);
+}
+
+.trim-name {
+  display: inline-block;
+  max-width: 15ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 .filter-section {
@@ -1064,6 +1080,7 @@ th {
   max-width: 48ch;
   white-space: normal;
   color: var(--color-text-secondary);
+  font-style: italic;
 }
 
 .data-table tbody tr:hover {
