@@ -25,9 +25,9 @@ $hugoCommand = $null
 $localHugo = Join-Path $repoRoot "hugo"
 $localHugoExe = Join-Path $repoRoot "hugo.exe"
 $hugoFromPath = Get-Command "hugo" -ErrorAction SilentlyContinue
-$isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+$runningOnWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
 
-if ($isWindows) {
+if ($runningOnWindows) {
     if (Test-Path -LiteralPath $localHugoExe) {
         $hugoCommand = $localHugoExe
     } elseif (Test-Path -LiteralPath $localHugo) {
