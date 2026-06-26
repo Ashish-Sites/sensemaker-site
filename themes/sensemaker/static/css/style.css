@@ -644,13 +644,6 @@ th {
 }
 
 .entry-lineage {
-  position: sticky;
-  top: var(--entry-lineage-top);
-  max-height: calc(100vh - var(--entry-lineage-top) - 1rem);
-  overflow: auto;
-}
-
-.entry-lineage.entry-lineage-static {
   position: static;
   top: auto;
   max-height: none;
