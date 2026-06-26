@@ -1,0 +1,36 @@
+param(
+    [string]$BaseUrl = "https://ashish-sites.github.io/sensemaker-site/"
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+
+$shellCommand = $null
+if (Get-Command "pwsh" -ErrorAction SilentlyContinue) {
+    $shellCommand = "pwsh"
+} elseif (Get-Command "powershell" -ErrorAction SilentlyContinue) {
+    $shellCommand = "powershell"
+} else {
+    throw "Neither 'pwsh' nor 'powershell' is available on PATH."
+}
+
+Write-Host "Running taxonomy validation..."
+& $shellCommand -File (Join-Path $PSScriptRoot "validate-taxonomy.ps1")
+
+Write-Host "Running content quality validation..."
+& $shellCommand -File (Join-Path $PSScriptRoot "validate-content-quality.ps1")
+
+Write-Host "Building Hugo site..."
+Push-Location $repoRoot
+try {
+    & ./hugo --minify --cleanDestinationDir --baseURL $BaseUrl
+} finally {
+    Pop-Location
+}
+
+Write-Host "Running built-link validation..."
+& $shellCommand -File (Join-Path $PSScriptRoot "validate-built-links.ps1")
+
+Write-Host "All validations passed. Build completed successfully."

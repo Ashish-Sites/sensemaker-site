@@ -24,14 +24,8 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
-      - name: Validate taxonomy content
-        run: pwsh -File ./scripts/validate-taxonomy.ps1
-
-      - name: Validate content quality
-        run: pwsh -File ./scripts/validate-content-quality.ps1
-
-      - name: Build
-        run: hugo --minify --cleanDestinationDir --baseURL "https://ashish-sites.github.io/sensemaker-site/"
+      - name: Validate, build, and verify links
+        run: pwsh -File ./scripts/build-with-validation.ps1 -BaseUrl "https://ashish-sites.github.io/sensemaker-site/"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

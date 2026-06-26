@@ -2,6 +2,24 @@
 
 A digital extension of handwritten thinking. A personal sense-making environment that preserves your natural thinking process while adding capabilities that paper cannot provide.
 
+## Companion Documents
+
+- [Design document](DESIGN.md)
+- [Content model decisions](CONTENT_MODEL_DECISIONS.md)
+
+## Table of Contents
+
+- [Philosophy](#philosophy)
+- [Core Principles](#core-principles)
+- [Project Structure](#project-structure)
+- [Investigation Format](#investigation-format)
+- [Status Values](#status-values)
+- [Quick Start](#quick-start)
+- [Build Validation Pipeline](#build-validation-pipeline)
+- [Building and Deployment](#building-and-deployment)
+- [Features](#features)
+- [Troubleshooting](#troubleshooting)
+
 ## Philosophy
 
 SenseMaker is not a blog, wiki, or traditional note-taking application. It is a **digital notebook that has acquired superpowers**:
@@ -27,13 +45,18 @@ SenseMaker is not a blog, wiki, or traditional note-taking application. It is a 
 ```
 wiki-site/
 ├── content/
-│   ├── investigations/          # All investigations
-│   │   ├── engineering/
-│   │   ├── ai/
-│   │   ├── philosophy/
-│   │   └── ...
-│   ├── search/                  # Search page
-│   └── _index.md
+│   ├── investigations/          # Investigation entries
+│   ├── articles/                # Article entries
+│   ├── areas/                   # Area taxonomy terms
+│   ├── topics/                  # Topic taxonomy terms
+│   ├── tags/                    # Tag taxonomy terms
+│   ├── questions/               # Question taxonomy terms
+│   └── help/
+├── scripts/                     # Build/validation scripts
+│   ├── validate-taxonomy.ps1
+│   ├── validate-content-quality.ps1
+│   ├── validate-built-links.ps1
+│   └── build-with-validation.ps1
 ├── themes/
 │   └── sensemaker/              # Custom minimal theme
 │       ├── layouts/
@@ -176,7 +199,7 @@ git commit -m "New investigation: Topic Title"
 git push origin main
 ```
 
-GitHub Actions automatically builds and deploys to GitHub Pages.
+Use the workflow in `.github/workflows/deploy.yml` from the GitHub Actions tab to run the validated build + deploy pipeline.
 
 ### 4. Update Later
 
@@ -218,6 +241,23 @@ Use the directory name (slug) of the related investigation, not the title.
 
 Related investigations appear as a linked list at the bottom of each page with their status badges.
 
+## Build Validation Pipeline
+
+The build pipeline includes three validation gates before deployment:
+
+1. `scripts/validate-taxonomy.ps1`
+  Checks taxonomy integrity (required `_index.md` files, canonical term files, and required `entry_type`).
+2. `scripts/validate-content-quality.ps1`
+  Checks markdown quality rules (balanced fences, safe root links, image references, and investigation template ordering).
+3. `scripts/validate-built-links.ps1`
+  Checks generated HTML in `public/` for broken internal links and missing assets.
+
+Run the full local pipeline with one command:
+
+```powershell
+pwsh -File ./scripts/build-with-validation.ps1 -BaseUrl "https://ashish-sites.github.io/sensemaker-site/"
+```
+
 ## Building and Deployment
 
 ### Local Development
@@ -229,25 +269,24 @@ Related investigations appear as a linked list at the bottom of each page with t
 # Serve locally
 hugo server
 
-# Build production site
-hugo
+# Run full validated production build
+pwsh -File ./scripts/build-with-validation.ps1 -BaseUrl "https://ashish-sites.github.io/sensemaker-site/"
 ```
 
 ### GitHub Pages Deployment
 
-1. Push to `main` branch
-2. GitHub Actions workflow automatically:
-   - Builds the Hugo site
-   - Publishes to `gh-pages` branch
-   - Site is live at `[repo].github.io/wiki-site`
+1. Open the `Deploy to GitHub Pages` workflow in GitHub Actions.
+2. Run `workflow_dispatch`.
+3. Workflow executes validation + build + deploy.
+4. Site is published from `gh-pages`.
 
 ### Custom Domain
 
 To use a custom domain:
 
-1. Edit `.github/workflows/deploy.yml` and update `cname`
-2. Add CNAME record to your DNS provider
-3. Enable GitHub Pages in repository settings
+1. Add a `CNAME` file under `static/` with your domain.
+2. Add CNAME record at your DNS provider.
+3. Ensure GitHub Pages is configured to serve from `gh-pages`.
 
 ## Features
 
