@@ -155,7 +155,7 @@ th {
 
 /* Layout */
 .container {
-  max-width: 1240px;
+  max-width: 1365px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 }
@@ -463,12 +463,14 @@ th {
 
 /* Investigations List/Cards */
 .investigations-list {
-  max-width: 1000px;
+  max-width: none;
 }
 
 /* Entry page layout */
 .entry-page {
   max-width: 1100px;
+  --entry-sticky-top: 6.2rem;
+  --entry-lineage-top: 24.5rem;
 }
 
 .entry-title-row {
@@ -488,6 +490,11 @@ th {
   display: grid;
   gap: var(--spacing-md);
   font-size: 0.88rem;
+}
+
+.entry-context-row-three-col {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
 }
 
 .entry-context-group {
@@ -629,11 +636,17 @@ th {
   color: var(--color-text-muted);
 }
 
-.entry-meta,
+.entry-meta {
+  position: sticky;
+  top: var(--entry-sticky-top);
+  max-height: calc(100vh - var(--entry-sticky-top) - 1rem);
+  overflow: auto;
+}
+
 .entry-lineage {
   position: sticky;
-  top: 6.2rem;
-  max-height: calc(100vh - 7.2rem);
+  top: var(--entry-lineage-top);
+  max-height: calc(100vh - var(--entry-lineage-top) - 1rem);
   overflow: auto;
 }
 
@@ -1376,6 +1389,10 @@ th {
 
   .entry-main {
     grid-row: auto;
+  }
+
+  .entry-context-row-three-col {
+    grid-template-columns: 1fr;
   }
 
   .entry-meta,

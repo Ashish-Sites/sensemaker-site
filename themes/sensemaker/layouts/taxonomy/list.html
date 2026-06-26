@@ -1,12 +1,6 @@
 {{ define "content" }}
 <div class="taxonomy-page">
   <h1>{{ .Title }}</h1>
-  {{ with .Params.description }}
-    <p class="entry-description">{{ . }}</p>
-  {{ end }}
-  {{ if .Content }}
-    <div class="prose taxonomy-intro">{{ .Content }}</div>
-  {{ end }}
 
   {{ $all := .Pages }}
   {{ $sorted := sort $all "Lastmod" "desc" }}

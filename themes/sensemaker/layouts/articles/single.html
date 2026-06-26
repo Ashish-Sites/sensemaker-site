@@ -12,7 +12,7 @@
   </header>
 
   {{ if or .Params.tags (gt (len $targets) 0) }}
-    <section class="entry-context-row" aria-label="Context">
+    <section class="entry-context-row entry-context-row-three-col" aria-label="Context">
       {{ if .Params.tags }}
         <div class="entry-context-group">
           <span class="entry-context-label">Tags</span>
