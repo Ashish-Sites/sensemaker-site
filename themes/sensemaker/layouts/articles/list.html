@@ -7,7 +7,8 @@
   {{ $sorted := sort $all "Lastmod" "desc" }}
   {{ $ideas := where $all ".Params.article_type" "eq" "idea" }}
   {{ $comments := where $all ".Params.article_type" "eq" "comment" }}
-  {{ $paginator := .Paginate $sorted 12 }}
+  {{ $pageSize := 10 }}
+  {{ $paginator := .Paginate $sorted $pageSize }}
 
   <section class="list-summary">
     <div class="summary-card">

@@ -58,5 +58,30 @@
 
   <script src="{{ "js/theme-toggle.js" | absURL }}"></script>
   <script src="{{ "js/katex-setup.js" | absURL }}"></script>
+  <script>
+    (function () {
+      const navGroups = Array.from(document.querySelectorAll('.nav .nav-group'));
+      if (!navGroups.length) return;
+
+      navGroups.forEach((group) => {
+        group.addEventListener('toggle', () => {
+          if (!group.open) return;
+          navGroups.forEach((other) => {
+            if (other !== group) other.removeAttribute('open');
+          });
+        });
+      });
+
+      document.addEventListener('click', (event) => {
+        if (navGroups.some((group) => group.contains(event.target))) return;
+        navGroups.forEach((group) => group.removeAttribute('open'));
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        navGroups.forEach((group) => group.removeAttribute('open'));
+      });
+    })();
+  </script>
 </body>
 </html>
