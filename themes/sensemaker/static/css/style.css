@@ -468,7 +468,7 @@ th {
 
 /* Entry page layout */
 .entry-page {
-  max-width: 1100px;
+  max-width: 1240px;
   --entry-sticky-top: 6.2rem;
   --entry-lineage-top: 24.5rem;
 }
@@ -648,6 +648,13 @@ th {
   top: var(--entry-lineage-top);
   max-height: calc(100vh - var(--entry-lineage-top) - 1rem);
   overflow: auto;
+}
+
+.entry-lineage.entry-lineage-static {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 .trim-name {
