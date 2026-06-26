@@ -19,9 +19,15 @@
     <div class="questions-section">
       <h3>Questions</h3>
       <ul class="questions-list">
-        {{ range .Params.questions }}
+        {{ range $q := .Params.questions }}
+          {{ $questionLink := relURL (print "/questions/" (urlize $q) "/") }}
+          {{ range $.Site.Taxonomies.questions.ByCount }}
+            {{ if eq .Term $q }}
+              {{ $questionLink = .Page.RelPermalink }}
+            {{ end }}
+          {{ end }}
           <li>
-            <a href="{{ relURL (print "/questions/" (urlize .) "/") }}">{{ . }}</a>
+            <a href="{{ $questionLink }}">{{ $q }}</a>
           </li>
         {{ end }}
       </ul>
