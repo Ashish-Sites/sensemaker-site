@@ -1,0 +1,73 @@
+{{ define "content" }}
+<div class="investigations-list">
+  <h1>Investigations</h1>
+  <p class="subtitle">{{ .Site.Params.description }}</p>
+
+  {{ if .Pages }}
+    <div class="filter-section">
+      <input type="text" id="list-search" class="search-filter" placeholder="Filter investigations...">
+    </div>
+
+    <div class="investigations-grid">
+      {{ range .Pages }}
+        <div class="investigation-card" data-title="{{ .Title }}" data-areas="{{ delimit .Params.areas "," }}" data-topics="{{ delimit .Params.topics "," }}" data-status="{{ lower .Params.status }}">
+          <div class="card-header">
+            <div class="status-badge status-{{ lower .Params.status }}">
+              {{ .Params.status }}
+            </div>
+            <span class="updated">{{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+          </div>
+          
+          <h2 class="card-title">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </h2>
+
+          {{ if .Params.areas }}
+            <div class="card-areas">
+              {{ range first 2 .Params.areas }}
+                <span class="area-badge">{{ . }}</span>
+              {{ end }}
+            </div>
+          {{ end }}
+
+          {{ if .Params.topics }}
+            <div class="card-topics">
+              {{ range first 3 .Params.topics }}
+                <span class="topic-badge">{{ . }}</span>
+              {{ end }}
+            </div>
+          {{ end }}
+
+          {{ if .Params.questions }}
+            <div class="card-preview">
+              <strong>Questions:</strong>
+              {{ range first 1 .Params.questions }}
+                <p>{{ . }}</p>
+              {{ end }}
+            </div>
+          {{ end }}
+
+          <a href="{{ .RelPermalink }}" class="card-link">Explore →</a>
+        </div>
+      {{ end }}
+    </div>
+  {{ else }}
+    <p class="empty-state">No investigations yet. Start by creating your first one.</p>
+  {{ end }}
+</div>
+
+<script>
+  document.getElementById('list-search')?.addEventListener('keyup', function(e) {
+    const query = e.target.value.toLowerCase();
+    document.querySelectorAll('.investigation-card').forEach(card => {
+      const title = card.dataset.title.toLowerCase();
+      const areas = card.dataset.areas.toLowerCase();
+      const topics = card.dataset.topics.toLowerCase();
+      const status = card.dataset.status;
+      
+      const matches = title.includes(query) || areas.includes(query) || topics.includes(query) || status.includes(query);
+      card.style.display = matches ? '' : 'none';
+    });
+  });
+</script>
+{{ end }}

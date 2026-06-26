@@ -1,0 +1,12 @@
+name = "sensemaker"
+license = "MIT"
+licenselink = "https://github.com/yourusername/sensemaker/blob/main/LICENSE"
+description = "A minimal theme for SenseMaker - a digital thinking environment optimized for long-term sense-making"
+homepage = "https://github.com/yourusername/sensemaker"
+tags = ["minimal", "dark mode", "investigation", "knowledge", "thinking"]
+features = ["search", "dark mode", "responsive", "taxonomy"]
+min_version = "0.87.0"
+
+[author]
+  name = "Your Name"
+  homepage = "https://yourdomain.com"

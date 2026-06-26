@@ -1,0 +1,99 @@
+{{ define "content" }}
+<div class="homepage">
+  <div class="hero">
+    <h1>{{ .Site.Title }}</h1>
+    <p class="tagline">{{ .Site.Params.description }}</p>
+    <a href="/investigations/" class="cta-button">Explore Investigations →</a>
+  </div>
+
+  <div class="homepage-sections">
+    <!-- Recently Updated -->
+    <section class="home-section">
+      <h2>Recently Updated</h2>
+      {{ $recent := where .Site.RegularPages "Type" "investigations" }}
+      {{ $recent := sort $recent "Lastmod" "desc" }}
+      {{ range first 5 $recent }}
+        <div class="home-item">
+          <div class="item-header">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+          </div>
+          <p class="item-meta">Updated {{ dateFormat "02-Jan-2006" .Lastmod }}</p>
+        </div>
+      {{ end }}
+    </section>
+
+    <!-- Recently Created -->
+    <section class="home-section">
+      <h2>Recently Created</h2>
+      {{ $new := sort (where .Site.RegularPages "Type" "investigations") "Date" "desc" }}
+      {{ range first 5 $new }}
+        <div class="home-item">
+          <div class="item-header">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+          </div>
+          <p class="item-meta">Created {{ dateFormat "02-Jan-2006" .Date }}</p>
+        </div>
+      {{ end }}
+    </section>
+
+    <!-- Areas -->
+    <section class="home-section">
+      <h2>Areas of Investigation</h2>
+      {{ $pages := where .Site.RegularPages "Type" "investigations" }}
+      <div class="areas-list">
+        {{ range .Data.Terms.areas.ByCount }}
+          <a href="{{ .Page.RelPermalink }}" class="area-item">
+            <span class="area-name">{{ .Name }}</span>
+            <span class="area-count">{{ len .Pages }}</span>
+          </a>
+        {{ end }}
+      </div>
+    </section>
+
+    <!-- Topics -->
+    <section class="home-section">
+      <h2>Topics</h2>
+      <div class="topics-list">
+        {{ range $i, $term := .Data.Terms.topics.ByCount }}
+          {{ if lt $i 20 }}
+          <a href="{{ .Page.RelPermalink }}" class="topic-item">
+            <span>{{ .Name }}</span>
+            <span class="count">({{ len .Pages }})</span>
+          </a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </section>
+
+    <!-- Open Investigations (Seed, Thinking, Reading, Exploring) -->
+    <section class="home-section">
+      <h2>Open Investigations</h2>
+      {{ $open := where (where .Site.RegularPages "Type" "investigations") ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring") }}
+      {{ range first 8 $open }}
+        <div class="home-item">
+          <div class="item-header">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+          </div>
+        </div>
+      {{ end }}
+    </section>
+
+    <!-- Stable Investigations (Ready for reference) -->
+    <section class="home-section">
+      <h2>Stable Investigations</h2>
+      {{ $stable := where (where .Site.RegularPages "Type" "investigations") ".Params.status" "eq" "Stable" }}
+      {{ range first 8 $stable }}
+        <div class="home-item">
+          <div class="item-header">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+          </div>
+        </div>
+      {{ end }}
+    </section>
+  </div>
+</div>
+{{ end }}

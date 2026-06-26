@@ -1,0 +1,59 @@
+baseURL = "/sensemaker-site/"
+locale = "en-us"
+title = "SenseMaker"
+theme = "sensemaker"
+pluralizeListTitles = false
+removePathAccents = true
+
+# Output formats
+[outputs]
+  home = ["HTML", "JSON"]
+
+# Taxonomies - Core organization
+[taxonomies]
+  area = "areas"
+  topic = "topics"
+
+# Menu navigation
+[[menu.main]]
+  name = "Investigations"
+  url = "/investigations/"
+  weight = 1
+
+[[menu.main]]
+  name = "Areas"
+  url = "/areas/"
+  weight = 2
+
+[[menu.main]]
+  name = "Topics"
+  url = "/topics/"
+  weight = 3
+
+[[menu.main]]
+  name = "Search"
+  url = "/search/"
+  weight = 4
+
+# Markdown rendering
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    style = "native"
+
+# Site parameters
+[params]
+  favicon = "/images/favicon.svg"
+  author = "Your Name"
+  description = "A digital thinking environment for long-term sense-making"
+  
+  # Dark mode toggle
+  darkMode = true
+  
+  # Search configuration
+  search = true
+  
+  # Footer
+  footer = "SenseMaker MVP · Digital Extension of Thinking"

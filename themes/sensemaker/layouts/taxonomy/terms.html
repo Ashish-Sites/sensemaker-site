@@ -1,0 +1,37 @@
+{{ define "content" }}
+<div class="taxonomy-page">
+  <h1>{{ .Title }}</h1>
+  <p class="subtitle">{{ .Content }}</p>
+  
+  {{ if .Pages }}
+    <div class="pages-grid">
+      {{ range .Pages }}
+        <div class="investigation-card">
+          <div class="card-header">
+            <div class="status-badge status-{{ lower .Params.status }}">
+              {{ .Params.status }}
+            </div>
+            <span class="updated">{{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+          </div>
+          
+          <h2 class="card-title">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </h2>
+
+          {{ if .Params.questions }}
+            <div class="card-preview">
+              {{ range first 1 .Params.questions }}
+                <p>{{ . }}</p>
+              {{ end }}
+            </div>
+          {{ end }}
+
+          <a href="{{ .RelPermalink }}" class="card-link">View →</a>
+        </div>
+      {{ end }}
+    </div>
+  {{ else }}
+    <p class="empty-state">No items in this category.</p>
+  {{ end }}
+</div>
+{{ end }}

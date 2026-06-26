@@ -1,0 +1,17 @@
+{{- $investigations := where .Site.RegularPages "Type" "investigations" -}}
+[
+{{- range $index, $page := $investigations -}}
+{
+  "url": {{ $page.RelPermalink | jsonify }},
+  "title": {{ $page.Title | jsonify }},
+  "content": {{ $page.Plain | jsonify }},
+  "status": {{ $page.Params.status | jsonify }},
+  "areas": {{ delimit $page.Params.areas ", " | jsonify }},
+  "topics": {{ delimit $page.Params.topics ", " | jsonify }},
+  "questions": {{ delimit $page.Params.questions ", " | jsonify }},
+  "tags": {{ delimit $page.Params.tags ", " | jsonify }},
+  "created": {{ $page.Params.created | jsonify }},
+  "updated": {{ $page.Params.created | jsonify }}
+}{{ if ne (add $index 1) (len $investigations) }},{{ end }}
+{{- end }}
+]

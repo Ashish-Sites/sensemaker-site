@@ -1,0 +1,83 @@
+{{ define "content" }}
+<article class="investigation">
+  <div class="investigation-meta">
+    <div class="status-badge status-{{ lower .Params.status }}">
+      {{ .Params.status }}
+    </div>
+    
+    <div class="meta-info">
+      <span class="created">Created: {{ dateFormat "02-Jan-2006" .Date }}</span>
+      {{ if gt .Lastmod .Date }}
+        <span class="updated">Updated: {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+      {{ end }}
+    </div>
+  </div>
+
+  <h1 class="investigation-title">{{ .Title }}</h1>
+
+  {{ if .Params.questions }}
+    <div class="questions-section">
+      <h3>Questions</h3>
+      <ul class="questions-list">
+        {{ range .Params.questions }}
+          <li>{{ . }}</li>
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+
+  <div class="investigation-content">
+    {{ .Content }}
+  </div>
+
+  {{ if .Params.areas }}
+    <div class="taxonomy-section">
+      <h4>Areas</h4>
+      <div class="tags">
+        {{ range .Params.areas }}
+          <a href="{{ relURL (print "/areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
+
+  {{ if .Params.topics }}
+    <div class="taxonomy-section">
+      <h4>Topics</h4>
+      <div class="tags">
+        {{ range .Params.topics }}
+          <a href="{{ relURL (print "/topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
+
+  {{ if .Params.tags }}
+    <div class="taxonomy-section">
+      <h4>Tags</h4>
+      <div class="tags">
+        {{ range .Params.tags }}
+          <span class="tag tag-regular">#{{ . }}</span>
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
+
+  {{ if .Params.related }}
+    <div class="related-section">
+      <h3>Related Investigations</h3>
+      <ul class="related-list">
+        {{ $related := .Params.related }}
+        {{ range where .Site.RegularPages "Type" "investigations" }}
+          {{ if in $related (.File.BaseFileName | strings.TrimSuffix ".md") }}
+            <li>
+              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+              <span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span>
+            </li>
+          {{ end }}
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+</article>
+{{ end }}
