@@ -26,11 +26,11 @@ local_backend: true
 media_folder: static/images/uploads
 public_folder: /images/uploads
 
-site_url: https://ashish-sites.github.io
+site_url: https://ashish-sites.github.io/sensemaker-site/
 display_url: https://ashish-sites.github.io/sensemaker-site/
 logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 
-publish_mode: simple
+publish_mode: editorial_workflow
 
 collections:
   - name: investigations
