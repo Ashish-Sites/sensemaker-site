@@ -8,6 +8,10 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 
+if ($BaseUrl -match '^\[[^\]]+\]\((https?://[^)]+)\)$') {
+    $BaseUrl = $Matches[1]
+}
+
 $shellCommand = $null
 if (Get-Command "pwsh" -ErrorAction SilentlyContinue) {
     $shellCommand = "pwsh"
@@ -20,14 +24,27 @@ if (Get-Command "pwsh" -ErrorAction SilentlyContinue) {
 $hugoCommand = $null
 $localHugo = Join-Path $repoRoot "hugo"
 $localHugoExe = Join-Path $repoRoot "hugo.exe"
-if (Test-Path -LiteralPath $localHugoExe) {
-    $hugoCommand = $localHugoExe
-} elseif (Test-Path -LiteralPath $localHugo) {
-    $hugoCommand = $localHugo
-} elseif (Get-Command "hugo" -ErrorAction SilentlyContinue) {
-    $hugoCommand = "hugo"
+$hugoFromPath = Get-Command "hugo" -ErrorAction SilentlyContinue
+$isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+
+if ($isWindows) {
+    if (Test-Path -LiteralPath $localHugoExe) {
+        $hugoCommand = $localHugoExe
+    } elseif (Test-Path -LiteralPath $localHugo) {
+        $hugoCommand = $localHugo
+    } elseif ($hugoFromPath) {
+        $hugoCommand = "hugo"
+    }
 } else {
-    throw "Hugo executable not found. Install Hugo or add it to PATH."
+    if ($hugoFromPath) {
+        $hugoCommand = "hugo"
+    } elseif (Test-Path -LiteralPath $localHugo) {
+        $hugoCommand = $localHugo
+    }
+}
+
+if (-not $hugoCommand) {
+    throw "Hugo executable not found for this OS. Install Hugo or add it to PATH."
 }
 
 Write-Host "Running taxonomy validation..."
