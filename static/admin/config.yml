@@ -179,11 +179,15 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: area_term
     extension: md
     format: frontmatter
     summary: "{{title}}"
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: area_term }
       - { label: Area Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
       - { label: Draft, name: draft, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown, required: false }
@@ -195,11 +199,15 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: topic_term
     extension: md
     format: frontmatter
     summary: "{{title}}"
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: topic_term }
       - { label: Topic Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
       - { label: Draft, name: draft, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown, required: false }
@@ -211,11 +219,15 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: tag_term
     extension: md
     format: frontmatter
     summary: "{{title}}"
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: tag_term }
       - { label: Tag Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
       - { label: Draft, name: draft, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown, required: false }
@@ -227,11 +239,15 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: question_term
     extension: md
     format: frontmatter
     summary: "{{title}}"
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: question_term }
       - { label: Question Text, name: title, widget: string, hint: "Use full natural-language question" }
       - { label: Draft, name: draft, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown, required: false }
