@@ -3,11 +3,44 @@
 {{ $linkedSorted := sort $linked "Lastmod" "desc" }}
 {{ $linkedInvestigations := where $linked ".Type" "investigations" }}
 {{ $linkedArticles := where $linked ".Type" "articles" }}
+{{ $topicPages := where .Site.RegularPages "Type" "topics" }}
+{{ $relatedTopics := slice }}
+{{ if eq .Data.Plural "areas" }}
+  {{ range $topicPages }}
+    {{ if eq (default "" .Params.primary_area) $.Title }}
+      {{ $relatedTopics = $relatedTopics | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
 
 <div class="entry-page entry-page-term entry-page-{{ .Data.Plural }}">
   <header class="entry-title-row">
     <h1>{{ .Title }}</h1>
   </header>
+
+  {{ if or (and (eq .Data.Plural "topics") .Params.primary_area) (and (eq .Data.Plural "areas") (gt (len $relatedTopics) 0)) }}
+    <section class="entry-context-row" aria-label="Context">
+      {{ if and (eq .Data.Plural "topics") .Params.primary_area }}
+        <div class="entry-context-group">
+          <span class="entry-context-label">Primary Area</span>
+          <div class="tags">
+            <a href="{{ absURL (print "areas/" (urlize .Params.primary_area) "/") }}" class="tag tag-area">{{ .Params.primary_area }}</a>
+          </div>
+        </div>
+      {{ end }}
+
+      {{ if and (eq .Data.Plural "areas") (gt (len $relatedTopics) 0) }}
+        <div class="entry-context-group">
+          <span class="entry-context-label">Related Topics</span>
+          <div class="tags">
+            {{ range $relatedTopics }}
+              <a href="{{ .RelPermalink }}" class="tag tag-topic">{{ .Title }}</a>
+            {{ end }}
+          </div>
+        </div>
+      {{ end }}
+    </section>
+  {{ end }}
 
   <section class="entry-grid">
     <article class="entry-main prose">

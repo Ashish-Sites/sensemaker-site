@@ -11,6 +11,39 @@
     <h1 class="investigation-title">{{ .Title }}</h1>
   </header>
 
+  {{ if or .Params.tags (gt (len $targets) 0) }}
+    <section class="entry-context-row" aria-label="Context">
+      {{ if .Params.tags }}
+        <div class="entry-context-group">
+          <span class="entry-context-label">Tags</span>
+          <div class="tags">
+            {{ range .Params.tags }}
+              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+            {{ end }}
+          </div>
+        </div>
+      {{ end }}
+
+      {{ if gt (len $targets) 0 }}
+        <div class="entry-context-group">
+          <span class="entry-context-label">Attached Investigations</span>
+          <div class="tags">
+            {{ range $target := $targets }}
+              {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+              {{ if $match }}
+                {{ range $match }}
+                  <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+                {{ end }}
+              {{ else }}
+                <span class="tag tag-regular">{{ $target }}</span>
+              {{ end }}
+            {{ end }}
+          </div>
+        </div>
+      {{ end }}
+    </section>
+  {{ end }}
+
   <section class="entry-grid">
     <div class="entry-main prose">
       {{ with .Params.description }}
@@ -23,16 +56,6 @@
         <p>No body content yet for this article.</p>
       {{ end }}
 
-      {{ if .Params.tags }}
-        <section class="entry-inline-section">
-          <h3>Tags</h3>
-          <div class="tags">
-            {{ range .Params.tags }}
-              <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
-            {{ end }}
-          </div>
-        </section>
-      {{ end }}
     </div>
 
     <aside class="entry-meta">
