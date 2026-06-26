@@ -39,13 +39,17 @@ collections:
     folder: content/investigations
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: investigation
     extension: md
     format: frontmatter
     slug: "{{slug}}"
     summary: "{{title}} - {{status}}"
     sortable_fields: [created, title, status]
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: investigation }
       - { label: Title, name: title, widget: string }
       - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Status
@@ -125,13 +129,17 @@ collections:
     folder: content/articles
     create: true
     delete: true
-    exclude: ["_index.md"]
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: article
     extension: md
     format: frontmatter
     slug: "{{slug}}"
     summary: "{{title}} - {{article_type}}"
     sortable_fields: [created, title, article_type]
     fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: article }
       - { label: Title, name: title, widget: string }
       - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Article Type
