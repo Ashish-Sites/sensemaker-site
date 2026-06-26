@@ -2,44 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>//localhost:1313/areas/ai/</loc>
+    <loc>/areas/ai/</loc>
   </url><url>
-    <loc>//localhost:1313/areas/</loc>
+    <loc>/areas/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/complexity/</loc>
+    <loc>/topics/complexity/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/deep-learning/</loc>
+    <loc>/topics/deep-learning/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/design-patterns/</loc>
+    <loc>/topics/design-patterns/</loc>
   </url><url>
-    <loc>//localhost:1313/investigations/engineering/distributed-systems/</loc>
+    <loc>/investigations/engineering/distributed-systems/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/distributed-systems/</loc>
+    <loc>/topics/distributed-systems/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/emergence/</loc>
+    <loc>/topics/emergence/</loc>
   </url><url>
-    <loc>//localhost:1313/investigations/philosophy/emergence/</loc>
+    <loc>/investigations/philosophy/emergence/</loc>
   </url><url>
-    <loc>//localhost:1313/areas/engineering/</loc>
+    <loc>/areas/engineering/</loc>
   </url><url>
-    <loc>//localhost:1313/investigations/</loc>
+    <loc>/investigations/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/language-models/</loc>
+    <loc>/topics/language-models/</loc>
   </url><url>
-    <loc>//localhost:1313/areas/philosophy/</loc>
+    <loc>/areas/philosophy/</loc>
   </url><url>
-    <loc>//localhost:1313/investigations/ai/scaling-and-emergence/</loc>
+    <loc>/investigations/ai/scaling-and-emergence/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/scaling-laws/</loc>
+    <loc>/topics/scaling-laws/</loc>
   </url><url>
-    <loc>//localhost:1313/search/</loc>
+    <loc>/search/</loc>
   </url><url>
-    <loc>//localhost:1313/</loc>
+    <loc>/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/system-architecture/</loc>
+    <loc>/topics/system-architecture/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/systems-thinking/</loc>
+    <loc>/topics/systems-thinking/</loc>
   </url><url>
-    <loc>//localhost:1313/topics/</loc>
+    <loc>/topics/</loc>
   </url>
 </urlset>

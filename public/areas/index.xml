@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Areas on SenseMaker</title>
-		<link>//localhost:1313/areas/</link>
+		<link>/areas/</link>
 		<description>Recent content in Areas on SenseMaker</description>
 		<generator>Hugo</generator>
 		<language>en-us</language>
@@ -10,26 +10,26 @@
 		
 		
 		
-			<atom:link href="//localhost:1313/areas/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="/areas/index.xml" rel="self" type="application/rss+xml" />
 			<item>
 				<title>AI</title>
-				<link>//localhost:1313/areas/ai/</link>
+				<link>/areas/ai/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/areas/ai/</guid>
+				<guid>/areas/ai/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Engineering</title>
-				<link>//localhost:1313/areas/engineering/</link>
+				<link>/areas/engineering/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/areas/engineering/</guid>
+				<guid>/areas/engineering/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Philosophy</title>
-				<link>//localhost:1313/areas/philosophy/</link>
+				<link>/areas/philosophy/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/areas/philosophy/</guid>
+				<guid>/areas/philosophy/</guid>
 				<description></description>
 			</item>
 	</channel>

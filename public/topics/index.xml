@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<title>Topics on SenseMaker</title>
-		<link>//localhost:1313/topics/</link>
+		<link>/topics/</link>
 		<description>Recent content in Topics on SenseMaker</description>
 		<generator>Hugo</generator>
 		<language>en-us</language>
@@ -10,68 +10,68 @@
 		
 		
 		
-			<atom:link href="//localhost:1313/topics/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="/topics/index.xml" rel="self" type="application/rss+xml" />
 			<item>
 				<title>Complexity</title>
-				<link>//localhost:1313/topics/complexity/</link>
+				<link>/topics/complexity/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/complexity/</guid>
+				<guid>/topics/complexity/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Deep Learning</title>
-				<link>//localhost:1313/topics/deep-learning/</link>
+				<link>/topics/deep-learning/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/deep-learning/</guid>
+				<guid>/topics/deep-learning/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Design Patterns</title>
-				<link>//localhost:1313/topics/design-patterns/</link>
+				<link>/topics/design-patterns/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/design-patterns/</guid>
+				<guid>/topics/design-patterns/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Distributed Systems</title>
-				<link>//localhost:1313/topics/distributed-systems/</link>
+				<link>/topics/distributed-systems/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/distributed-systems/</guid>
+				<guid>/topics/distributed-systems/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Emergence</title>
-				<link>//localhost:1313/topics/emergence/</link>
+				<link>/topics/emergence/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/emergence/</guid>
+				<guid>/topics/emergence/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Language Models</title>
-				<link>//localhost:1313/topics/language-models/</link>
+				<link>/topics/language-models/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/language-models/</guid>
+				<guid>/topics/language-models/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Scaling Laws</title>
-				<link>//localhost:1313/topics/scaling-laws/</link>
+				<link>/topics/scaling-laws/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/scaling-laws/</guid>
+				<guid>/topics/scaling-laws/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>System Architecture</title>
-				<link>//localhost:1313/topics/system-architecture/</link>
+				<link>/topics/system-architecture/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/system-architecture/</guid>
+				<guid>/topics/system-architecture/</guid>
 				<description></description>
 			</item>
 			<item>
 				<title>Systems Thinking</title>
-				<link>//localhost:1313/topics/systems-thinking/</link>
+				<link>/topics/systems-thinking/</link>
 				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-				<guid>//localhost:1313/topics/systems-thinking/</guid>
+				<guid>/topics/systems-thinking/</guid>
 				<description></description>
 			</item>
 	</channel>
