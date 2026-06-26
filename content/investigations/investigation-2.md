@@ -9,6 +9,8 @@ topics:
   - Topic 2
 questions:
   - Question 2
+tags:
+  - Tag 2
 draft: false
 ---
 Investigation 2

@@ -63,7 +63,7 @@ removePathAccents = true
 # Site parameters
 [params]
   favicon = "/images/favicon.svg"
-  author = "Your Name"
+  author = "Ashish Sinha"
   description = "A digital thinking environment for long-term sense-making"
   
   # Dark mode toggle
