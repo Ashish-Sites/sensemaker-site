@@ -22,7 +22,7 @@ This is an expanded sample body for **question_term** entry **Where is the bottl
 
 ## Paragraphs and Inline Formatting
 
-Lorem ipsum style content can hide real rendering issues, so this paragraph mixes **bold**, *italic*, ~~strikethrough~~, inline code, and [an internal link](/investigations/) with [an external link](https://gohugo.io).
+Lorem ipsum style content can hide real rendering issues, so this paragraph mixes **bold**, *italic*, ~~strikethrough~~, `inline code`, and [an internal link](https://ashish-sites.github.io/sensemaker-site/investigations/) with [an external link](https://gohugo.io).
 
 A second paragraph adds more line wrapping behavior, longer sentence lengths, and a different cadence so you can evaluate vertical rhythm in lists, cards, and prose containers.
 
@@ -63,19 +63,19 @@ A second paragraph adds more line wrapping behavior, longer sentence lengths, an
 
 ## Code Block
 
-`yaml
+```yaml
 entry_type: question_term
 title: Where is the bottleneck in this system?
 slug: question-06
-`",
-    ",
-    
+```
+
+## Horizontal Rule
 
 ---
 
 ## Image
 
-![Sample placeholder image](/images/uploads/sensemaker-grid.svg)
+![Sample placeholder image](/sensemaker-site/images/uploads/sensemaker-grid.svg)
 
 ## Multi-column Content
 
@@ -86,6 +86,6 @@ slug: question-06
 
 ## Footnote-style Line
 
-Term reference: [Explore Topics](/topics/) and [Explore Tags](/tags/).
+Term reference: [Explore Topics](https://ashish-sites.github.io/sensemaker-site/topics/) and [Explore Tags](https://ashish-sites.github.io/sensemaker-site/tags/).
 
 

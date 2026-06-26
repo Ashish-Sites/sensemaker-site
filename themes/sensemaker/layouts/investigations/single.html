@@ -70,12 +70,6 @@
         <p class="entry-description">{{ . }}</p>
       {{ end }}
 
-      {{ if .Content }}
-        {{ .Content }}
-      {{ else }}
-        <p>No body content yet for this investigation.</p>
-      {{ end }}
-
       {{ if .Params.questions }}
         <section class="entry-inline-section">
           <h3>Questions</h3>
@@ -91,6 +85,12 @@
             {{ end }}
           </ul>
         </section>
+      {{ end }}
+
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else }}
+        <p>No body content yet for this investigation.</p>
       {{ end }}
 
     </div>
