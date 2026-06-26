@@ -8,6 +8,6 @@ topics:
   - SITE
 questions:
   - How to use this site
-draft: true
+draft: false
 ---
 This is document about the usage of this site.
