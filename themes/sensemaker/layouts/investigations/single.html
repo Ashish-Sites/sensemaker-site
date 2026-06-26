@@ -95,51 +95,53 @@
 
     </div>
 
-    <aside class="entry-meta">
-      <h2>Metadata</h2>
-      <dl class="entry-meta-list">
-        <div><dt>Type</dt><dd>investigation</dd></div>
-        <div><dt>Status</dt><dd>{{ default "Seed" .Params.status }}</dd></div>
-        <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
-        <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
-        <div><dt>Areas</dt><dd>{{ len (default (slice) .Params.areas) }}</dd></div>
-        <div><dt>Topics</dt><dd>{{ len (default (slice) .Params.topics) }}</dd></div>
-        <div><dt>Questions</dt><dd>{{ len (default (slice) .Params.questions) }}</dd></div>
-        <div><dt>Tags</dt><dd>{{ len (default (slice) .Params.tags) }}</dd></div>
-        <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
-      </dl>
-    </aside>
+    <aside class="entry-rail">
+      <section class="entry-meta">
+        <h2>Metadata</h2>
+        <dl class="entry-meta-list">
+          <div><dt>Type</dt><dd>investigation</dd></div>
+          <div><dt>Status</dt><dd>{{ default "Seed" .Params.status }}</dd></div>
+          <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
+          <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
+          <div><dt>Areas</dt><dd>{{ len (default (slice) .Params.areas) }}</dd></div>
+          <div><dt>Topics</dt><dd>{{ len (default (slice) .Params.topics) }}</dd></div>
+          <div><dt>Questions</dt><dd>{{ len (default (slice) .Params.questions) }}</dd></div>
+          <div><dt>Tags</dt><dd>{{ len (default (slice) .Params.tags) }}</dd></div>
+          <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+        </dl>
+      </section>
 
-    <aside class="entry-lineage">
-      <h2>Lineage</h2>
+      <section class="entry-lineage">
+        <h2>Lineage</h2>
 
-      <h3>Attached Articles</h3>
-      {{ if gt (len $attached) 0 }}
-        <ul class="entry-lineage-list">
-          {{ range $attached }}
-            <li>
-              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
-              <span class="entry-lineage-meta">{{ default "idea" .Params.article_type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <p class="empty-state">No attached articles yet.</p>
-      {{ end }}
+        <h3>Attached Articles</h3>
+        {{ if gt (len $attached) 0 }}
+          <ul class="entry-lineage-list">
+            {{ range $attached }}
+              <li>
+                <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
+                <span class="entry-lineage-meta">{{ default "idea" .Params.article_type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+              </li>
+            {{ end }}
+          </ul>
+        {{ else }}
+          <p class="empty-state">No attached articles yet.</p>
+        {{ end }}
 
-      <h3>Related Investigations</h3>
-      {{ if gt (len $relatedInv) 0 }}
-        <ul class="entry-lineage-list">
-          {{ range $relatedInv }}
-            <li>
-              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
-              <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <p class="empty-state">No related investigations yet.</p>
-      {{ end }}
+        <h3>Related Investigations</h3>
+        {{ if gt (len $relatedInv) 0 }}
+          <ul class="entry-lineage-list">
+            {{ range $relatedInv }}
+              <li>
+                <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
+                <span class="entry-lineage-meta">{{ default "Seed" .Params.status }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+              </li>
+            {{ end }}
+          </ul>
+        {{ else }}
+          <p class="empty-state">No related investigations yet.</p>
+        {{ end }}
+      </section>
     </aside>
   </section>
 </article>

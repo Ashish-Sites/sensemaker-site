@@ -55,33 +55,35 @@
       {{ end }}
     </article>
 
-    <aside class="entry-meta">
-      <h2>Metadata</h2>
-      <dl class="entry-meta-list">
-        <div><dt>Type</dt><dd>{{ .Data.Singular }}</dd></div>
-        <div><dt>Lifecycle</dt><dd>{{ default "active" .Params.lifecycle }}</dd></div>
-        <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
-        <div><dt>Linked entries</dt><dd>{{ len $linked }}</dd></div>
-        <div><dt>Investigations</dt><dd>{{ len $linkedInvestigations }}</dd></div>
-        <div><dt>Articles</dt><dd>{{ len $linkedArticles }}</dd></div>
-        <div><dt>Latest update</dt><dd>{{ with index $linkedSorted 0 }}{{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}n/a{{ end }}</dd></div>
-      </dl>
-    </aside>
+    <aside class="entry-rail">
+      <section class="entry-meta">
+        <h2>Metadata</h2>
+        <dl class="entry-meta-list">
+          <div><dt>Type</dt><dd>{{ .Data.Singular }}</dd></div>
+          <div><dt>Lifecycle</dt><dd>{{ default "active" .Params.lifecycle }}</dd></div>
+          <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+          <div><dt>Linked entries</dt><dd>{{ len $linked }}</dd></div>
+          <div><dt>Investigations</dt><dd>{{ len $linkedInvestigations }}</dd></div>
+          <div><dt>Articles</dt><dd>{{ len $linkedArticles }}</dd></div>
+          <div><dt>Latest update</dt><dd>{{ with index $linkedSorted 0 }}{{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}n/a{{ end }}</dd></div>
+        </dl>
+      </section>
 
-    <aside class="entry-lineage">
-      <h2>Lineage</h2>
-      {{ if gt (len $linkedSorted) 0 }}
-        <ul class="entry-lineage-list">
-          {{ range first 16 $linkedSorted }}
-            <li>
-              <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
-              <span class="entry-lineage-meta">{{ .Type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
-            </li>
-          {{ end }}
-        </ul>
-      {{ else }}
-        <p class="empty-state">No linked entries yet.</p>
-      {{ end }}
+      <section class="entry-lineage">
+        <h2>Lineage</h2>
+        {{ if gt (len $linkedSorted) 0 }}
+          <ul class="entry-lineage-list">
+            {{ range first 16 $linkedSorted }}
+              <li>
+                <a href="{{ .RelPermalink }}" class="trim-name" title="{{ .Title }}">{{ .Title }}</a>
+                <span class="entry-lineage-meta">{{ .Type }} · {{ dateFormat "02-Jan-2006" .Lastmod }}</span>
+              </li>
+            {{ end }}
+          </ul>
+        {{ else }}
+          <p class="empty-state">No linked entries yet.</p>
+        {{ end }}
+      </section>
     </aside>
   </section>
 </div>
