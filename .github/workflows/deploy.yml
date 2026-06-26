@@ -9,6 +9,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Kolkata
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
