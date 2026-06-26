@@ -12,18 +12,25 @@
 
   <h1 class="investigation-title">{{ .Title }}</h1>
 
-  {{ if .Params.investigation }}
-    {{ $target := .Params.investigation }}
-    {{ $match := first 1 (where (where .Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+  {{ $targets := default (slice) .Params.investigations }}
+  {{ if and (eq (len $targets) 0) .Params.investigation }}
+    {{ $targets = $targets | append .Params.investigation }}
+  {{ end }}
+  {{ if gt (len $targets) 0 }}
     <div class="taxonomy-section">
-      <h4>Attached To Investigation</h4>
-      {{ if $match }}
-        {{ range $match }}
-          <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+      <h4>Attached To Investigations</h4>
+      <div class="tags">
+        {{ range $target := $targets }}
+          {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+          {{ if $match }}
+            {{ range $match }}
+              <a href="{{ .RelPermalink }}" class="tag tag-area">{{ .Title }}</a>
+            {{ end }}
+          {{ else }}
+            <span class="tag tag-regular">{{ $target }}</span>
+          {{ end }}
         {{ end }}
-      {{ else }}
-        <span class="tag tag-regular">{{ $target }}</span>
-      {{ end }}
+      </div>
     </div>
   {{ end }}
 
@@ -36,7 +43,7 @@
       <h4>Tags</h4>
       <div class="tags">
         {{ range .Params.tags }}
-          <a href="{{ relURL (print "/tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+          <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
         {{ end }}
       </div>
     </div>

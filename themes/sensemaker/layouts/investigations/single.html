@@ -35,12 +35,21 @@
   {{ end }}
 
   {{ $invSlug := .File.BaseFileName }}
-  {{ $articles := where (where .Site.RegularPages "Type" "articles") ".Params.investigation" "eq" $invSlug }}
-  {{ if $articles }}
+  {{ $allArticles := where .Site.RegularPages "Type" "articles" }}
+  {{ $attached := slice }}
+  {{ range $allArticles }}
+    {{ $legacyMatch := eq .Params.investigation $invSlug }}
+    {{ $multiMatch := in (default (slice) .Params.investigations) $invSlug }}
+    {{ $selectedFromInvestigation := in (default (slice) $.Params.attached_articles) .File.BaseFileName }}
+    {{ if or $legacyMatch $multiMatch $selectedFromInvestigation }}
+      {{ $attached = $attached | append . }}
+    {{ end }}
+  {{ end }}
+  {{ if gt (len $attached) 0 }}
     <div class="related-section">
       <h3>Attached Articles</h3>
       <ul class="related-list">
-        {{ range $articles }}
+        {{ range $attached }}
           <li>
             <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             {{ if .Params.article_type }}
