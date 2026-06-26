@@ -121,6 +121,39 @@ https://USERNAME.github.io/wiki-site/
 
 You can access it immediately after the first successful deployment.
 
+## Optional Browser CMS (Prose.io)
+
+If you want browser-based editing for Markdown content (create, edit, delete),
+you can use Prose.io with this repo.
+
+### Setup
+
+1. Ensure `.prose.yaml` exists at repository root (already added).
+2. Push your latest `main` branch.
+3. Open:
+
+```
+https://prose.io/#Ashish-Sites/sensemaker-site
+```
+
+4. Authorize with GitHub when prompted.
+
+### What You Can Do in Prose
+
+- Create new investigation files in `content/investigations/...`
+- Edit front matter fields (`title`, `status`, `areas`, etc.)
+- Append new dated entries in Markdown body
+- Delete investigations when needed
+- Commit changes directly to `main`
+
+After commit, GitHub Actions deploys the updated site automatically.
+
+### Notes
+
+- Prose.io is an external hosted editor and may occasionally be unavailable.
+- Your source of truth remains Markdown + Git.
+- For bulk edits or advanced refactors, local VS Code editing is still better.
+
 ## Checking Deployment Status
 
 ### In GitHub

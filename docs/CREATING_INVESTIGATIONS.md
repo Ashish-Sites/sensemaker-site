@@ -2,6 +2,15 @@
 
 Guide for creating investigations in SenseMaker.
 
+You can do this either locally in VS Code or in Prose.io:
+
+```
+https://prose.io/#Ashish-Sites/sensemaker-site
+```
+
+Prose writes directly to this repository, so commits there trigger deployment the
+same way as local commits.
+
 ## Investigation Filename
 
 Use kebab-case (lowercase with hyphens) for the filename:
@@ -82,6 +91,13 @@ Nine months later, you notice something new...
 Always use: `DD-Month-YYYY` (e.g., `26-June-2026`)
 
 This is consistent and sortable.
+
+## If You Use Prose.io
+
+- Create files under `content/investigations/<area>/...`
+- Keep filename in kebab-case
+- Confirm front matter remains valid YAML lists for `areas`, `topics`, `questions`, `tags`, and `related`
+- Keep append-only behavior: add a new dated section, do not overwrite prior dated sections
 
 ## Content Elements You Can Use
 

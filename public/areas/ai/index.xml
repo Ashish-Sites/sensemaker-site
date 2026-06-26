@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>AI on SenseMaker</title>
+		<link>/areas/ai/</link>
+		<description>Recent content in AI on SenseMaker</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<atom:link href="/areas/ai/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Scaling and Emergence in Neural Networks</title>
+				<link>/investigations/ai/scaling-and-emergence/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>/investigations/ai/scaling-and-emergence/</guid>
+				<description>&lt;h2 id=&#34;10-march-2026&#34;&gt;10-March-2026&lt;/h2&gt;&#xA;&lt;p&gt;There&amp;rsquo;s something remarkable happening in AI right now: behaviors that didn&amp;rsquo;t exist in smaller models suddenly appear in larger ones.&lt;/p&gt;&#xA;&lt;h3 id=&#34;observed-phenomena&#34;&gt;Observed Phenomena&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;In-context learning&lt;/strong&gt;: Small models can&amp;rsquo;t learn from examples in the prompt. Larger models can.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Reasoning&lt;/strong&gt;: Models under a certain scale seem to purely memorize patterns. Larger models exhibit something that looks like reasoning.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Multi-step problem solving&lt;/strong&gt;: Emerges around the billions parameter scale.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Apparent understanding&lt;/strong&gt;: At sufficient scale, models output text that sounds intelligent rather than simply patterned.&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

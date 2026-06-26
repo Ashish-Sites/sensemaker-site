@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Systems Thinking on SenseMaker</title>
+		<link>/topics/systems-thinking/</link>
+		<description>Recent content in Systems Thinking on SenseMaker</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<atom:link href="/topics/systems-thinking/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Emergent Behavior in Complex Systems</title>
+				<link>/investigations/philosophy/emergence/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>/investigations/philosophy/emergence/</guid>
+				<description>&lt;h2 id=&#34;26-june-2026&#34;&gt;26-June-2026&lt;/h2&gt;&#xA;&lt;p&gt;I&amp;rsquo;ve been thinking about emergence more and more as I design larger systems. It&amp;rsquo;s not just a physics concept—it&amp;rsquo;s everywhere in software, biology, economics, and social systems.&lt;/p&gt;&#xA;&lt;p&gt;What fascinates me is that emergence is not magic. The rules are deterministic, yet the outcome is unpredictable without simulation. The local rules don&amp;rsquo;t contain information about the global behavior.&lt;/p&gt;&#xA;&lt;h3 id=&#34;initial-observations&#34;&gt;Initial Observations&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Localized rules, non-local effects&lt;/strong&gt;: Ants following simple pheromone trails create sophisticated colony-level behavior without central planning&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Information transfer&lt;/strong&gt;: The system transfers information through very low-bandwidth channels (chemical gradients), yet exhibits intelligent problem-solving&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Irreducibility&lt;/strong&gt;: You cannot predict the global pattern by analyzing individual components in isolation&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;questions-this-raises&#34;&gt;Questions this raises&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Is this fundamentally different from coordination via explicit communication?&lt;/li&gt;&#xA;&lt;li&gt;What&amp;rsquo;s the minimum complexity needed for emergence to become evident?&lt;/li&gt;&#xA;&lt;li&gt;Can we design systems that leverage emergence rather than fight against it?&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;intuition&#34;&gt;Intuition&lt;/h3&gt;&#xA;&lt;p&gt;I suspect emergence is not special—it&amp;rsquo;s the natural consequence of:&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

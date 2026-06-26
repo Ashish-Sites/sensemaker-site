@@ -1,4 +1,4 @@
-baseURL = "/sensemaker-site/"
+baseURL = "/"
 locale = "en-us"
 title = "SenseMaker"
 theme = "sensemaker"

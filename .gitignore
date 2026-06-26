@@ -6,9 +6,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Hugo
-/resources/
-/public/
+hugo.exe
+
 
 # Dependencies
 node_modules/
