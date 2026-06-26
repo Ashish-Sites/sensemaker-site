@@ -3,7 +3,7 @@
   <div class="hero">
     <h1>{{ .Site.Title }}</h1>
     <p class="tagline">{{ .Site.Params.description }}</p>
-    <a href="/investigations/" class="cta-button">Explore Investigations →</a>
+    <a href="{{ "investigations/" | absURL }}" class="cta-button">Explore Investigations →</a>
   </div>
 
   <div class="homepage-sections">

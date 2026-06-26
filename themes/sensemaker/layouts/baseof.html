@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Title }} · {{ .Site.Title }}</title>
   <meta name="description" content="{{ .Description | default .Site.Params.description }}">
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="/css/print.css">
+  <link rel="stylesheet" href="{{ "css/style.css" | absURL }}">
+  <link rel="stylesheet" href="{{ "css/print.css" | absURL }}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
@@ -15,10 +15,10 @@
   <header class="header">
     <div class="container">
       <div class="header-content">
-        <h1 class="logo"><a href="/">{{ .Site.Title }}</a></h1>
+        <h1 class="logo"><a href="{{ "" | absURL }}">{{ .Site.Title }}</a></h1>
         <nav class="nav">
           {{ range .Site.Menus.main }}
-            <a href="{{ .URL }}" class="nav-link {{ if $current := $.RelPermalink }}{{ if eq $current .URL }}active{{ end }}{{ end }}">
+            <a href="{{ .URL | absURL }}" class="nav-link {{ if hasSuffix $.RelPermalink .URL }}active{{ end }}">
               {{ .Name }}
             </a>
           {{ end }}
@@ -40,10 +40,7 @@
     </div>
   </footer>
 
-  <script src="/js/theme-toggle.js"></script>
-  <script src="/js/katex-setup.js"></script>
-  {{ if or (hasPrefix .RelPermalink "/investigations/") (hasPrefix .RelPermalink "/search") }}
-    <script src="/js/search.js"></script>
-  {{ end }}
+  <script src="{{ "js/theme-toggle.js" | absURL }}"></script>
+  <script src="{{ "js/katex-setup.js" | absURL }}"></script>
 </body>
 </html>
