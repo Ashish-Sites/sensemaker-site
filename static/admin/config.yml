@@ -88,5 +88,5 @@ collections:
         widget: list
         required: false
         field: { label: Related Slug, name: related_slug, widget: string, hint: "Use filename slug only, no .md" }
-      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown }
