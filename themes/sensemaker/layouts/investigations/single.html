@@ -20,9 +20,9 @@
       <h3>Questions</h3>
       <ul class="questions-list">
         {{ range $q := .Params.questions }}
-          {{ $questionLink := relURL (print "/questions/" (urlize $q) "/") }}
+          {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
           {{ range $.Site.Taxonomies.questions.ByCount }}
-            {{ if eq .Term $q }}
+            {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
               {{ $questionLink = .Page.RelPermalink }}
             {{ end }}
           {{ end }}
@@ -61,7 +61,7 @@
       <h4>Areas</h4>
       <div class="tags">
         {{ range .Params.areas }}
-          <a href="{{ relURL (print "/areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
+          <a href="{{ absURL (print "areas/" (urlize .) "/") }}" class="tag tag-area">{{ . }}</a>
         {{ end }}
       </div>
     </div>
@@ -72,7 +72,7 @@
       <h4>Topics</h4>
       <div class="tags">
         {{ range .Params.topics }}
-          <a href="{{ relURL (print "/topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
+          <a href="{{ absURL (print "topics/" (urlize .) "/") }}" class="tag tag-topic">{{ . }}</a>
         {{ end }}
       </div>
     </div>
@@ -83,7 +83,7 @@
       <h4>Tags</h4>
       <div class="tags">
         {{ range .Params.tags }}
-          <a href="{{ relURL (print "/tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
+          <a href="{{ absURL (print "tags/" (urlize .) "/") }}" class="tag tag-regular">#{{ . }}</a>
         {{ end }}
       </div>
     </div>
