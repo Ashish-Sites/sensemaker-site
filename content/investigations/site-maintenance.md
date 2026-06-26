@@ -10,7 +10,8 @@ questions:
   - How to maintain this site?
 tags:
   - site-maintenance
-related: []
+related:
+  - site-maintenance
 draft: false
 ---
 About site maintenance
