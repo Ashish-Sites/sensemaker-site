@@ -1,0 +1,43 @@
+html,
+body {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+main,
+article,
+section,
+.container,
+.investigation,
+.taxonomy-page,
+.investigations-list,
+.investigation-content {
+  background: transparent !important;
+  color: #0f172a !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+span,
+a,
+small,
+strong,
+em {
+  color: inherit !important;
+}
+
+a {
+  color: #0b57d0 !important;
+}
+
+pre,
+code {
+  background: #eef2ff !important;
+  color: #1f2937 !important;
+}

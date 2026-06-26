@@ -39,20 +39,19 @@ collections:
     folder: content/investigations
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     slug: "{{slug}}"
-    nested:
-      depth: 3
-      summary: "{{title}}"
     summary: "{{title}} - {{status}}"
     sortable_fields: [created, title, status]
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Status
         name: status
         widget: select
+        default: Seed
         options:
           - Seed
           - Thinking
@@ -126,6 +125,7 @@ collections:
     folder: content/articles
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     slug: "{{slug}}"
@@ -133,7 +133,7 @@ collections:
     sortable_fields: [created, title, article_type]
     fields:
       - { label: Title, name: title, widget: string }
-      - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Article Type
         name: article_type
         widget: select
@@ -171,6 +171,7 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     summary: "{{title}}"
@@ -186,6 +187,7 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     summary: "{{title}}"
@@ -201,6 +203,7 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     summary: "{{title}}"
@@ -216,6 +219,7 @@ collections:
     path: "{{slug}}/_index"
     create: true
     delete: true
+    exclude: ["_index.md"]
     extension: md
     format: frontmatter
     summary: "{{title}}"
