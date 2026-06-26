@@ -6,4 +6,4 @@ tags:
   - site-maintenance
 draft: true
 ---
-Some ideas
+Some ideas about the site
