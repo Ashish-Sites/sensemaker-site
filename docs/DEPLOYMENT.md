@@ -128,7 +128,7 @@ you can use Prose.io with this repo.
 
 ### Setup
 
-1. Ensure `.prose.yaml` exists at repository root (already added).
+1. Ensure `.prose.yml` exists at repository root (already added).
 2. Push your latest `main` branch.
 3. Open:
 
@@ -153,6 +153,61 @@ After commit, GitHub Actions deploys the updated site automatically.
 - Prose.io is an external hosted editor and may occasionally be unavailable.
 - Your source of truth remains Markdown + Git.
 - For bulk edits or advanced refactors, local VS Code editing is still better.
+
+## Optional Browser CMS (Decap CMS)
+
+Decap CMS gives a form-based editor for front matter plus Markdown body editing.
+
+### Included in this repo
+
+- Admin app entry: `static/admin/index.html`
+- CMS config: `static/admin/config.yml`
+
+After deployment, open:
+
+```
+https://ashish-sites.github.io/sensemaker-site/admin/
+```
+
+### Important: GitHub Pages auth requirement
+
+On GitHub Pages, Decap needs an OAuth bridge service to authenticate with GitHub.
+
+In `static/admin/config.yml`, set:
+
+```yaml
+backend:
+  name: github
+  repo: Ashish-Sites/sensemaker-site
+  branch: main
+  base_url: https://your-oauth-bridge.example.com
+  auth_endpoint: auth
+```
+
+You can host this bridge for free (for example on Netlify, Vercel, or Cloudflare Workers)
+using the Decap OAuth bridge project.
+
+### Local testing
+
+`local_backend: true` is enabled, so local CMS testing works without OAuth bridge:
+
+```bash
+npx decap-server
+hugo server
+```
+
+Then open:
+
+```
+http://localhost:1313/admin/
+```
+
+### What the Decap form edits
+
+- `title`, `created`, `status`
+- `areas`, `topics`, `questions`, `tags`, `related`
+- `draft`
+- Markdown body content
 
 ## Checking Deployment Status
 

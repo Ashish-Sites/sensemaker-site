@@ -1,0 +1,78 @@
+backend:
+  name: github
+  repo: Ashish-Sites/sensemaker-site
+  branch: main
+  # Required on GitHub Pages: host your own Decap OAuth bridge and set these.
+  # Example:
+  # base_url: https://your-oauth-bridge.example.com
+  # auth_endpoint: auth
+
+local_backend: true
+
+media_folder: static/images/uploads
+public_folder: /images/uploads
+
+site_url: https://ashish-sites.github.io/sensemaker-site/
+display_url: https://ashish-sites.github.io/sensemaker-site/
+logo_url: https://ashish-sites.github.io/sensemaker-site/favicon.ico
+
+publish_mode: simple
+
+collections:
+  - name: investigations
+    label: Investigations
+    label_singular: Investigation
+    folder: content/investigations
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    nested:
+      depth: 3
+      summary: "{{title}}"
+    summary: "{{title}} - {{status}}"
+    sortable_fields: [created, title, status]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - label: Status
+        name: status
+        widget: select
+        options:
+          - Seed
+          - Thinking
+          - Reading
+          - Exploring
+          - Model Emerging
+          - Essay Draft
+          - Stable
+          - Reopened
+          - Archived
+      - label: Areas
+        name: areas
+        widget: list
+        min: 1
+        field: { label: Area, name: area, widget: string }
+      - label: Topics
+        name: topics
+        widget: list
+        min: 1
+        field: { label: Topic, name: topic, widget: string }
+      - label: Questions
+        name: questions
+        widget: list
+        min: 1
+        field: { label: Question, name: question, widget: string }
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        field: { label: Tag, name: tag, widget: string }
+      - label: Related
+        name: related
+        widget: list
+        required: false
+        field: { label: Related Slug, name: related_slug, widget: string, hint: "Use filename slug only, no .md" }
+      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Body, name: body, widget: markdown }

@@ -1,17 +1,140 @@
-<!doctype html><html lang=en data-theme=dark><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Search · SenseMaker</title><meta name=description content="A digital thinking environment for long-term sense-making"><link rel=stylesheet href=https://ashish-sites.github.io/sensemaker-site/css/style.css><link rel=stylesheet href=https://ashish-sites.github.io/sensemaker-site/css/print.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css><script src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js></script></head><body><header class=header><div class=container><div class=header-content><h1 class=logo><a href=https://ashish-sites.github.io/sensemaker-site/>SenseMaker</a></h1><nav class=nav><a href=https://ashish-sites.github.io/sensemaker-site/investigations/ class=nav-link>Investigations
-</a><a href=https://ashish-sites.github.io/sensemaker-site/areas/ class=nav-link>Areas
-</a><a href=https://ashish-sites.github.io/sensemaker-site/topics/ class=nav-link>Topics
-</a><a href=https://ashish-sites.github.io/sensemaker-site/search/ class="nav-link active">Search
-</a><button id=theme-toggle class=theme-toggle title="Toggle dark mode">🌙</button></nav></div></div></header><main class=main><div class=container><div class=search-page><h1>Search</h1><div class=search-box><input type=text id=search-input class=search-input placeholder="Search investigations, questions, tags, areas, topics..." autocomplete=off><div class=search-hints><small>Search across title, body, questions, tags, areas, topics, and status</small></div></div><div id=search-results class=search-results><div class=search-empty>Enter a search query to begin</div></div></div><script>let searchIndex=[];fetch("https://ashish-sites.github.io/sensemaker-site/index.json").then(e=>e.json()).then(e=>{searchIndex=e}).catch(e=>console.error("Failed to load search index:",e));const searchInput=document.getElementById("search-input"),resultsContainer=document.getElementById("search-results");searchInput.addEventListener("input",function(e){const t=e.target.value.toLowerCase().trim();if(!t){resultsContainer.innerHTML='<div class="search-empty">Enter a search query to begin</div>';return}const n=searchIndex.filter(e=>{const n=e.title.toLowerCase(),s=e.content.toLowerCase(),o=(e.questions||"").toLowerCase(),i=(e.tags||"").toLowerCase(),a=(e.areas||"").toLowerCase(),r=(e.topics||"").toLowerCase(),c=(e.status||"").toLowerCase();return n.includes(t)||s.includes(t)||o.includes(t)||i.includes(t)||a.includes(t)||r.includes(t)||c.includes(t)}).slice(0,50);if(n.length===0){resultsContainer.innerHTML='<div class="search-empty">No results found for "'+t+'"</div>';return}resultsContainer.innerHTML=n.map(e=>`
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search · SenseMaker</title>
+  <meta name="description" content="A digital thinking environment for long-term sense-making">
+  <link rel="stylesheet" href="//localhost:1313/css/style.css">
+  <link rel="stylesheet" href="//localhost:1313/css/print.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="logo"><a href="//localhost:1313/">SenseMaker</a></h1>
+        <nav class="nav">
+          
+            <a href="//localhost:1313/investigations/" class="nav-link ">
+              Investigations
+            </a>
+          
+            <a href="//localhost:1313/areas/" class="nav-link ">
+              Areas
+            </a>
+          
+            <a href="//localhost:1313/topics/" class="nav-link ">
+              Topics
+            </a>
+          
+            <a href="//localhost:1313/search/" class="nav-link active">
+              Search
+            </a>
+          
+          <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      
+<div class="search-page">
+  <h1>Search</h1>
+  
+  <div class="search-box">
+    <input 
+      type="text" 
+      id="search-input" 
+      class="search-input" 
+      placeholder="Search investigations, questions, tags, areas, topics..." 
+      autocomplete="off"
+    >
+    <div class="search-hints">
+      <small>Search across title, body, questions, tags, areas, topics, and status</small>
+    </div>
+  </div>
+
+  <div id="search-results" class="search-results">
+    <div class="search-empty">Enter a search query to begin</div>
+  </div>
+</div>
+
+<script>
+  let searchIndex = [];
+  
+  
+  fetch('\/\/localhost:1313\/index.json')
+    .then(response => response.json())
+    .then(data => {
+      searchIndex = data;
+    })
+    .catch(err => console.error('Failed to load search index:', err));
+
+  const searchInput = document.getElementById('search-input');
+  const resultsContainer = document.getElementById('search-results');
+
+  searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase().trim();
+    
+    if (!query) {
+      resultsContainer.innerHTML = '<div class="search-empty">Enter a search query to begin</div>';
+      return;
+    }
+
+    const results = searchIndex.filter(item => {
+      const title = item.title.toLowerCase();
+      const body = item.content.toLowerCase();
+      const questions = (item.questions || '').toLowerCase();
+      const tags = (item.tags || '').toLowerCase();
+      const areas = (item.areas || '').toLowerCase();
+      const topics = (item.topics || '').toLowerCase();
+      const status = (item.status || '').toLowerCase();
+
+      return title.includes(query) || 
+             body.includes(query) || 
+             questions.includes(query) || 
+             tags.includes(query) || 
+             areas.includes(query) || 
+             topics.includes(query) || 
+             status.includes(query);
+    }).slice(0, 50);
+
+    if (results.length === 0) {
+      resultsContainer.innerHTML = '<div class="search-empty">No results found for "' + query + '"</div>';
+      return;
+    }
+
+    resultsContainer.innerHTML = results.map(result => `
       <div class="search-result">
-        <h3><a href="${e.url}">${e.title}</a></h3>
+        <h3><a href="${result.url}">${result.title}</a></h3>
         <div class="result-meta">
-          <span class="status-badge-small status-${e.status.toLowerCase()}">${e.status}</span>
-          <span class="areas">${e.areas||"N/A"}</span>
+          <span class="status-badge-small status-${result.status.toLowerCase()}">${result.status}</span>
+          <span class="areas">${result.areas || 'N/A'}</span>
         </div>
-        <p class="result-snippet">${e.content.substring(0,200)}...</p>
+        <p class="result-snippet">${result.content.substring(0, 200)}...</p>
         <div class="result-tags">
-          ${e.tags?e.tags.split(",").map(e=>`<span class="tag-small">#${e.trim()}</span>`).join(""):""}
+          ${result.tags ? result.tags.split(',').map(tag => `<span class="tag-small">#${tag.trim()}</span>`).join('') : ''}
         </div>
       </div>
-    `).join("")})</script></div></main><footer class=footer><div class=container><p>SenseMaker MVP · Digital Extension of Thinking</p></div></footer><script src=https://ashish-sites.github.io/sensemaker-site/js/theme-toggle.js></script><script src=https://ashish-sites.github.io/sensemaker-site/js/katex-setup.js></script></body></html>
+    `).join('');
+  });
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>SenseMaker MVP · Digital Extension of Thinking</p>
+    </div>
+  </footer>
+
+  <script src="//localhost:1313/js/theme-toggle.js"></script>
+  <script src="//localhost:1313/js/katex-setup.js"></script>
+</body>
+</html>

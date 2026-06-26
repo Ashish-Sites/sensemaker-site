@@ -1,1 +1,45 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url><loc>https://ashish-sites.github.io/sensemaker-site/areas/ai/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/areas/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/complexity/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/deep-learning/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/design-patterns/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/investigations/engineering/distributed-systems/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/distributed-systems/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/emergence/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/investigations/philosophy/emergence/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/areas/engineering/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/investigations/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/language-models/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/areas/philosophy/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/investigations/ai/scaling-and-emergence/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/scaling-laws/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/search/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/system-architecture/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/systems-thinking/</loc></url><url><loc>https://ashish-sites.github.io/sensemaker-site/topics/</loc></url></urlset>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>//localhost:1313/areas/ai/</loc>
+  </url><url>
+    <loc>//localhost:1313/areas/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/complexity/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/deep-learning/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/design-patterns/</loc>
+  </url><url>
+    <loc>//localhost:1313/investigations/engineering/distributed-systems/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/distributed-systems/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/emergence/</loc>
+  </url><url>
+    <loc>//localhost:1313/investigations/philosophy/emergence/</loc>
+  </url><url>
+    <loc>//localhost:1313/areas/engineering/</loc>
+  </url><url>
+    <loc>//localhost:1313/investigations/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/language-models/</loc>
+  </url><url>
+    <loc>//localhost:1313/areas/philosophy/</loc>
+  </url><url>
+    <loc>//localhost:1313/investigations/ai/scaling-and-emergence/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/scaling-laws/</loc>
+  </url><url>
+    <loc>//localhost:1313/search/</loc>
+  </url><url>
+    <loc>//localhost:1313/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/system-architecture/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/systems-thinking/</loc>
+  </url><url>
+    <loc>//localhost:1313/topics/</loc>
+  </url>
+</urlset>

@@ -1,10 +1,189 @@
-<!doctype html><html lang=en data-theme=dark><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Design Patterns in Distributed Systems · SenseMaker</title><meta name=description content="A digital thinking environment for long-term sense-making"><link rel=stylesheet href=https://ashish-sites.github.io/sensemaker-site/css/style.css><link rel=stylesheet href=https://ashish-sites.github.io/sensemaker-site/css/print.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css><script src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js></script></head><body><header class=header><div class=container><div class=header-content><h1 class=logo><a href=https://ashish-sites.github.io/sensemaker-site/>SenseMaker</a></h1><nav class=nav><a href=https://ashish-sites.github.io/sensemaker-site/investigations/ class=nav-link>Investigations
-</a><a href=https://ashish-sites.github.io/sensemaker-site/areas/ class=nav-link>Areas
-</a><a href=https://ashish-sites.github.io/sensemaker-site/topics/ class=nav-link>Topics
-</a><a href=https://ashish-sites.github.io/sensemaker-site/search/ class=nav-link>Search
-</a><button id=theme-toggle class=theme-toggle title="Toggle dark mode">🌙</button></nav></div></div></header><main class=main><div class=container><article class=investigation><div class=investigation-meta><div class="status-badge status-stable">Stable</div><div class=meta-info><span class=created>Created: 01-Jan-0001</span></div></div><h1 class=investigation-title>Design Patterns in Distributed Systems</h1><div class=questions-section><h3>Questions</h3><ul class=questions-list><li>What are the fundamental patterns in distributed systems?</li><li>How do we handle consistency vs. availability?</li><li>What's the role of consensus algorithms?</li></ul></div><div class=investigation-content><h2 id=15-may-2026>15-May-2026</h2><p>Over the past year of building distributed systems, I&rsquo;ve noticed that certain patterns repeat constantly:</p><ol><li><strong>Replication</strong>: Data is copied across nodes for fault tolerance</li><li><strong>Consensus</strong>: Nodes must agree on a shared state</li><li><strong>Partitioning</strong>: Data is divided across multiple nodes</li><li><strong>Caching</strong>: Frequently accessed data is stored closer to where it&rsquo;s used</li></ol><p>These aren&rsquo;t arbitrary. They emerge from fundamental constraints:</p><ul><li>Network latency is non-negotiable</li><li>Nodes fail unpredictably</li><li>You cannot have both consistency and availability when partitions occur</li></ul><h3 id=the-cap-theorem>The CAP Theorem</h3><p>CAP tells us we must choose two of three:</p><ul><li><strong>Consistency</strong>: All nodes see the same data</li><li><strong>Availability</strong>: The system responds to requests</li><li><strong>Partition tolerance</strong>: The system works despite network failures</li></ul><p>In practice, partitions are inevitable, so you&rsquo;re really choosing between consistency and availability.</p><hr><h2 id=12-july-2026>12-July-2026</h2><p>Reading about Raft and Paxos, I&rsquo;m realizing that consensus is THE fundamental problem in distributed systems.</p><p>Every complex system eventually faces it:</p><ul><li>Databases must agree on transaction ordering</li><li>Distributed caches must invalidate consistently</li><li>Microservices must coordinate</li><li>Blockchains are fundamentally consensus problems</li></ul><h3 id=key-insight>Key insight</h3><p>The cost of consensus is often the bottleneck. Systems that require strong consistency are slower and less available than those that accept eventual consistency.</p><p>This suggests the real design challenge isn&rsquo;t solving consensus—it&rsquo;s deciding WHEN you need it.</p></div><div class=taxonomy-section><h4>Areas</h4><div class=tags><a href=/areas/engineering/ class="tag tag-area">Engineering</a></div></div><div class=taxonomy-section><h4>Topics</h4><div class=tags><a href=/topics/distributed-systems/ class="tag tag-topic">Distributed Systems</a>
-<a href=/topics/design-patterns/ class="tag tag-topic">Design Patterns</a>
-<a href=/topics/system-architecture/ class="tag tag-topic">System Architecture</a></div></div><div class=taxonomy-section><h4>Tags</h4><div class=tags><span class="tag tag-regular">#distributed</span>
-<span class="tag tag-regular">#patterns</span>
-<span class="tag tag-regular">#architecture</span></div></div><div class=related-section><h3>Related Investigations</h3><ul class=related-list><li><a href=/sensemaker-site/investigations/philosophy/emergence/>Emergent Behavior in Complex Systems</a>
-<span class="status-badge-small status-thinking">Thinking</span></li></ul></div></article></div></main><footer class=footer><div class=container><p>SenseMaker MVP · Digital Extension of Thinking</p></div></footer><script src=https://ashish-sites.github.io/sensemaker-site/js/theme-toggle.js></script><script src=https://ashish-sites.github.io/sensemaker-site/js/katex-setup.js></script></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Patterns in Distributed Systems · SenseMaker</title>
+  <meta name="description" content="A digital thinking environment for long-term sense-making">
+  <link rel="stylesheet" href="//localhost:1313/css/style.css">
+  <link rel="stylesheet" href="//localhost:1313/css/print.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <h1 class="logo"><a href="//localhost:1313/">SenseMaker</a></h1>
+        <nav class="nav">
+          
+            <a href="//localhost:1313/investigations/" class="nav-link ">
+              Investigations
+            </a>
+          
+            <a href="//localhost:1313/areas/" class="nav-link ">
+              Areas
+            </a>
+          
+            <a href="//localhost:1313/topics/" class="nav-link ">
+              Topics
+            </a>
+          
+            <a href="//localhost:1313/search/" class="nav-link ">
+              Search
+            </a>
+          
+          <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      
+<article class="investigation">
+  <div class="investigation-meta">
+    <div class="status-badge status-stable">
+      Stable
+    </div>
+    
+    <div class="meta-info">
+      <span class="created">Created: 01-Jan-0001</span>
+      
+    </div>
+  </div>
+
+  <h1 class="investigation-title">Design Patterns in Distributed Systems</h1>
+
+  
+    <div class="questions-section">
+      <h3>Questions</h3>
+      <ul class="questions-list">
+        
+          <li>What are the fundamental patterns in distributed systems?</li>
+        
+          <li>How do we handle consistency vs. availability?</li>
+        
+          <li>What&#39;s the role of consensus algorithms?</li>
+        
+      </ul>
+    </div>
+  
+
+  <div class="investigation-content">
+    <h2 id="15-may-2026">15-May-2026</h2>
+<p>Over the past year of building distributed systems, I&rsquo;ve noticed that certain patterns repeat constantly:</p>
+<ol>
+<li><strong>Replication</strong>: Data is copied across nodes for fault tolerance</li>
+<li><strong>Consensus</strong>: Nodes must agree on a shared state</li>
+<li><strong>Partitioning</strong>: Data is divided across multiple nodes</li>
+<li><strong>Caching</strong>: Frequently accessed data is stored closer to where it&rsquo;s used</li>
+</ol>
+<p>These aren&rsquo;t arbitrary. They emerge from fundamental constraints:</p>
+<ul>
+<li>Network latency is non-negotiable</li>
+<li>Nodes fail unpredictably</li>
+<li>You cannot have both consistency and availability when partitions occur</li>
+</ul>
+<h3 id="the-cap-theorem">The CAP Theorem</h3>
+<p>CAP tells us we must choose two of three:</p>
+<ul>
+<li><strong>Consistency</strong>: All nodes see the same data</li>
+<li><strong>Availability</strong>: The system responds to requests</li>
+<li><strong>Partition tolerance</strong>: The system works despite network failures</li>
+</ul>
+<p>In practice, partitions are inevitable, so you&rsquo;re really choosing between consistency and availability.</p>
+<hr>
+<h2 id="12-july-2026">12-July-2026</h2>
+<p>Reading about Raft and Paxos, I&rsquo;m realizing that consensus is THE fundamental problem in distributed systems.</p>
+<p>Every complex system eventually faces it:</p>
+<ul>
+<li>Databases must agree on transaction ordering</li>
+<li>Distributed caches must invalidate consistently</li>
+<li>Microservices must coordinate</li>
+<li>Blockchains are fundamentally consensus problems</li>
+</ul>
+<h3 id="key-insight">Key insight</h3>
+<p>The cost of consensus is often the bottleneck. Systems that require strong consistency are slower and less available than those that accept eventual consistency.</p>
+<p>This suggests the real design challenge isn&rsquo;t solving consensus—it&rsquo;s deciding WHEN you need it.</p>
+
+  </div>
+
+  
+    <div class="taxonomy-section">
+      <h4>Areas</h4>
+      <div class="tags">
+        
+          <a href="/areas/engineering/" class="tag tag-area">Engineering</a>
+        
+      </div>
+    </div>
+  
+
+  
+    <div class="taxonomy-section">
+      <h4>Topics</h4>
+      <div class="tags">
+        
+          <a href="/topics/distributed-systems/" class="tag tag-topic">Distributed Systems</a>
+        
+          <a href="/topics/design-patterns/" class="tag tag-topic">Design Patterns</a>
+        
+          <a href="/topics/system-architecture/" class="tag tag-topic">System Architecture</a>
+        
+      </div>
+    </div>
+  
+
+  
+    <div class="taxonomy-section">
+      <h4>Tags</h4>
+      <div class="tags">
+        
+          <span class="tag tag-regular">#distributed</span>
+        
+          <span class="tag tag-regular">#patterns</span>
+        
+          <span class="tag tag-regular">#architecture</span>
+        
+      </div>
+    </div>
+  
+
+  
+    <div class="related-section">
+      <h3>Related Investigations</h3>
+      <ul class="related-list">
+        
+        
+          
+        
+          
+            <li>
+              <a href="/investigations/philosophy/emergence/">Emergent Behavior in Complex Systems</a>
+              <span class="status-badge-small status-thinking">Thinking</span>
+            </li>
+          
+        
+          
+        
+      </ul>
+    </div>
+  
+</article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>SenseMaker MVP · Digital Extension of Thinking</p>
+    </div>
+  </footer>
+
+  <script src="//localhost:1313/js/theme-toggle.js"></script>
+  <script src="//localhost:1313/js/katex-setup.js"></script>
+</body>
+</html>
