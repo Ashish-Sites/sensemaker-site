@@ -14,6 +14,9 @@
   </div>
 
   <h1 class="investigation-title">{{ .Title }}</h1>
+  {{ with .Params.description }}
+    <p class="entry-description">{{ . }}</p>
+  {{ end }}
 
   {{ if .Params.questions }}
     <div class="questions-section">

@@ -51,6 +51,7 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: investigation }
       - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
       - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Status
         name: status
@@ -70,6 +71,9 @@ collections:
         name: areas
         widget: relation
         collection: areas_terms
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -79,6 +83,9 @@ collections:
         name: topics
         widget: relation
         collection: topics_terms
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -88,6 +95,9 @@ collections:
         name: questions
         widget: relation
         collection: questions_terms
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -97,6 +107,9 @@ collections:
         name: tags
         widget: relation
         collection: tags_terms
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -115,6 +128,9 @@ collections:
         name: attached_articles
         widget: relation
         collection: articles
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title, article_type]
         value_field: "{{slug}}"
@@ -141,14 +157,21 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: article }
       - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
       - { label: Created, name: created, widget: datetime, format: "YYYY-MM-DD", time_format: false, default: "{{now}}" }
       - label: Article Type
         name: article_type
         widget: select
         options:
           - idea
-          - subsection
+          - sub-article
           - comment
+          - evidence
+          - summary
+          - counterpoint
+          - quote
+          - definition
+          - synthesis
         default: idea
       - label: Attached Investigations
         name: investigations
@@ -164,11 +187,27 @@ collections:
         name: tags
         widget: relation
         collection: tags_terms
+        filters:
+          - field: lifecycle
+            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
         multiple: true
         required: false
+      - { label: Source Link, name: source_link, widget: string, required: false, hint: "Optional primary reference URL, especially for evidence or quote articles" }
+      - { label: Confidence, name: confidence, widget: select, required: false, options: [low, medium, high], hint: "Optional confidence level for claims in this article" }
+      - label: Canonical Investigation
+        name: canonical_investigation
+        widget: relation
+        collection: investigations
+        search_fields: [title]
+        display_fields: [title]
+        value_field: "{{slug}}"
+        multiple: false
+        required: false
+        hint: "Optional primary home investigation when attached to multiple investigations"
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown }
 
@@ -189,7 +228,9 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: area_term }
       - { label: Area Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
-      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
+      - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 
   - name: topics_terms
@@ -209,7 +250,22 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: topic_term }
       - { label: Topic Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
-      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
+      - label: Primary Area
+        name: primary_area
+        widget: relation
+        collection: areas_terms
+        filters:
+          - field: lifecycle
+            values: [active]
+        search_fields: [title]
+        display_fields: [title]
+        value_field: title
+        multiple: false
+        required: false
+        hint: "Optional conceptual parent area for this topic"
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
+      - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 
   - name: tags_terms
@@ -229,7 +285,9 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: tag_term }
       - { label: Tag Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
-      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
+      - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
 
   - name: questions_terms
@@ -249,5 +307,7 @@ collections:
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: question_term }
       - { label: Question Text, name: title, widget: string, hint: "Use full natural-language question" }
-      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
+      - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }

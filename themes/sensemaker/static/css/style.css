@@ -342,6 +342,14 @@ th {
   margin-bottom: var(--spacing-xl);
 }
 
+.entry-description {
+  margin-top: calc(var(--spacing-md) * -1);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  max-width: 72ch;
+}
+
 .investigation-content {
   margin-bottom: var(--spacing-2xl);
 }
@@ -906,6 +914,12 @@ th {
   vertical-align: middle;
 }
 
+.table-description {
+  max-width: 48ch;
+  white-space: normal;
+  color: var(--color-text-secondary);
+}
+
 .data-table tbody tr:hover {
   background-color: rgba(88, 166, 255, 0.07);
 }
@@ -944,8 +958,14 @@ th {
 }
 
 .status-idea { background-color: rgba(88, 166, 255, 0.15); color: #58a6ff; }
-.status-subsection { background-color: rgba(240, 136, 62, 0.15); color: #f0883e; }
+.status-sub-article { background-color: rgba(240, 136, 62, 0.15); color: #f0883e; }
 .status-comment { background-color: rgba(121, 192, 255, 0.15); color: #79c0ff; }
+.status-evidence { background-color: rgba(63, 185, 80, 0.15); color: #3fb950; }
+.status-summary { background-color: rgba(31, 111, 235, 0.15); color: #1f6feb; }
+.status-counterpoint { background-color: rgba(209, 36, 15, 0.15); color: #d1240f; }
+.status-quote { background-color: rgba(163, 113, 247, 0.15); color: #a371f7; }
+.status-definition { background-color: rgba(56, 139, 253, 0.15); color: #388bfd; }
+.status-synthesis { background-color: rgba(255, 166, 87, 0.15); color: #ffa657; }
 
 .empty-state.compact {
   padding: var(--spacing-lg) 0;

@@ -11,6 +11,9 @@
   </div>
 
   <h1 class="investigation-title">{{ .Title }}</h1>
+  {{ with .Params.description }}
+    <p class="entry-description">{{ . }}</p>
+  {{ end }}
 
   {{ $targets := default (slice) .Params.investigations }}
   {{ if and (eq (len $targets) 0) .Params.investigation }}

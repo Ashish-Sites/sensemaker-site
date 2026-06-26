@@ -43,14 +43,18 @@
         <thead>
           <tr>
             <th data-sort="string">Term</th>
+            <th data-sort="string">Description</th>
             <th data-sort="number">Investigations</th>
             <th data-sort="date">Updated</th>
           </tr>
         </thead>
         <tbody>
           {{ range $paginator.Pages }}
+            {{ $desc := .Params.description }}
+            {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 160) }}{{ end }}
             <tr>
               <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
               <td data-sort-value="{{ len .Pages }}">{{ len .Pages }}</td>
               <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
             </tr>

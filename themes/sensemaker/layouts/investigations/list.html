@@ -40,6 +40,7 @@
         <thead>
           <tr>
             <th data-sort="string">Title</th>
+            <th data-sort="string">Description</th>
             <th data-sort="string">Status</th>
             <th data-sort="string">Areas</th>
             <th data-sort="string">Topics</th>
@@ -48,8 +49,11 @@
         </thead>
         <tbody>
           {{ range $paginator.Pages }}
+            {{ $desc := .Params.description }}
+            {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 160) }}{{ end }}
             <tr>
               <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
               <td data-sort-value="{{ lower .Params.status }}"><span class="status-badge-small status-{{ lower .Params.status }}">{{ .Params.status }}</span></td>
               <td data-sort-value="{{ lower (delimit (default (slice) .Params.areas) ", ") }}">{{ delimit (default (slice) .Params.areas) ", " }}</td>
               <td data-sort-value="{{ lower (delimit (default (slice) .Params.topics) ", ") }}">{{ delimit (default (slice) .Params.topics) ", " }}</td>

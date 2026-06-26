@@ -1,7 +1,7 @@
 {{ define "content" }}
 <div class="investigations-list">
   <h1>Articles</h1>
-  <p class="subtitle">Attachable notes that extend investigations: idea, subsection, comment.</p>
+  <p class="subtitle">Attachable notes that extend investigations: idea, sub-article, comment.</p>
 
   {{ $all := where .Site.RegularPages "Type" "articles" }}
   {{ $sorted := sort $all "Lastmod" "desc" }}
@@ -40,6 +40,7 @@
         <thead>
           <tr>
             <th data-sort="string">Title</th>
+            <th data-sort="string">Description</th>
             <th data-sort="string">Type</th>
             <th data-sort="number">Linked Investigations</th>
             <th data-sort="date">Updated</th>
@@ -51,8 +52,11 @@
             {{ if and (eq (len $linkedInv) 0) .Params.investigation }}
               {{ $linkedInv = $linkedInv | append .Params.investigation }}
             {{ end }}
+            {{ $desc := .Params.description }}
+            {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 160) }}{{ end }}
             <tr>
               <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
               <td data-sort-value="{{ lower (default "idea" .Params.article_type) }}"><span class="status-badge-small status-{{ lower (default "idea" .Params.article_type) }}">{{ default "idea" .Params.article_type }}</span></td>
               <td data-sort-value="{{ len $linkedInv }}">{{ len $linkedInv }}</td>
               <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
