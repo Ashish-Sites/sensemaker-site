@@ -1,5 +1,6 @@
 param(
-    [string]$BaseUrl = "https://ashish-sites.github.io/sensemaker-site/"
+    [string]$BaseUrl = "https://ashish-sites.github.io/sensemaker-site/",
+    [string]$OutputDir = "public"
 )
 
 Set-StrictMode -Version Latest
@@ -38,12 +39,17 @@ Write-Host "Running content quality validation..."
 Write-Host "Building Hugo site..."
 Push-Location $repoRoot
 try {
-    & $hugoCommand --minify --cleanDestinationDir --baseURL $BaseUrl
+    & $hugoCommand --minify --cleanDestinationDir --baseURL $BaseUrl --destination $OutputDir
 } finally {
     Pop-Location
 }
 
 Write-Host "Running built-link validation..."
-& $shellCommand -File (Join-Path $PSScriptRoot "validate-built-links.ps1")
+$resolvedOutputDir = Join-Path $repoRoot $OutputDir
+if (-not (Test-Path -LiteralPath $resolvedOutputDir)) {
+    throw "Build output directory not found: $resolvedOutputDir"
+}
+
+& $shellCommand -File (Join-Path $PSScriptRoot "validate-built-links.ps1") -PublicDir $resolvedOutputDir
 
 Write-Host "All validations passed. Build completed successfully."

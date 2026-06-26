@@ -19,7 +19,8 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -34,7 +35,12 @@ jobs:
           extended: true
 
       - name: Validate, build, and verify links
-        run: pwsh -File ./scripts/build-with-validation.ps1 -BaseUrl "${{ steps.pages.outputs.base_url }}/"
+        run: pwsh -File ./scripts/build-with-validation.ps1 -BaseUrl "${{ steps.pages.outputs.base_url }}/" -OutputDir "public"
+
+      - name: Verify build output directory
+        run: |
+          ls -la
+          test -d public
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
