@@ -1,10 +1,6 @@
 ---
 title: Investigations
 type: investigations
-created: 2026-06-26
-status: Exploring
-areas:
-  - META
 draft: false
 ---
 
