@@ -1,0 +1,86 @@
+:root {
+  --sm-bg: #f4f6fb;
+  --sm-surface: #ffffff;
+  --sm-text: #172033;
+  --sm-muted: #5a6478;
+  --sm-primary: #0b57d0;
+  --sm-primary-strong: #0043b8;
+  --sm-border: #d5dbea;
+  --sm-radius: 12px;
+}
+
+html,
+body {
+  background: var(--sm-bg) !important;
+  color: var(--sm-text) !important;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
+}
+
+body * {
+  font-family: inherit;
+}
+
+a {
+  color: var(--sm-primary) !important;
+}
+
+a:hover {
+  color: var(--sm-primary-strong) !important;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--sm-border) !important;
+  border-radius: 10px !important;
+  background: #fff !important;
+  color: var(--sm-text) !important;
+  box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--sm-primary) !important;
+  box-shadow: 0 0 0 3px rgba(11, 87, 208, 0.15) !important;
+}
+
+button {
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
+  transition: all 160ms ease !important;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+[class*="Sidebar"],
+[class*="CollectionTop"],
+[class*="EditorToolbar"],
+[class*="ToolbarContainer"] {
+  background: var(--sm-surface) !important;
+}
+
+[class*="Card"],
+[class*="Widget"],
+[class*="Pane"] {
+  border-radius: var(--sm-radius) !important;
+}
+
+[class*="Card"],
+[class*="WidgetContainer"],
+[class*="Pane"],
+[class*="ToolbarContainer"] {
+  border: 1px solid var(--sm-border) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06) !important;
+}
+
+[class*="PreviewPane"] {
+  background: #fff !important;
+}
+
+::selection {
+  background: rgba(11, 87, 208, 0.2);
+}
