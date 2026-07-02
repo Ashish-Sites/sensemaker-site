@@ -641,7 +641,13 @@ th {
 }
 
 .entry-tab-panel-active {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--spacing-lg);
+}
+
+#tab-graph.entry-tab-panel-active {
+  grid-template-columns: 1fr;
 }
 
 /* Graph Container */
