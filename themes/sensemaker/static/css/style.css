@@ -570,6 +570,43 @@ th {
   margin-bottom: var(--spacing-sm);
 }
 
+.summary-content,
+.comment-text,
+.quote-text {
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.6;
+}
+
+.comment-item,
+.quote-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comment-item:last-child,
+.quote-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.comment-date,
+.quote-date,
+.quote-source {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0.5rem 0 0 0;
+  font-style: italic;
+}
+
+.entry-metadata-note {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 .entry-meta h2,
 .entry-lineage h2 {
   margin-top: 0;

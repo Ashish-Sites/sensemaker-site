@@ -71,6 +71,53 @@
         <p class="entry-description">{{ . }}</p>
       {{ end }}
 
+      {{ if .Params.summary }}
+        <section class="entry-inline-section">
+          <h3>Summary</h3>
+          <div class="summary-content prose">{{ .Params.summary | markdownify }}</div>
+          {{ if .Params.summary_updated }}
+            <p class="entry-metadata-note">Updated {{ dateFormat "02-Jan-2006" (time .Params.summary_updated) }}</p>
+          {{ end }}
+        </section>
+      {{ end }}
+
+      {{ if .Params.comments }}
+        <section class="entry-inline-section">
+          <h3>Comments</h3>
+          <div class="comments-list">
+            {{ range .Params.comments }}
+              <div class="comment-item">
+                <p class="comment-text prose">{{ .text | markdownify }}</p>
+                {{ if .date }}
+                  <p class="comment-date">{{ dateFormat "02-Jan-2006" (time .date) }}</p>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+
+      {{ if .Params.quotes }}
+        <section class="entry-inline-section">
+          <h3>Key Quotes</h3>
+          <div class="quotes-list">
+            {{ range .Params.quotes }}
+              <div class="quote-item">
+                <blockquote class="quote-text prose">
+                  {{ .text | markdownify }}
+                </blockquote>
+                {{ if .source }}
+                  <p class="quote-source">— {{ .source }}</p>
+                {{ end }}
+                {{ if .date }}
+                  <p class="quote-date">{{ dateFormat "02-Jan-2006" (time .date) }}</p>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
+
       {{ if .Params.questions }}
         <section class="entry-inline-section">
           <h3>Questions</h3>
