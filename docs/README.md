@@ -6,6 +6,7 @@ A digital extension of handwritten thinking. A personal sense-making environment
 
 - [Design document](DESIGN.md)
 - [Content model decisions](CONTENT_MODEL_DECISIONS.md)
+- [Deployment guide](DEPLOYMENT.md)
 
 ## Table of Contents
 
