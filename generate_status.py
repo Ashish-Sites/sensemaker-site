@@ -329,13 +329,9 @@ def generate_report(items, items_dict, G, orphans, asymmetric, stale,
 
     lines = []
 
-    # Header
+    # Header — layout template already shows the generated banner + timestamps,
+    # so just start directly with the content sections.
     lines += [
-        "# SenseMaker Status Report",
-        "",
-        "Machine-generated. Not part of the authored record.",
-        f"**Generated:** {now_iso}   **Commit:** `{source_commit}`",
-        "",
         "---",
         "",
     ]
