@@ -81,6 +81,31 @@
         </section>
       {{ end }}
 
+      {{ if .Params.questions }}
+        <section class="entry-inline-section">
+          <h3>Questions</h3>
+          <ul class="questions-list">
+            {{ range $q := .Params.questions }}
+              {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
+              {{ range $.Site.Taxonomies.questions.ByCount }}
+                {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
+                  {{ $questionLink = .Page.RelPermalink }}
+                {{ end }}
+              {{ end }}
+              <li><a href="{{ $questionLink }}">{{ $q }}</a></li>
+            {{ end }}
+          </ul>
+        </section>
+      {{ else }}
+        <p class="empty-state">No questions defined yet for this investigation.</p>
+      {{ end }}
+
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else }}
+        <p>No body content yet for this investigation.</p>
+      {{ end }}
+
       {{ if .Params.comments }}
         <section class="entry-inline-section">
           <h3>Comments</h3>
@@ -116,31 +141,6 @@
             {{ end }}
           </div>
         </section>
-      {{ end }}
-
-      {{ if .Params.questions }}
-        <section class="entry-inline-section">
-          <h3>Questions</h3>
-          <ul class="questions-list">
-            {{ range $q := .Params.questions }}
-              {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
-              {{ range $.Site.Taxonomies.questions.ByCount }}
-                {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
-                  {{ $questionLink = .Page.RelPermalink }}
-                {{ end }}
-              {{ end }}
-              <li><a href="{{ $questionLink }}">{{ $q }}</a></li>
-            {{ end }}
-          </ul>
-        </section>
-      {{ else }}
-        <p class="empty-state">No questions defined yet for this investigation.</p>
-      {{ end }}
-
-      {{ if .Content }}
-        {{ .Content }}
-      {{ else }}
-        <p>No body content yet for this investigation.</p>
       {{ end }}
 
     </div>
