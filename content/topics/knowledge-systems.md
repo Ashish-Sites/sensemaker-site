@@ -2,6 +2,7 @@
 title: Knowledge Systems
 entry_type: topic_term
 description: "Systems for capturing, organizing, and retrieving knowledge"
+lifecycle: active
 draft: false
 primary_area: "Technology"
 ---

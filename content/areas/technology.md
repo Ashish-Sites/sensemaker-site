@@ -2,6 +2,7 @@
 title: Technology
 entry_type: area_term
 description: "Digital tools, systems, and frameworks for extending human capability"
+lifecycle: active
 draft: false
 ---
 

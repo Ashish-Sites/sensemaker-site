@@ -71,9 +71,6 @@ collections:
         name: areas
         widget: relation
         collection: areas_terms
-        filters:
-          - field: lifecycle
-            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -83,9 +80,6 @@ collections:
         name: topics
         widget: relation
         collection: topics_terms
-        filters:
-          - field: lifecycle
-            values: [active]
         search_fields: [title]
         display_fields: [title]
         value_field: title
@@ -105,14 +99,10 @@ collections:
         required: false
       - label: Tags
         name: tags
-        widget: relation
-        collection: tags_terms
-        filters:
-          - field: lifecycle
-            values: [active]
-        search_fields: [title]
-        display_fields: [title]
-        value_field: title
+        widget: list
+        allow_add: true
+        hint: "Free-form tags (will be auto-indexed by site)"
+        field: {label: Tag, name: tag, widget: string}
         multiple: true
         required: false
       - label: Related
@@ -185,15 +175,10 @@ collections:
       - { label: Legacy Single Investigation Slug, name: investigation, widget: string, required: false, hint: "Backward compatibility only. Prefer Attached Investigations." }
       - label: Tags
         name: tags
-        widget: relation
-        collection: tags_terms
-        filters:
-          - field: lifecycle
-            values: [active]
-        search_fields: [title]
-        display_fields: [title]
-        value_field: title
-        multiple: true
+        widget: list
+        allow_add: true
+        hint: "Free-form tags (will be auto-indexed by site)"
+        field: {label: Tag, name: tag, widget: string}
         required: false
       - { label: Source Link, name: source_link, widget: string, required: false, hint: "Optional primary reference URL, especially for evidence or quote articles" }
       - { label: Confidence, name: confidence, widget: select, required: false, options: [low, medium, high], hint: "Optional confidence level for claims in this article" }

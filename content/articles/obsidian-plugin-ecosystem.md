@@ -8,6 +8,7 @@ tags: ["tools", "extensibility"]
 investigations: ["Building a Personal Knowledge System"]
 source_link: "https://obsidian.md/plugins"
 confidence: "high"
+lifecycle: active
 draft: false
 ---
 
