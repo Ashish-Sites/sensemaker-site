@@ -2,16 +2,16 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-07-02T10:55:32.125403Z'
-source_commit: 0db304544e94e709f2f5da87163f164e8a68d15e
+generated_at: '2026-07-02T11:03:46.205798Z'
+source_commit: c0673197f9092c07613224be86cf9246518ee5d5
 title: Link Integrity
 ---
 
 # Link Integrity Report
 
 This page is automatically generated. It is not part of the authored record.
-**Last generated:** 2026-07-02T10:55:32.125403Z
-**Source commit:** `0db304544e94e709f2f5da87163f164e8a68d15e`
+**Last generated:** 2026-07-02T11:03:46.205798Z
+**Source commit:** `c0673197f9092c07613224be86cf9246518ee5d5`
 
 ## Orphans
 Items with no inbound or outbound links: **1**
