@@ -194,21 +194,52 @@ CANDIDATE_MODELS = [
 
 
 def detect_generation_model(client):
-    """Find the first candidate model that accepts a minimal generate request."""
+    """Discover available generation models via list_models(), then probe to confirm."""
     import time
+
+    # Step 1: list what the API actually has
+    listed = []
+    try:
+        for m in client.models.list():
+            name = m.name  # e.g. "models/gemini-2.0-flash"
+            if "embedding" in name.lower():
+                continue
+            # strip "models/" prefix for use in generate_content calls
+            short = name.removeprefix("models/")
+            listed.append(short)
+        print(f"  Available models: {listed[:8]}", file=sys.stderr)
+    except Exception as e:
+        print(f"  Could not list models: {e}", file=sys.stderr)
+
+    # Step 2: prefer listed models, fall back to static candidates
+    static = [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+    ]
+    candidates = listed + [m for m in static if m not in listed]
+
+    # Step 3: probe each — retry with backoff on 429, skip on 404
     probe = "Reply with the single word: ok"
-    for model in CANDIDATE_MODELS:
-        try:
-            resp = client.models.generate_content(model=model, contents=probe)
-            if resp.text:
-                print(f"  ✓ Using generation model: {model}", file=sys.stderr)
-                return model
-        except Exception as e:
-            err = str(e)
-            print(f"  Model {model} unavailable: {err.split(chr(10))[0][:80]}", file=sys.stderr)
-            if "429" in err or "RESOURCE_EXHAUSTED" in err:
-                time.sleep(3)
-            continue
+    for model in candidates[:10]:
+        for attempt in range(3):
+            try:
+                resp = client.models.generate_content(model=model, contents=probe)
+                if resp.text:
+                    print(f"  ✓ Using generation model: {model}", file=sys.stderr)
+                    return model
+                break
+            except Exception as e:
+                err = str(e)
+                if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                    wait = 15 * (attempt + 1)
+                    print(f"  {model}: rate limited, waiting {wait}s (attempt {attempt + 1}/3)…", file=sys.stderr)
+                    time.sleep(wait)
+                    continue  # retry same model
+                # 404 or other non-retriable — skip to next model
+                print(f"  {model}: {err.split(chr(10))[0][:80]}", file=sys.stderr)
+                break
     return None
 
 
