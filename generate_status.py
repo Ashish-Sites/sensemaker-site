@@ -62,21 +62,77 @@ def get_gemini_client():
     return genai
 
 
+def detect_embedding_model(client):
+    """
+    Detect available embedding model by listing models and finding one that supports embedContent.
+    Falls back to common model names if list_models fails.
+    Returns model name or None if none available.
+    """
+    if not client:
+        return None
+    
+    # Try to list available models
+    try:
+        models = client.list_models()
+        for model in models:
+            model_name = model.name
+            # Check if this model supports embedContent
+            supported_methods = getattr(model, 'supported_generation_config', {}).get('supported_methods', [])
+            if 'embedContent' in supported_methods or 'embed' in model_name.lower():
+                print(f"  ✓ Detected embedding model: {model_name}", file=sys.stderr)
+                return model_name
+    except Exception as e:
+        print(f"  Note: Could not list models ({e}). Using fallback model names.", file=sys.stderr)
+    
+    # Fallback: try common model names
+    fallback_models = [
+        "models/embedding-001",
+        "models/text-embedding-004",
+        "embedding-001",
+        "text-embedding-004",
+    ]
+    
+    for model in fallback_models:
+        try:
+            # Quick test: try embedding a short string
+            result = client.embed_content(
+                model=model,
+                content="test"
+            )
+            if result and ('embedding' in result or 'embeddings' in result):
+                print(f"  ✓ Found working embedding model: {model}", file=sys.stderr)
+                return model
+        except Exception:
+            continue
+    
+    return None
+
+
 def embed_text(client, text, model_name="models/text-embedding-004", verbose=False):
     """Embed text using Gemini embeddings API. Try multiple model names if first fails."""
     if not client or not text:
         return None
     
-    # Try multiple model names in case the API has changed
+    # Try the provided model first, then fallbacks
     model_names = [
-        model_name,
+        model_name,  # Use the detected model first
         "models/text-embedding-004",
         "models/embedding-001",
         "models/text-embedding-003",
+        "embedding-001",  # Try without models/ prefix
+        "text-embedding-004",
     ]
     
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_models = []
+    for m in model_names:
+        if m not in seen:
+            unique_models.append(m)
+            seen.add(m)
+    
     last_error = None
-    for model in model_names:
+    for model in unique_models:
         try:
             result = client.embed_content(
                 model=model,
@@ -135,7 +191,7 @@ def chunk_text(text, max_length=500):
     return [c for c in chunks if len(c) > 50]  # Skip tiny chunks
 
 
-def analyze_rhythm(client, items, items_dict):
+def analyze_rhythm(client, items, items_dict, embedding_model="models/text-embedding-004"):
     """
     Analyze rhythm/coherence for each item.
     Returns list of (item_type, slug, title, coherence_score, analysis_dict).
@@ -163,7 +219,7 @@ def analyze_rhythm(client, items, items_dict):
             continue
         
         # Embed the intent/promise
-        intent_embed = embed_text(client, intent_text, verbose=True)
+        intent_embed = embed_text(client, intent_text, model_name=embedding_model, verbose=True)
         if not intent_embed:
             embedding_failures += 1
             results.append((item_type, slug, title, None, {"reason": "Intent embedding failed"}))
@@ -177,7 +233,7 @@ def analyze_rhythm(client, items, items_dict):
         
         chunk_scores = []
         for chunk in body_chunks:
-            chunk_embed = embed_text(client, chunk, verbose=False)
+            chunk_embed = embed_text(client, chunk, model_name=embedding_model, verbose=False)
             if chunk_embed:
                 score = cosine_similarity(intent_embed, chunk_embed)
                 chunk_scores.append(score)
@@ -646,10 +702,15 @@ def main():
         else:
             client = get_gemini_client()
             if client:
-                print("  Initializing embeddings...")
-                rhythm_results = analyze_rhythm(client, items, items_dict)
-                rhythm_output = output_dir / "rhythm-analysis.md"
-                generate_rhythm_markdown(rhythm_results, source_commit, rhythm_output)
+                print("  Detecting embedding model...")
+                embedding_model = detect_embedding_model(client)
+                if embedding_model:
+                    print(f"  Using model: {embedding_model}")
+                    rhythm_results = analyze_rhythm(client, items, items_dict, embedding_model)
+                    rhythm_output = output_dir / "rhythm-analysis.md"
+                    generate_rhythm_markdown(rhythm_results, source_commit, rhythm_output)
+                else:
+                    print("  ⚠ No embedding models available in Gemini API. Skipping rhythm analysis.")
             else:
                 print("  ⚠ Gemini API key not found or client init failed. Skipping rhythm analysis.")
     
