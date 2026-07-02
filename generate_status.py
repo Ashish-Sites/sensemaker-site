@@ -188,27 +188,43 @@ CANDIDATE_MODELS = [
     "gemini-1.5-flash",
     "gemini-2.0-flash",
     "gemini-2.0-flash-lite",
+    "gemini-1.5-flash-latest",
+    "gemini-1.0-pro",
 ]
 
 
-def _call_gemini(client, prompt, models=CANDIDATE_MODELS):
-    """Try each model in order. Return (response_text, model_used) or raise."""
+def detect_generation_model(client):
+    """Find the first candidate model that accepts a minimal generate request."""
     import time
-    last_err = None
-    for model in models:
-        for attempt in range(2):  # one retry per model
-            try:
-                response = client.models.generate_content(model=model, contents=prompt)
-                return response.text.strip(), model
-            except Exception as e:
-                err_str = str(e)
-                last_err = e
-                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                    if attempt == 0:
-                        time.sleep(5)   # brief wait before retry
-                    continue           # try next attempt / next model
-                raise               # non-quota error: propagate immediately
-    raise last_err
+    probe = "Reply with the single word: ok"
+    for model in CANDIDATE_MODELS:
+        try:
+            resp = client.models.generate_content(model=model, contents=probe)
+            if resp.text:
+                print(f"  ✓ Using generation model: {model}", file=sys.stderr)
+                return model
+        except Exception as e:
+            err = str(e)
+            print(f"  Model {model} unavailable: {err.split(chr(10))[0][:80]}", file=sys.stderr)
+            if "429" in err or "RESOURCE_EXHAUSTED" in err:
+                time.sleep(3)
+            continue
+    return None
+
+
+def _call_gemini(client, prompt, model):
+    """Call a specific model with one retry on quota errors."""
+    import time
+    for attempt in range(2):
+        try:
+            response = client.models.generate_content(model=model, contents=prompt)
+            return response.text.strip()
+        except Exception as e:
+            err_str = str(e)
+            if ("429" in err_str or "RESOURCE_EXHAUSTED" in err_str) and attempt == 0:
+                time.sleep(10)
+                continue
+            raise
 
 
 def _classify_error(e):
@@ -227,7 +243,7 @@ def _classify_error(e):
     return first_line
 
 
-def analyze_item(client, item_type, slug, data):
+def analyze_item(client, item_type, slug, data, model):
     """Call Gemini to analyse a single content item. Returns dict."""
     title = data.get("title", slug)
     description = data.get("description") or data.get("summary") or ""
@@ -243,11 +259,9 @@ def analyze_item(client, item_type, slug, data):
     )
 
     try:
-        raw, model_used = _call_gemini(client, prompt)
+        raw = _call_gemini(client, prompt, model)
         raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        result = json.loads(raw)
-        print(f"    ✓ {model_used}", file=sys.stderr)
-        return result
+        return json.loads(raw)
     except json.JSONDecodeError:
         return {"error": "Could not parse Gemini response"}
     except Exception as e:
@@ -436,12 +450,16 @@ def main():
     content_analyses = {}
     client = get_gemini_client()
     if client:
-        analyzable = [(t, s, d) for t, s, d in items if t in ("investigation", "article")]
-        print(f"Analyzing {len(analyzable)} items with Gemini...")
-        for item_type, slug, data in analyzable:
-            print(f"  Analyzing {item_type}/{slug}...")
-            result = analyze_item(client, item_type, slug, data)
-            content_analyses[(item_type, slug)] = result
+        gen_model = detect_generation_model(client)
+        if gen_model:
+            analyzable = [(t, s, d) for t, s, d in items if t in ("investigation", "article")]
+            print(f"Analyzing {len(analyzable)} items with Gemini ({gen_model})...")
+            for item_type, slug, data in analyzable:
+                print(f"  Analyzing {item_type}/{slug}...")
+                result = analyze_item(client, item_type, slug, data, gen_model)
+                content_analyses[(item_type, slug)] = result
+        else:
+            print("Skipping content analysis (no working generation model found).")
     else:
         print("Skipping content analysis (no Gemini client).")
 
