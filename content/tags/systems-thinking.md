@@ -1,6 +1,6 @@
 ---
 entry_type: tag_term
-title: Systems Thinking
+title: systems-thinking
 description: Holistic approaches to understanding complex systems and their interactions
 lifecycle: active
 draft: false
