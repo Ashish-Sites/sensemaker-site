@@ -101,15 +101,6 @@ collections:
         name: tags
         widget: relation
         collection: tags_terms
-        search_fields: [title]
-        display_fields: [title]
-        value_field: title
-        multiple: true
-        required: false
-      - label: Tags
-        name: tags
-        widget: relation
-        collection: tags_terms
         filters:
           - field: lifecycle
             values: [active]
@@ -186,15 +177,6 @@ collections:
         multiple: true
         required: false
       - { label: Legacy Single Investigation Slug, name: investigation, widget: string, required: false, hint: "Backward compatibility only. Prefer Attached Investigations." }
-      - label: Tags
-        name: tags
-        widget: relation
-        collection: tags_terms
-        search_fields: [title]
-        display_fields: [title]
-        value_field: title
-        multiple: true
-        required: false
       - label: Tags
         name: tags
         widget: relation
