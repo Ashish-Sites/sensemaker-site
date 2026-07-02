@@ -316,6 +316,15 @@ document.addEventListener('DOMContentLoaded', function() {
           ctx.arc(node.x, node.y, nodeRadius + 3, 0, 2 * Math.PI);
           ctx.stroke();
         }
+        
+        // Draw simple text label
+        ctx.font = '11px Arial';
+        ctx.fillStyle = '#c9d1d9';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        const labelX = node.x + nodeRadius + 6;
+        const labelY = node.y;
+        ctx.fillText(label, labelX, labelY);
       })
       .linkColor(d => d.type === 'attached-article' ? '#ff6b6b' : '#999')
       .linkWidth(d => d.type === 'attached-article' ? 2.5 : 1.5)
