@@ -99,10 +99,23 @@ collections:
         required: false
       - label: Tags
         name: tags
-        widget: list
-        allow_add: true
-        hint: "Free-form tags (will be auto-indexed by site)"
-        field: {label: Tag, name: tag, widget: string}
+        widget: relation
+        collection: tags_terms
+        search_fields: [title]
+        display_fields: [title]
+        value_field: title
+        multiple: true
+        required: false
+      - label: Tags
+        name: tags
+        widget: relation
+        collection: tags_terms
+        filters:
+          - field: lifecycle
+            values: [active]
+        search_fields: [title]
+        display_fields: [title]
+        value_field: title
         multiple: true
         required: false
       - label: Related
@@ -175,10 +188,24 @@ collections:
       - { label: Legacy Single Investigation Slug, name: investigation, widget: string, required: false, hint: "Backward compatibility only. Prefer Attached Investigations." }
       - label: Tags
         name: tags
-        widget: list
-        allow_add: true
-        hint: "Free-form tags (will be auto-indexed by site)"
-        field: {label: Tag, name: tag, widget: string}
+        widget: relation
+        collection: tags_terms
+        search_fields: [title]
+        display_fields: [title]
+        value_field: title
+        multiple: true
+        required: false
+      - label: Tags
+        name: tags
+        widget: relation
+        collection: tags_terms
+        filters:
+          - field: lifecycle
+            values: [active]
+        search_fields: [title]
+        display_fields: [title]
+        value_field: title
+        multiple: true
         required: false
       - { label: Source Link, name: source_link, widget: string, required: false, hint: "Optional primary reference URL, especially for evidence or quote articles" }
       - { label: Confidence, name: confidence, widget: select, required: false, options: [low, medium, high], hint: "Optional confidence level for claims in this article" }
@@ -247,6 +274,27 @@ collections:
         multiple: false
         required: false
         hint: "Optional conceptual parent area for this topic"
+      - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
+      - { label: Draft, name: draft, widget: boolean, default: true }
+      - { label: Body, name: body, widget: markdown, required: false }
+
+  - name: tags_terms
+    label: Tags
+    label_singular: Tag
+    folder: content/tags
+    create: true
+    delete: true
+    exclude: ["_index.md", "**/_index.md"]
+    filter:
+      field: entry_type
+      value: tag_term
+    extension: md
+    format: frontmatter
+    summary: "{{title}}"
+    fields:
+      - { label: Entry Type, name: entry_type, widget: hidden, default: tag_term }
+      - { label: Tag Title, name: title, widget: string, hint: "Used in investigations and taxonomy links" }
+      - { label: Description, name: description, widget: string, required: false, hint: "Short summary for list pages (max 200 chars)", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body, name: body, widget: markdown, required: false }
