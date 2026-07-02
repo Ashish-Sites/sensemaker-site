@@ -15,3 +15,8 @@ node_modules/
 
 # Generated Hugo output
 public/
+
+# Python
+__pycache__/
+*.py[cod]
+.Python
