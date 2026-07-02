@@ -65,12 +65,12 @@ def embed_text(client, text):
     
     try:
         result = client.embed_content(
-            model="models/embedding-001",
+            model="models/text-embedding-004",  # Updated model name
             content=text
         )
         return result['embedding']
     except Exception as e:
-        print(f"Warning: Embedding failed for text: {e}", file=sys.stderr)
+        # Silently fail for individual embeddings
         return None
 
 
@@ -513,24 +513,32 @@ def generate_rhythm_markdown(rhythm_results, source_commit, output_path):
             body_lines.append("")
     
     # Summary
-    scored = [r for r in rhythm_results if r[2] is not None]
+    scored = [r for r in rhythm_results if r[3] is not None]
     if scored:
-        avg_coherence = sum(r[3] for r in scored if r[3]) / len([r for r in scored if r[3]])
+        scores = [r[3] for r in scored if r[3]]
+        if scores:
+            avg_coherence = sum(scores) / len(scores)
+            body_lines.append("---")
+            body_lines.append("")
+            body_lines.append("## Summary")
+            body_lines.append("")
+            body_lines.append(f"**Overall Corpus Coherence:** {round(avg_coherence, 2)}")
+            body_lines.append("")
+            body_lines.append("**Interpretation:**")
+            if avg_coherence >= 0.85:
+                body_lines.append("- 0.85+: Excellent coherence. Content stays focused.")
+            elif avg_coherence >= 0.75:
+                body_lines.append("- 0.75–0.84: Good coherence. Minor tangents detected in some pieces.")
+            elif avg_coherence >= 0.65:
+                body_lines.append("- 0.65–0.74: Fair coherence. Some pieces drift from stated intent.")
+            else:
+                body_lines.append("- Below 0.65: Weak coherence. Strong divergence from intent detected.")
+    else:
         body_lines.append("---")
         body_lines.append("")
         body_lines.append("## Summary")
         body_lines.append("")
-        body_lines.append(f"**Overall Corpus Coherence:** {round(avg_coherence, 2)}")
-        body_lines.append("")
-        body_lines.append("**Interpretation:**")
-        if avg_coherence >= 0.85:
-            body_lines.append("- 0.85+: Excellent coherence. Content stays focused.")
-        elif avg_coherence >= 0.75:
-            body_lines.append("- 0.75–0.84: Good coherence. Minor tangents detected in some pieces.")
-        elif avg_coherence >= 0.65:
-            body_lines.append("- 0.65–0.74: Fair coherence. Some pieces drift from stated intent.")
-        else:
-            body_lines.append("- Below 0.65: Weak coherence. Strong divergence from intent detected.")
+        body_lines.append("*No items could be scored for coherence. Check that content has body text and embeddings are available.*")
     
     # Write file
     body_content = "\n".join(body_lines)
