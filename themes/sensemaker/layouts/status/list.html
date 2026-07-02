@@ -1,0 +1,92 @@
+{{ define "main" }}
+<section class="list-view">
+  <header class="list-header">
+    <h1>Status</h1>
+    <p>Machine-generated operational dashboards for the corpus</p>
+  </header>
+
+  {{ if .Pages }}
+  <div class="list-items">
+    {{ range .Pages.ByDate.Reverse }}
+    <article class="list-item">
+      <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      {{ if .Params.generated_at }}
+      <div class="list-meta">
+        <small>Generated: {{ .Params.generated_at }}</small>
+      </div>
+      {{ end }}
+      {{ if .Summary }}
+      <p class="list-summary">{{ .Summary }}</p>
+      {{ end }}
+    </article>
+    {{ end }}
+  </div>
+  {{ else }}
+  <p>No status pages available.</p>
+  {{ end }}
+</section>
+
+<style>
+  .list-view {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .list-header {
+    margin-bottom: 32px;
+  }
+
+  .list-header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .list-header p {
+    color: #a0aec0;
+    font-size: 16px;
+  }
+
+  .list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .list-item {
+    padding: 20px;
+    border: 1px solid #404854;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+
+  .list-item:hover {
+    border-color: #62b1d8;
+  }
+
+  .list-item h2 {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+  }
+
+  .list-item h2 a {
+    color: #4a90e2;
+    text-decoration: none;
+  }
+
+  .list-item h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .list-meta {
+    font-size: 12px;
+    color: #718096;
+    margin-bottom: 12px;
+  }
+
+  .list-summary {
+    color: #cbd5e0;
+    margin: 0;
+    line-height: 1.6;
+  }
+</style>
+{{ end }}

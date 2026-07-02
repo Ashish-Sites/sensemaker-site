@@ -56,6 +56,11 @@ removePathAccents = true
   url = "/search/"
   weight = 7
 
+[[menu.main]]
+  name = "Status"
+  url = "/status/"
+  weight = 8
+
 # Markdown rendering
 [markup]
   [markup.goldmark]

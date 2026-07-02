@@ -1,0 +1,72 @@
+{{ define "main" }}
+<article class="entry status-page">
+  <header class="entry-header">
+    <div class="status-banner">
+      ⚙️ <strong>Generated</strong> — not part of the authored record
+    </div>
+    
+    <h1>{{ .Title }}</h1>
+    
+    {{ if .Params.generated_at }}
+    <div class="status-meta">
+      <p><small>Generated: <code>{{ .Params.generated_at }}</code></small></p>
+      {{ if .Params.source_commit }}
+      <p><small>Source: <code>{{ .Params.source_commit }}</code></small></p>
+      {{ end }}
+    </div>
+    {{ end }}
+  </header>
+
+  <div class="entry-content">
+    {{ .Content }}
+  </div>
+</article>
+
+<style>
+  .status-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .status-banner {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border-left: 4px solid #fbbf24;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #e2e8f0;
+  }
+
+  .status-meta {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #404854;
+    color: #a0aec0;
+  }
+
+  .status-meta code {
+    background: #2d3748;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+
+  .entry-content ul {
+    line-height: 1.8;
+  }
+
+  .entry-content li {
+    margin-bottom: 8px;
+  }
+
+  .entry-content code {
+    background: #2d3748;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+</style>
+{{ end }}
