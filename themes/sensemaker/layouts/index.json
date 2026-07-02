@@ -1,17 +1,19 @@
 {{- $investigations := where .Site.RegularPages "Type" "investigations" -}}
+{{- $articles := where .Site.RegularPages "Type" "articles" -}}
+{{- $items := append $investigations $articles -}}
 [
-{{- range $index, $page := $investigations -}}
+{{- range $index, $page := $items -}}
 {
   "url": {{ $page.RelPermalink | jsonify }},
   "title": {{ $page.Title | jsonify }},
   "content": {{ $page.Plain | jsonify }},
-  "status": {{ $page.Params.status | jsonify }},
+  "status": {{ $page.Params.status | default "Article" | jsonify }},
   "areas": {{ delimit (default (slice) $page.Params.areas) ", " | jsonify }},
   "topics": {{ delimit (default (slice) $page.Params.topics) ", " | jsonify }},
   "questions": {{ delimit (default (slice) $page.Params.questions) ", " | jsonify }},
   "tags": {{ delimit (default (slice) $page.Params.tags) ", " | jsonify }},
   "created": {{ $page.Params.created | jsonify }},
   "updated": {{ $page.Params.created | jsonify }}
-}{{ if ne (add $index 1) (len $investigations) }},{{ end }}
+}{{ if ne (add $index 1) (len $items) }},{{ end }}
 {{- end }}
 ]
