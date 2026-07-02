@@ -57,6 +57,9 @@ tags:
   - systems-thinking
   - personal-knowledge
   - tools
+attached_articles:
+  - obsidian-plugin-ecosystem
+  - why-personal-knowledge-systems-matter
 ---
 
 # Building a Personal Knowledge System
