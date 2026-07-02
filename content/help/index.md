@@ -25,7 +25,7 @@ draft: false
 
 ### Search
 
-Use Search to quickly find entries by title and content text.
+Use Search to quickly find entries across investigations, articles, and questions. Search works on title, body content, tags, areas, topics, and associated questions.
 
 ## Terminology
 

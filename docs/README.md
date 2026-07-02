@@ -1,4 +1,4 @@
-# SenseMaker MVP
+# SenseMaker
 
 A digital extension of handwritten thinking. A personal sense-making environment that preserves your natural thinking process while adding capabilities that paper cannot provide.
 
@@ -385,6 +385,6 @@ SenseMaker itself is provided as-is. Your investigations are yours.
 
 ---
 
-**Version**: MVP 0.1  
+**Version**: v0.1  
 **Last Updated**: June 2026  
 **Status**: Actively evolving
