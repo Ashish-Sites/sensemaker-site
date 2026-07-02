@@ -12,7 +12,7 @@ import json
 import argparse
 import subprocess
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 try:
     import frontmatter
@@ -316,7 +316,8 @@ MATCH_ICON = {"good": "✓", "partial": "⚠️", "poor": "❌"}
 
 def generate_report(items, items_dict, G, orphans, asymmetric, stale,
                     content_analyses, source_commit, output_path):
-    now_iso = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    IST = timezone(timedelta(hours=5, minutes=30))
+    now_iso = datetime.now(tz=IST).strftime("%Y-%m-%dT%H:%M:%S+05:30")
 
     fm = {
         "title": "Status Report",
