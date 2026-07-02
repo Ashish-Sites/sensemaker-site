@@ -3,9 +3,13 @@
   <h1>{{ .Title }}</h1>
 
   {{ $terms := .Data.Terms.ByCount }}
+  {{/* Fall back to physical section pages when no content references these terms */}}
   {{ $termPages := .Pages }}
+  {{ if eq (len $termPages) 0 }}
+    {{ $termPages = where .Site.Pages "Section" .Data.Plural }}
+  {{ end }}
   {{ $paginator := .Paginate $termPages 20 }}
-  {{ $termTotal := len $terms }}
+  {{ $termTotal := len $termPages }}
   {{ $assocCount := 0 }}
   {{ range $terms }}{{ $assocCount = add $assocCount .Count }}{{ end }}
 
