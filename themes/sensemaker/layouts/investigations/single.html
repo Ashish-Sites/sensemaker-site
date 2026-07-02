@@ -298,12 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .nodeVal(d => d.type === 'investigation' ? 12 : 8)
       .nodeCanvasObject((node, ctx) => {
         const label = node.label;
-        const fontSize = 12;
         const nodeRadius = node.type === 'investigation' ? 8 : 6;
-        
-        ctx.font = `${fontSize}px Arial`;
-        const textWidth = ctx.measureText(label).width;
-        const bckgDimensions = [textWidth + 8, fontSize + 6];
         
         // Draw node circle
         ctx.fillStyle = node.type === 'investigation' ? '#4a90e2' : '#50c878';
@@ -311,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.beginPath();
         ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
         ctx.fill();
+        ctx.globalAlpha = 1;
         
         // Add outer ring for central node
         if (node.id === data.current) {
@@ -320,24 +316,6 @@ document.addEventListener('DOMContentLoaded', function() {
           ctx.arc(node.x, node.y, nodeRadius + 3, 0, 2 * Math.PI);
           ctx.stroke();
         }
-        
-        ctx.globalAlpha = 1;
-        
-        // Draw label background
-        ctx.fillStyle = 'rgba(13, 17, 23, 0.95)';
-        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y + nodeRadius + 5, bckgDimensions[0], bckgDimensions[1]);
-        
-        // Draw label border
-        ctx.strokeStyle = node.type === 'investigation' ? '#4a90e2' : '#50c878';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(node.x - bckgDimensions[0] / 2, node.y + nodeRadius + 5, bckgDimensions[0], bckgDimensions[1]);
-        
-        // Draw label text
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#c9d1d9';
-        ctx.font = `11px Arial`;
-        ctx.fillText(label, node.x, node.y + nodeRadius + 8);
       })
       .linkColor(d => d.type === 'attached-article' ? '#ff6b6b' : '#999')
       .linkWidth(d => d.type === 'attached-article' ? 2.5 : 1.5)

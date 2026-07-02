@@ -640,14 +640,14 @@ th {
   display: none;
 }
 
-.entry-tab-panel-active {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--spacing-lg);
+#tab-overview.entry-tab-panel-active {
+  display: contents;
 }
 
 #tab-graph.entry-tab-panel-active {
-  grid-template-columns: 1fr;
+  display: grid;
+  grid-column: 1 / -1;
+  gap: var(--spacing-lg);
 }
 
 /* Graph Container */
