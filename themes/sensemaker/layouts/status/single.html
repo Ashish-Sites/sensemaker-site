@@ -10,7 +10,7 @@
     {{ if .Params.generated_at }}
     <div class="status-meta">
       <small>
-        Generated {{ dateFormat "2 Jan 2006, 15:04 UTC" .Params.generated_at }}
+        Generated {{ time.Format "2 Jan 2006, 15:04 IST" "Asia/Kolkata" .Params.generated_at }}
         {{ if .Params.source_commit }}
           &nbsp;·&nbsp; commit <code>{{ substr .Params.source_commit 0 7 }}</code>
         {{ end }}
