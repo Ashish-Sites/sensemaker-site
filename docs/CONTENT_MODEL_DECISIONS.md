@@ -52,11 +52,8 @@ Keep only current, required content-model decisions and unresolved items.
 2. `title`
 3. `created`
 4. `status`
-5. `areas` (required)
-6. `topics` (required)
-7. `questions` (required)
-8. `body`
-9. Optional: `description`, `tags`, `related`, `attached_articles`, `draft`
+5. `body`
+6. Optional: `areas`, `topics`, `questions`, `description`, `tags`, `related`, `attached_articles`, `draft`
 
 ### Articles
 1. `entry_type`: article

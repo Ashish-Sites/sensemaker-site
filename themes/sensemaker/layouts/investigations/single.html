@@ -27,7 +27,8 @@
     <h1 class="investigation-title">{{ .Title }}</h1>
   </header>
 
-  {{ if or .Params.areas .Params.topics .Params.tags }}
+  {{ $contextExists := or .Params.areas .Params.topics .Params.tags }}
+  {{ if $contextExists }}
     <section class="entry-context-row entry-context-row-three-col" aria-label="Context">
       {{ if .Params.areas }}
         <div class="entry-context-group">
@@ -85,6 +86,8 @@
             {{ end }}
           </ul>
         </section>
+      {{ else }}
+        <p class="empty-state">No questions defined yet for this investigation.</p>
       {{ end }}
 
       {{ if .Content }}
