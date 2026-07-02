@@ -57,9 +57,26 @@ removePathAccents = true
   weight = 7
 
 [[menu.main]]
+  name = "Manage"
+  weight = 8
+
+[[menu.main]]
+  name = "Admin"
+  url = "/admin/"
+  parent = "Manage"
+  weight = 1
+
+[[menu.main]]
+  name = "Publish"
+  url = "https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml"
+  parent = "Manage"
+  weight = 2
+
+[[menu.main]]
   name = "Status"
   url = "/status/"
-  weight = 8
+  parent = "Manage"
+  weight = 3
 
 # Markdown rendering
 [markup]
