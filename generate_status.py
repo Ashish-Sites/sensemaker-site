@@ -62,7 +62,7 @@ def get_gemini_client():
     return genai
 
 
-def embed_text(client, text, model_name="models/text-embedding-004"):
+def embed_text(client, text, model_name="models/text-embedding-004", verbose=False):
     """Embed text using Gemini embeddings API. Try multiple model names if first fails."""
     if not client or not text:
         return None
@@ -75,17 +75,24 @@ def embed_text(client, text, model_name="models/text-embedding-004"):
         "models/text-embedding-003",
     ]
     
+    last_error = None
     for model in model_names:
         try:
             result = client.embed_content(
                 model=model,
                 content=text
             )
-            return result.get('embedding') or result.get('embeddings', [{}])[0].get('value')
-        except Exception:
+            embedding = result.get('embedding') or result.get('embeddings', [{}])[0].get('value')
+            if verbose and embedding:
+                print(f"  ✓ Embedded with {model}", file=sys.stderr)
+            return embedding
+        except Exception as e:
+            last_error = e
             continue
     
-    # All models failed
+    # All models failed - log it
+    if verbose and last_error:
+        print(f"Warning: Embedding failed for all models. Last error: {last_error}", file=sys.stderr)
     return None
 
 
@@ -137,6 +144,7 @@ def analyze_rhythm(client, items, items_dict):
         return []
     
     results = []
+    embedding_failures = 0
     
     for item_type, slug, data in items:
         if item_type == "question":  # Skip questions, they're just prompts
@@ -155,9 +163,10 @@ def analyze_rhythm(client, items, items_dict):
             continue
         
         # Embed the intent/promise
-        intent_embed = embed_text(client, intent_text)
+        intent_embed = embed_text(client, intent_text, verbose=True)
         if not intent_embed:
-            results.append((item_type, slug, title, None, {"reason": "Embedding failed"}))
+            embedding_failures += 1
+            results.append((item_type, slug, title, None, {"reason": "Intent embedding failed"}))
             continue
         
         # Chunk and embed body
@@ -168,7 +177,7 @@ def analyze_rhythm(client, items, items_dict):
         
         chunk_scores = []
         for chunk in body_chunks:
-            chunk_embed = embed_text(client, chunk)
+            chunk_embed = embed_text(client, chunk, verbose=False)
             if chunk_embed:
                 score = cosine_similarity(intent_embed, chunk_embed)
                 chunk_scores.append(score)
@@ -194,7 +203,11 @@ def analyze_rhythm(client, items, items_dict):
                 "divergences": divergences[:3]  # Top 3 divergent sections
             }))
         else:
+            embedding_failures += 1
             results.append((item_type, slug, title, None, {"reason": "Could not score chunks"}))
+    
+    if embedding_failures > 0:
+        print(f"  Warning: {embedding_failures} items could not be embedded", file=sys.stderr)
     
     return results
 
@@ -629,16 +642,16 @@ def main():
     if args.enable_rhythm:
         print("\nAnalyzing rhythm...")
         if not HAS_GEMINI:
-            print("  Warning: google-generativeai not installed. Skipping rhythm analysis.")
-            print("  Install with: pip install google-generativeai")
+            print("  ⚠ google-generativeai not installed. Skipping rhythm analysis.")
         else:
             client = get_gemini_client()
             if client:
+                print("  Initializing embeddings...")
                 rhythm_results = analyze_rhythm(client, items, items_dict)
                 rhythm_output = output_dir / "rhythm-analysis.md"
                 generate_rhythm_markdown(rhythm_results, source_commit, rhythm_output)
             else:
-                print("  Skipping rhythm analysis (no API key)")
+                print("  ⚠ Gemini API key not found or client init failed. Skipping rhythm analysis.")
     
     print("\n✓ Done!")
 
