@@ -1,13 +1,14 @@
 {{- $investigations := where .Site.RegularPages "Type" "investigations" -}}
 {{- $articles := where .Site.RegularPages "Type" "articles" -}}
-{{- $items := append $investigations $articles -}}
+{{- $questions := where .Site.RegularPages "Type" "questions" -}}
+{{- $items := append (append $investigations $articles) $questions -}}
 [
 {{- range $index, $page := $items -}}
 {
   "url": {{ $page.RelPermalink | jsonify }},
   "title": {{ $page.Title | jsonify }},
   "content": {{ $page.Plain | jsonify }},
-  "status": {{ $page.Params.status | default "Article" | jsonify }},
+  "status": {{ $page.Params.status | default "Question" | jsonify }},
   "areas": {{ delimit (default (slice) $page.Params.areas) ", " | jsonify }},
   "topics": {{ delimit (default (slice) $page.Params.topics) ", " | jsonify }},
   "questions": {{ delimit (default (slice) $page.Params.questions) ", " | jsonify }},
