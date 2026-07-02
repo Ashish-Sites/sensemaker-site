@@ -13,6 +13,10 @@ from datetime import datetime, timedelta
 import subprocess
 import json
 import re
+import warnings
+
+# Suppress deprecation warnings from google.generativeai (pending migration to google-genai)
+warnings.filterwarnings("ignore", message=".*google.generativeai.*")
 
 try:
     import frontmatter
@@ -58,20 +62,31 @@ def get_gemini_client():
     return genai
 
 
-def embed_text(client, text):
-    """Embed text using Gemini embeddings API."""
+def embed_text(client, text, model_name="models/text-embedding-004"):
+    """Embed text using Gemini embeddings API. Try multiple model names if first fails."""
     if not client or not text:
         return None
     
-    try:
-        result = client.embed_content(
-            model="models/text-embedding-004",  # Updated model name
-            content=text
-        )
-        return result['embedding']
-    except Exception as e:
-        # Silently fail for individual embeddings
-        return None
+    # Try multiple model names in case the API has changed
+    model_names = [
+        model_name,
+        "models/text-embedding-004",
+        "models/embedding-001",
+        "models/text-embedding-003",
+    ]
+    
+    for model in model_names:
+        try:
+            result = client.embed_content(
+                model=model,
+                content=text
+            )
+            return result.get('embedding') or result.get('embeddings', [{}])[0].get('value')
+        except Exception:
+            continue
+    
+    # All models failed
+    return None
 
 
 def cosine_similarity(vec1, vec2):
