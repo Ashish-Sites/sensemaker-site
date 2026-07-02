@@ -205,6 +205,24 @@
 
     <!-- Graph Tab -->
     <div id="tab-graph" class="entry-tab-panel">
+      <div class="graph-legend">
+        <div class="legend-item">
+          <span class="legend-node legend-node-investigation"></span>
+          <span class="legend-label">Investigation</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-node legend-node-article"></span>
+          <span class="legend-label">Article</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-link legend-link-attached"></span>
+          <span class="legend-label">Attached</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-link legend-link-related"></span>
+          <span class="legend-label">Related</span>
+        </div>
+      </div>
       <div id="graph-container" class="graph-container"></div>
       <script id="graph-data" type="application/json">
         {
@@ -275,30 +293,68 @@ document.addEventListener('DOMContentLoaded', function() {
       (container)
       .graphData(data)
       .nodeId('id')
-      .nodeLabel(d => d.label)
+      .nodeLabel(d => `${d.label} (${d.type})`)
       .nodeColor(d => d.type === 'investigation' ? '#4a90e2' : '#50c878')
+      .nodeVal(d => d.type === 'investigation' ? 12 : 8)
       .nodeCanvasObject((node, ctx) => {
         const label = node.label;
         const fontSize = 12;
+        const nodeRadius = node.type === 'investigation' ? 8 : 6;
+        
         ctx.font = `${fontSize}px Arial`;
         const textWidth = ctx.measureText(label).width;
-        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+        const bckgDimensions = [textWidth + 8, fontSize + 6];
         
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+        // Draw node circle
+        ctx.fillStyle = node.type === 'investigation' ? '#4a90e2' : '#50c878';
+        ctx.globalAlpha = 0.9;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+        ctx.fill();
         
+        // Add outer ring for central node
+        if (node.id === data.current) {
+          ctx.strokeStyle = '#58a6ff';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, nodeRadius + 3, 0, 2 * Math.PI);
+          ctx.stroke();
+        }
+        
+        ctx.globalAlpha = 1;
+        
+        // Draw label background
+        ctx.fillStyle = 'rgba(13, 17, 23, 0.95)';
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y + nodeRadius + 5, bckgDimensions[0], bckgDimensions[1]);
+        
+        // Draw label border
+        ctx.strokeStyle = node.type === 'investigation' ? '#4a90e2' : '#50c878';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(node.x - bckgDimensions[0] / 2, node.y + nodeRadius + 5, bckgDimensions[0], bckgDimensions[1]);
+        
+        // Draw label text
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#000';
-        ctx.fillText(label, node.x, node.y);
+        ctx.fillStyle = '#c9d1d9';
+        ctx.font = `11px Arial`;
+        ctx.fillText(label, node.x, node.y + nodeRadius + 8);
       })
       .linkColor(d => d.type === 'attached-article' ? '#ff6b6b' : '#999')
-      .linkWidth(d => d.type === 'attached-article' ? 2 : 1)
+      .linkWidth(d => d.type === 'attached-article' ? 2.5 : 1.5)
+      .linkDirectionalParticles(d => d.type === 'attached-article' ? 2 : 0)
+      .linkDirectionalParticleSpeed(0.005)
       .onNodeClick(node => {
         window.location.href = '/sensemaker-site/' + (node.type === 'investigation' ? 'investigations' : 'articles') + '/' + node.id + '/';
       })
       .width(container.clientWidth)
-      .height(container.clientHeight || 600);
+      .height(container.clientHeight || 600)
+      .d3Force('charge', null)
+      .numDimensions(2)
+      .warmupTicks(100)
+      .cooldownTicks(50)
+      .onEngineStop(() => {
+        // Graph finished cooling, ready to interact
+      });
   }
 });
 </script>
