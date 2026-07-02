@@ -9,10 +9,12 @@
     
     {{ if .Params.generated_at }}
     <div class="status-meta">
-      <p><small>Generated: <code>{{ .Params.generated_at }}</code></small></p>
-      {{ if .Params.source_commit }}
-      <p><small>Source: <code>{{ .Params.source_commit }}</code></small></p>
-      {{ end }}
+      <small>
+        Generated {{ dateFormat "2 Jan 2006, 15:04 UTC" .Params.generated_at }}
+        {{ if .Params.source_commit }}
+          &nbsp;·&nbsp; commit <code>{{ substr .Params.source_commit 0 7 }}</code>
+        {{ end }}
+      </small>
     </div>
     {{ end }}
   </header>
