@@ -1,4 +1,14 @@
 {{ define "content" }}
+{{/* Redirect /status/ straight to the single report page */}}
+{{ range .Pages }}
+  {{ if eq .File.BaseFileName "report" }}
+    <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+    <script>window.location.href = "{{ .Permalink }}";</script>
+    <p>Redirecting to <a href="{{ .Permalink }}">Status Report</a>…</p>
+    {{ return }}
+  {{ end }}
+{{ end }}
+
 <section class="list-view">
   <header class="list-header">
     <h1>Status</h1>
@@ -15,14 +25,11 @@
         <small>Generated: {{ .Params.generated_at }}</small>
       </div>
       {{ end }}
-      {{ if .Summary }}
-      <p class="list-summary">{{ .Summary }}</p>
-      {{ end }}
     </article>
     {{ end }}
   </div>
   {{ else }}
-  <p>No status pages available.</p>
+  <p>No status report available yet.</p>
   {{ end }}
 </section>
 
