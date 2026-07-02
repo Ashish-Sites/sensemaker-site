@@ -183,8 +183,52 @@ Provide a short analysis in JSON (no markdown fences, raw JSON only):
 }}
 """
 
-def analyze_item(client, item_type, slug, data, model="gemini-2.0-flash-lite"):
-    """Call Gemini to analyse a single content item. Returns dict or None."""
+# Models to try in order — flash-lite is cheapest but has lowest quota
+CANDIDATE_MODELS = [
+    "gemini-1.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+]
+
+
+def _call_gemini(client, prompt, models=CANDIDATE_MODELS):
+    """Try each model in order. Return (response_text, model_used) or raise."""
+    import time
+    last_err = None
+    for model in models:
+        for attempt in range(2):  # one retry per model
+            try:
+                response = client.models.generate_content(model=model, contents=prompt)
+                return response.text.strip(), model
+            except Exception as e:
+                err_str = str(e)
+                last_err = e
+                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                    if attempt == 0:
+                        time.sleep(5)   # brief wait before retry
+                    continue           # try next attempt / next model
+                raise               # non-quota error: propagate immediately
+    raise last_err
+
+
+def _classify_error(e):
+    """Return a short, human-readable error string — never raw JSON."""
+    msg = str(e)
+    if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
+        return "API quota exceeded — will retry on next scheduled run"
+    if "400" in msg or "invalid" in msg.lower():
+        return "Invalid request"
+    if "403" in msg or "permission" in msg.lower():
+        return "API key permission denied"
+    if "404" in msg:
+        return "Model not found"
+    # Fallback: first sentence only, no JSON
+    first_line = msg.split("\n")[0][:120]
+    return first_line
+
+
+def analyze_item(client, item_type, slug, data):
+    """Call Gemini to analyse a single content item. Returns dict."""
     title = data.get("title", slug)
     description = data.get("description") or data.get("summary") or ""
     body = (data.get("body") or "").strip()
@@ -199,19 +243,17 @@ def analyze_item(client, item_type, slug, data, model="gemini-2.0-flash-lite"):
     )
 
     try:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-        )
-        raw = response.text.strip()
+        raw, model_used = _call_gemini(client, prompt)
         raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-        return json.loads(raw)
-    except json.JSONDecodeError as e:
-        print(f"  Warning: JSON parse error for {item_type}/{slug}: {e}", file=sys.stderr)
-        return {"error": f"JSON parse error: {e}"}
+        result = json.loads(raw)
+        print(f"    ✓ {model_used}", file=sys.stderr)
+        return result
+    except json.JSONDecodeError:
+        return {"error": "Could not parse Gemini response"}
     except Exception as e:
-        print(f"  Warning: Gemini error for {item_type}/{slug}: {e}", file=sys.stderr)
-        return {"error": str(e)}
+        msg = _classify_error(e)
+        print(f"  Warning: {item_type}/{slug}: {msg}", file=sys.stderr)
+        return {"error": msg}
 
 
 # ---------------------------------------------------------------------------
