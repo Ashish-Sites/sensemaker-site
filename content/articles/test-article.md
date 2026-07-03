@@ -9,12 +9,11 @@ investigations:
 tags:
   - knowledge-work
 confidence: medium
+content_blocks: []
 lifecycle: active
 draft: false
 ---
 # Heading
-
-
 
 * One 
 * Two 
@@ -42,3 +41,5 @@ draft: false
        C -->|Two| E[iPhone]
        C -->|Three| F[fa:fa-car Car]
    ```
+
+   ![](/images/uploads/screenshot-2026-07-02-112706.png)
