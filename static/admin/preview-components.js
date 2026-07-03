@@ -120,6 +120,23 @@
     setTimeout(() => runPreviewEnhancements(document), 0);
   };
 
+  const installPublishWarning = () => {
+    if (window.__sensemakerPublishWarningInstalled) return;
+    window.__sensemakerPublishWarningInstalled = true;
+
+    window.CMS.registerEventListener({
+      name: 'prePublish',
+      handler: ({ entry }) => {
+        const isDraft = Boolean(entry && typeof entry.getIn === 'function' && entry.getIn(['data', 'draft']));
+        if (!isDraft) return;
+
+        window.alert(
+          'This entry is still marked as draft. Publishing will make it live on the site.',
+        );
+      },
+    });
+  };
+
   if (h && ReactRef && ReactRef.Component) {
     const renderBlock = (block, idx) => {
       const type = getValue(block, "type", "markdown");
@@ -308,4 +325,5 @@
   });
 
   installPreviewObserver();
+  installPublishWarning();
 })();
