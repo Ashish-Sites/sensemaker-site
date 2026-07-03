@@ -1,7 +1,7 @@
 (function () {
   if (!window.CMS) return;
 
-  const ReactRef = window.React || window.CMS.React || null;
+  const ReactRef = window.CMS.React || null;
   const h = ReactRef ? ReactRef.createElement : null;
 
   const getValue = (obj, key, fallback) => {
