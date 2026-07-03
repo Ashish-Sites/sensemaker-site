@@ -8,7 +8,7 @@ investigations:
   - personal-knowledge-system
 confidence: medium
 lifecycle: active
-draft: true
+draft: false
 ---
 # Heading
 
