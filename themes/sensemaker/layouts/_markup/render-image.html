@@ -1,4 +1,4 @@
 <figure class="markdown-image">
-  <img src="{{ .Destination | relURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>
+  <img src="{{ .Destination | absURL }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }}>
   {{ with .Title }}<figcaption>{{ . }}</figcaption>{{ end }}
 </figure>
