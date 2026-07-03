@@ -10,6 +10,6 @@ This section contains practical guidance and rendering demos.
 
 ## Pages
 
-- [Site Help](/help/site-help/)
-- [Content Block Demo](/help/content-block-demo/)
-- [Content Blocks Guide](/help/content-blocks-guide/)
+- [Site Help]({{< relref "help/site-help.md" >}})
+- [Content Block Demo]({{< relref "help/content-block-demo.md" >}})
+- [Content Blocks Guide]({{< relref "help/content-blocks-guide.md" >}})
