@@ -43,3 +43,9 @@ draft: false
    ```
 
    ![](/images/uploads/screenshot-2026-07-02-112706.png)
+
+## Another heading
+
+
+
+![](/images/uploads/screenshot-2026-07-03-102629.png)
