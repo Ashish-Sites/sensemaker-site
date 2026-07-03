@@ -317,14 +317,22 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const nodeRadius = () => 12;
-    const boxScale = 0.7;
-    const labelFontSize = 11;
+    const boxScale = 0.58;
+    const labelFontSize = 9;
+    const hoverFontSize = 11;
 
     const linkColor = (link) => link.type === 'attached' ? palette.attachedLink : palette.relatedLink;
     const truncateLabel = (label) => {
       const text = String(label || '');
       return text.length > 10 ? text.slice(0, 10) : text;
     };
+
+    const escapeHtml = (text) => String(text || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
 
     const estimateBoxWidth = (label) => {
       const visible = truncateLabel(label);
@@ -413,7 +421,10 @@ document.addEventListener('DOMContentLoaded', function() {
       (container)
       .graphData(data)
       .nodeId('id')
-      .nodeLabel(d => d.label)
+      .nodeLabel((d) => {
+        const text = escapeHtml(d.label);
+        return `<div style="font-size:${hoverFontSize}px;line-height:1.2;padding:2px 4px;">${text}</div>`;
+      })
       .nodeColor(nodeColor)
       .nodeVal(nodeRadius)
       .nodeCanvasObject((node, ctx) => {
