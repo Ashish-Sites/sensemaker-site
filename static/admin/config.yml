@@ -266,7 +266,7 @@ collections:
               - { label: Block Type, name: type, widget: hidden, default: math }
               - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
+      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Use this as the main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
 
   - name: articles
     label: Articles
@@ -473,7 +473,7 @@ collections:
               - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
+      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Use this as the main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
 
   - name: areas_terms
     label: Areas

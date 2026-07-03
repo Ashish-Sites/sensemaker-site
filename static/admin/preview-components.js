@@ -15,6 +15,24 @@
     return value;
   };
 
+  const escapeHtml = (value) =>
+    String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  const escapeAttr = (value) => String(value || "").replace(/"/g, "\\\"");
+
+  const buildShortcode = (name, attrs, body) => {
+    const attrString = Object.entries(attrs || {})
+      .filter(([, value]) => value !== undefined && value !== null && String(value) !== "")
+      .map(([key, value]) => `${key}="${escapeAttr(value)}"`)
+      .join(" ");
+    const openTag = attrString ? `{{< ${name} ${attrString} >}}` : `{{< ${name} >}}`;
+    if (body === undefined || body === null) return openTag;
+    return `${openTag}\n${body}\n{{< /${name} >}}`;
+  };
+
   const parseTableMarkdown = (markdown) => {
     const text = String(markdown || "").trim();
     if (!text) return null;
@@ -401,7 +419,7 @@
     window.CMS.registerPreviewTemplate("articles", BlockPreview);
   }
 
-  const mermaidPattern = /^```mermaid\n([\s\S]*?)\n```$/m;
+  const mermaidPattern = /^{{<\s*mermaid\s*>}}\n([\s\S]*?)\n{{<\s*\/mermaid\s*>}}$/m;
 
   window.CMS.registerEditorComponent({
     id: "mermaid-diagram",
@@ -412,10 +430,312 @@
       return { diagram: match[1] };
     },
     toBlock: function (obj) {
-      return "```mermaid\n" + (obj.diagram || "") + "\n```";
+      return buildShortcode("mermaid", {}, obj.diagram || "");
     },
     toPreview: function (obj) {
       return '<div class="mermaid">' + (obj.diagram || "") + "</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "code-shortcode",
+    label: "Code",
+    fields: [
+      { name: "lang", label: "Language", widget: "string", required: false, default: "text" },
+      { name: "code", label: "Code", widget: "text" }
+    ],
+    pattern: /^{{<\s*code(?:\s+lang="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/code\s*>}}$/m,
+    fromBlock: function (match) {
+      return { lang: match[1] || "text", code: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("code", { lang: obj.lang || "text" }, obj.code || "");
+    },
+    toPreview: function (obj) {
+      return '<pre class="cms-shortcode-preview-code"><code>' + escapeHtml(obj.code || "") + "</code></pre>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "chart-shortcode",
+    label: "Chart",
+    fields: [
+      { name: "type", label: "Chart Type", widget: "select", options: ["line", "bar"], default: "line" },
+      { name: "labels", label: "Labels (pipe separated)", widget: "string" },
+      { name: "values", label: "Values (pipe separated)", widget: "string" },
+      { name: "series", label: "Series Label", widget: "string", required: false, default: "Series" }
+    ],
+    pattern: /^{{<\s*chart(?:\s+type="([^"]*)")?(?:\s+labels="([^"]*)")?(?:\s+values="([^"]*)")?(?:\s+series="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { type: match[1] || "line", labels: match[2] || "", values: match[3] || "", series: match[4] || "Series" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("chart", { type: obj.type || "line", labels: obj.labels || "", values: obj.values || "", series: obj.series || "Series" });
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Chart (' + escapeHtml(obj.type || "line") + ")</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "image-shortcode",
+    label: "Image",
+    fields: [
+      { name: "src", label: "Image Source", widget: "image" },
+      { name: "alt", label: "Alt Text", widget: "string", required: false },
+      { name: "title", label: "Caption", widget: "string", required: false }
+    ],
+    pattern: /^{{<\s*image\s+src="([^"]*)"(?:\s+alt="([^"]*)")?(?:\s+title="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { src: match[1] || "", alt: match[2] || "", title: match[3] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("image", { src: obj.src || "", alt: obj.alt || "", title: obj.title || "" });
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Image: ' + escapeHtml(obj.src || "") + "</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "table-shortcode",
+    label: "Table",
+    fields: [
+      { name: "caption", label: "Caption", widget: "string", required: false },
+      { name: "markdown", label: "Table Markdown", widget: "text" }
+    ],
+    pattern: /^{{<\s*table(?:\s+caption="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/table\s*>}}$/m,
+    fromBlock: function (match) {
+      return { caption: match[1] || "", markdown: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("table", { caption: obj.caption || "" }, obj.markdown || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Table</div>';
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "callout-shortcode",
+    label: "Callout",
+    fields: [
+      { name: "variant", label: "Variant", widget: "select", options: ["note", "info", "success", "warning", "danger"], default: "note" },
+      { name: "title", label: "Title", widget: "string", required: false },
+      { name: "body", label: "Body", widget: "markdown" }
+    ],
+    pattern: /^{{<\s*callout(?:\s+variant="([^"]*)")?(?:\s+title="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/callout\s*>}}$/m,
+    fromBlock: function (match) {
+      return { variant: match[1] || "note", title: match[2] || "", body: match[3] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("callout", { variant: obj.variant || "note", title: obj.title || "" }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Callout: ' + escapeHtml(obj.variant || "note") + "</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "quote-shortcode",
+    label: "Quote",
+    fields: [
+      { name: "source", label: "Source", widget: "string", required: false },
+      { name: "date", label: "Date", widget: "string", required: false },
+      { name: "body", label: "Body", widget: "markdown" }
+    ],
+    pattern: /^{{<\s*quote(?:\s+source="([^"]*)")?(?:\s+date="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/quote\s*>}}$/m,
+    fromBlock: function (match) {
+      return { source: match[1] || "", date: match[2] || "", body: match[3] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("quote", { source: obj.source || "", date: obj.date || "" }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<blockquote class="cms-shortcode-preview">' + escapeHtml(obj.body || "") + "</blockquote>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "details-shortcode",
+    label: "Details",
+    fields: [
+      { name: "title", label: "Title", widget: "string", required: false, default: "Details" },
+      { name: "open", label: "Open", widget: "boolean", required: false, default: false },
+      { name: "body", label: "Body", widget: "markdown" }
+    ],
+    pattern: /^{{<\s*details(?:\s+title="([^"]*)")?(?:\s+open="(true|false)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/details\s*>}}$/m,
+    fromBlock: function (match) {
+      return { title: match[1] || "Details", open: match[2] === "true", body: match[3] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("details", { title: obj.title || "Details", open: String(Boolean(obj.open)) }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<details class="cms-shortcode-preview"><summary>' + escapeHtml(obj.title || "Details") + "</summary><div>" + escapeHtml(obj.body || "") + "</div></details>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "definition-shortcode",
+    label: "Definition",
+    fields: [
+      { name: "term", label: "Term", widget: "string", required: false, default: "Term" },
+      { name: "body", label: "Body", widget: "markdown" }
+    ],
+    pattern: /^{{<\s*definition(?:\s+term="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/definition\s*>}}$/m,
+    fromBlock: function (match) {
+      return { term: match[1] || "Term", body: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("definition", { term: obj.term || "Term" }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<dl class="cms-shortcode-preview"><dt>' + escapeHtml(obj.term || "Term") + "</dt><dd>" + escapeHtml(obj.body || "") + "</dd></dl>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "tabs-shortcode",
+    label: "Tabs",
+    fields: [
+      { name: "id", label: "Tabs ID", widget: "string", required: false },
+      { name: "body", label: "Tabs Content", widget: "text", hint: "Use sections as: Title line, body text, then --- between tabs." }
+    ],
+    pattern: /^{{<\s*tabs(?:\s+id="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/tabs\s*>}}$/m,
+    fromBlock: function (match) {
+      return { id: match[1] || "", body: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("tabs", { id: obj.id || "" }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Tabs</div>';
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "timeline-shortcode",
+    label: "Timeline",
+    fields: [
+      { name: "id", label: "Timeline ID", widget: "string", required: false },
+      { name: "body", label: "Timeline Content", widget: "text", hint: "Use sections as: date | title, body text, then --- between events." }
+    ],
+    pattern: /^{{<\s*timeline(?:\s+id="([^"]*)")?\s*>}}\n([\s\S]*?)\n{{<\s*\/timeline\s*>}}$/m,
+    fromBlock: function (match) {
+      return { id: match[1] || "", body: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("timeline", { id: obj.id || "" }, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Timeline</div>';
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "checklist-shortcode",
+    label: "Checklist",
+    fields: [{ name: "body", label: "Body", widget: "markdown" }],
+    pattern: /^{{<\s*checklist\s*>}}\n([\s\S]*?)\n{{<\s*\/checklist\s*>}}$/m,
+    fromBlock: function (match) {
+      return { body: match[1] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("checklist", {}, obj.body || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Checklist</div>';
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "embed-shortcode",
+    label: "Embed",
+    fields: [
+      { name: "src", label: "Source URL", widget: "string" },
+      { name: "title", label: "Title", widget: "string", required: false },
+      { name: "ratio", label: "Aspect Ratio", widget: "select", options: ["16:9", "4:3", "1:1"], default: "16:9" }
+    ],
+    pattern: /^{{<\s*embed(?:\s+src="([^"]*)")?(?:\s+title="([^"]*)")?(?:\s+ratio="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { src: match[1] || "", title: match[2] || "", ratio: match[3] || "16:9" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("embed", { src: obj.src || "", title: obj.title || "", ratio: obj.ratio || "16:9" });
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Embed: ' + escapeHtml(obj.src || "") + "</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "referencecard-shortcode",
+    label: "Reference Card",
+    fields: [
+      { name: "ref", label: "Reference Path", widget: "string" },
+      { name: "label", label: "Label", widget: "string", required: false }
+    ],
+    pattern: /^{{<\s*referencecard(?:\s+ref="([^"]*)")?(?:\s+label="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { ref: match[1] || "", label: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("referencecard", { ref: obj.ref || "", label: obj.label || "" });
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Reference: ' + escapeHtml(obj.ref || "") + "</div>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "math-shortcode",
+    label: "Math",
+    fields: [{ name: "expression", label: "Expression", widget: "text" }],
+    pattern: /^{{<\s*math\s*>}}\n([\s\S]*?)\n{{<\s*\/math\s*>}}$/m,
+    fromBlock: function (match) {
+      return { expression: match[1] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("math", {}, obj.expression || "");
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">Math</div>';
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "contentlink-shortcode",
+    label: "Inline Content Link",
+    fields: [
+      { name: "ref", label: "Reference Path", widget: "string" },
+      { name: "label", label: "Label", widget: "string", required: false }
+    ],
+    pattern: /^{{<\s*contentlink(?:\s+ref="([^"]*)")?(?:\s+label="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { ref: match[1] || "", label: match[2] || "" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("contentlink", { ref: obj.ref || "", label: obj.label || "" });
+    },
+    toPreview: function (obj) {
+      return '<span class="cms-shortcode-preview">' + escapeHtml(obj.label || obj.ref || "Link") + "</span>";
+    }
+  });
+
+  window.CMS.registerEditorComponent({
+    id: "toc-shortcode",
+    label: "Table of Contents",
+    fields: [{ name: "title", label: "Title", widget: "string", required: false, default: "On this page" }],
+    pattern: /^{{<\s*toc(?:\s+title="([^"]*)")?\s*>}}$/m,
+    fromBlock: function (match) {
+      return { title: match[1] || "On this page" };
+    },
+    toBlock: function (obj) {
+      return buildShortcode("toc", { title: obj.title || "On this page" });
+    },
+    toPreview: function (obj) {
+      return '<div class="cms-shortcode-preview">TOC: ' + escapeHtml(obj.title || "On this page") + "</div>";
     }
   });
 
