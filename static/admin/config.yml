@@ -311,7 +311,7 @@ collections:
     folder: content/areas
     create: true
     delete: true
-    exclude: ["_index.md", "**/_index.md"]
+    nested: { depth: 100 }
     filter:
       field: entry_type
       value: area_term
@@ -332,7 +332,7 @@ collections:
     folder: content/topics
     create: true
     delete: true
-    exclude: ["_index.md", "**/_index.md"]
+    nested: { depth: 100 }
     filter:
       field: entry_type
       value: topic_term
@@ -366,7 +366,7 @@ collections:
     folder: content/tags
     create: true
     delete: true
-    exclude: ["_index.md", "**/_index.md"]
+    nested: { depth: 100 }
     filter:
       field: entry_type
       value: tag_term
