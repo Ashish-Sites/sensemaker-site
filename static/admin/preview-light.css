@@ -41,3 +41,37 @@ code {
   background: #eef2ff !important;
   color: #1f2937 !important;
 }
+
+.cms-block-preview-root {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.cms-block {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 0 0 14px;
+  background: #ffffff;
+}
+
+.cms-block-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.cms-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cms-preview-table th,
+.cms-preview-table td {
+  border: 1px solid #cbd5e1;
+  padding: 6px 8px;
+  text-align: left;
+}

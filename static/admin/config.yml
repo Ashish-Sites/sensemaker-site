@@ -130,8 +130,50 @@ collections:
         value_field: "{{slug}}"
         multiple: true
         required: false
+      - label: Content Blocks
+        name: content_blocks
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.type}}"
+        hint: "Optional drag-and-drop blocks. If empty, Body markdown is used."
+        types:
+          - label: Markdown
+            name: markdown
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: markdown }
+              - { label: Markdown, name: markdown, widget: markdown }
+          - label: Code
+            name: code
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: code }
+              - { label: Language, name: language, widget: string, required: false, default: text }
+              - { label: Code, name: code, widget: text }
+          - label: Mermaid
+            name: mermaid
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: mermaid }
+              - { label: Diagram, name: diagram, widget: text, hint: "Mermaid definition (e.g. flowchart TD...)" }
+          - label: Table
+            name: table
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: table }
+              - { label: Table Markdown, name: markdown, widget: text, hint: "Paste a Markdown table" }
+          - label: Chart
+            name: chart
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: chart }
+              - { label: Chart Type, name: chart_type, widget: select, options: [line, bar], default: line }
+              - { label: Series Label, name: series, widget: string, required: false, default: Series }
+              - { label: Labels (pipe separated), name: labels, widget: string, hint: "Example: Jan|Feb|Mar" }
+              - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body, name: body, widget: markdown }
+      - { label: Body (Fallback Markdown), name: body, widget: markdown, hint: "Used when Content Blocks are empty; keeps legacy entries working." }
 
   - name: articles
     label: Articles
@@ -201,9 +243,51 @@ collections:
         multiple: false
         required: false
         hint: "Optional primary home investigation when attached to multiple investigations"
+      - label: Content Blocks
+        name: content_blocks
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.type}}"
+        hint: "Optional drag-and-drop blocks. If empty, Body markdown is used."
+        types:
+          - label: Markdown
+            name: markdown
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: markdown }
+              - { label: Markdown, name: markdown, widget: markdown }
+          - label: Code
+            name: code
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: code }
+              - { label: Language, name: language, widget: string, required: false, default: text }
+              - { label: Code, name: code, widget: text }
+          - label: Mermaid
+            name: mermaid
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: mermaid }
+              - { label: Diagram, name: diagram, widget: text, hint: "Mermaid definition (e.g. flowchart TD...)" }
+          - label: Table
+            name: table
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: table }
+              - { label: Table Markdown, name: markdown, widget: text, hint: "Paste a Markdown table" }
+          - label: Chart
+            name: chart
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: chart }
+              - { label: Chart Type, name: chart_type, widget: select, options: [line, bar], default: line }
+              - { label: Series Label, name: series, widget: string, required: false, default: Series }
+              - { label: Labels (pipe separated), name: labels, widget: string, hint: "Example: Jan|Feb|Mar" }
+              - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body, name: body, widget: markdown }
+      - { label: Body (Fallback Markdown), name: body, widget: markdown, hint: "Used when Content Blocks are empty; keeps legacy entries working." }
 
   - name: areas_terms
     label: Areas

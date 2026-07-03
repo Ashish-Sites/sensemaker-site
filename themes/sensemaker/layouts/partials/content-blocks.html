@@ -1,0 +1,45 @@
+{{ $blocks := default (slice) .Params.content_blocks }}
+{{ range $index, $block := $blocks }}
+  {{ $type := lower (default "markdown" (index $block "type")) }}
+
+  {{ if eq $type "markdown" }}
+    {{ with (index $block "markdown") }}
+      <section class="content-block content-block-markdown">
+        {{ . | markdownify }}
+      </section>
+    {{ end }}
+  {{ else if eq $type "code" }}
+    {{ $language := default "text" (index $block "language") }}
+    {{ with (index $block "code") }}
+      <section class="content-block content-block-code">
+        {{ highlight . $language "" }}
+      </section>
+    {{ end }}
+  {{ else if eq $type "mermaid" }}
+    {{ with (index $block "diagram") }}
+      <section class="content-block content-block-mermaid">
+        <div class="mermaid">{{ . }}</div>
+      </section>
+    {{ end }}
+  {{ else if eq $type "table" }}
+    {{ with (index $block "markdown") }}
+      <section class="content-block content-block-table">
+        {{ . | markdownify }}
+      </section>
+    {{ end }}
+  {{ else if eq $type "chart" }}
+    {{ $chartType := default "line" (index $block "chart_type") }}
+    {{ $series := default "Series" (index $block "series") }}
+    {{ $labels := default "" (index $block "labels") }}
+    {{ $values := default "" (index $block "values") }}
+    <section class="content-block content-block-chart">
+      <div class="content-chart-wrap">
+        <canvas class="interactive-chart" data-type="{{ $chartType }}" data-series="{{ $series }}" data-labels="{{ $labels }}" data-values="{{ $values }}"></canvas>
+      </div>
+    </section>
+  {{ else }}
+    <section class="content-block content-block-unsupported">
+      <p class="entry-metadata-note">Unsupported block type: {{ $type }}</p>
+    </section>
+  {{ end }}
+{{ end }}

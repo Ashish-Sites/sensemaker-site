@@ -1464,6 +1464,19 @@ th {
   border-bottom: 1px solid var(--color-border);
 }
 
+.content-block + .content-block {
+  margin-top: var(--spacing-lg);
+}
+
+.content-block-chart .content-chart-wrap {
+  position: relative;
+  height: 280px;
+}
+
+.content-block-table table {
+  margin-bottom: 0;
+}
+
 .search-result h3 {
   margin: 0 0 var(--spacing-md) 0;
 }

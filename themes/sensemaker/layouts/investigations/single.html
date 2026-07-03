@@ -108,7 +108,10 @@
         <p class="empty-state">No questions defined yet for this investigation.</p>
       {{ end }}
 
-      {{ if .Content }}
+      {{ $blocks := default (slice) .Params.content_blocks }}
+      {{ if gt (len $blocks) 0 }}
+        {{ partial "content-blocks.html" . }}
+      {{ else if .Content }}
         {{ .Content }}
       {{ else }}
         <p>No body content yet for this investigation.</p>
