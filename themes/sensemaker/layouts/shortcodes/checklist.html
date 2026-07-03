@@ -1,0 +1,11 @@
+{{- $body := trim .Inner " \r\n\t" -}}
+{{- if eq $body "" -}}
+  {{- warnf "checklist shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-invalid">
+    <p class="entry-metadata-note">Checklist body is empty.</p>
+  </section>
+{{- else -}}
+  <section class="content-checklist">
+    <div class="prose">{{ $body | markdownify }}</div>
+  </section>
+{{- end -}}

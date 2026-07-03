@@ -1,0 +1,13 @@
+{{- $term := default "Definition" (.Get "term") -}}
+{{- $body := trim .Inner " \r\n\t" -}}
+{{- if eq $body "" -}}
+  {{- warnf "definition shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-invalid">
+    <p class="entry-metadata-note">Definition body is empty.</p>
+  </section>
+{{- else -}}
+  <dl class="definition-card">
+    <dt>{{ $term }}</dt>
+    <dd class="prose">{{ $body | markdownify }}</dd>
+  </dl>
+{{- end -}}

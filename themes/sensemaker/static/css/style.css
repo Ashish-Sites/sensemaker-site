@@ -1590,6 +1590,203 @@ th {
   border-radius: 8px;
 }
 
+.content-details {
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg-secondary);
+  overflow: hidden;
+}
+
+.content-details summary {
+  cursor: pointer;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-weight: 600;
+}
+
+.content-details-body {
+  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+}
+
+.definition-card {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid #58a6ff;
+  border-radius: 10px;
+  background-color: var(--color-bg-secondary);
+}
+
+.definition-card dt {
+  font-weight: 700;
+  color: #79c0ff;
+  margin-bottom: 0.5rem;
+}
+
+.definition-card dd {
+  margin: 0;
+}
+
+.content-tabs {
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.content-tabs-item + .content-tabs-item {
+  border-top: 1px solid var(--color-border);
+}
+
+.content-tabs-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.content-tabs-label {
+  display: block;
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.content-tabs-panel {
+  display: none;
+  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+}
+
+.content-tabs-input:checked ~ .content-tabs-panel {
+  display: block;
+}
+
+.content-tabs-input:checked ~ .content-tabs-label {
+  color: #79c0ff;
+  background-color: rgba(88, 166, 255, 0.08);
+}
+
+.content-timeline {
+  margin: var(--spacing-lg) 0;
+  padding-left: 1.2rem;
+  border-left: 2px solid var(--color-border);
+  list-style: none;
+}
+
+.content-timeline-item {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+}
+
+.content-timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -0.55rem;
+  top: 0.45rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background-color: #58a6ff;
+  box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.12);
+}
+
+.content-timeline-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.content-timeline-title {
+  margin: 0.35rem 0 0.5rem 0;
+}
+
+.content-checklist {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg-secondary);
+}
+
+.content-checklist ul {
+  margin-bottom: 0;
+}
+
+.embed-wrapper {
+  position: relative;
+  margin: var(--spacing-lg) 0;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.embed-wrapper::before {
+  content: "";
+  display: block;
+}
+
+.embed-wrapper-16-9::before { padding-top: 56.25%; }
+.embed-wrapper-4-3::before { padding-top: 75%; }
+.embed-wrapper-1-1::before { padding-top: 100%; }
+
+.embed-wrapper iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.reference-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+.reference-card:hover {
+  text-decoration: none;
+  border-color: #58a6ff;
+}
+
+.reference-card-type {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.reference-card-title {
+  font-size: 1.05rem;
+}
+
+.reference-card-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.reference-card-missing {
+  display: inline-flex;
+}
+
+.math-block {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-bg-secondary);
+  overflow-x: auto;
+}
+
 .search-result h3 {
   margin: 0 0 var(--spacing-md) 0;
 }

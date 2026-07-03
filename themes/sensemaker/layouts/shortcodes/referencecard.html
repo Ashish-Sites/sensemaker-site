@@ -1,0 +1,20 @@
+{{- $ref := default "" (.Get "ref") -}}
+{{- $label := default "" (.Get "label") -}}
+{{- $page := site.GetPage $ref -}}
+{{- if not $page -}}
+  {{- $page = site.GetPage (strings.TrimPrefix "/" $ref) -}}
+{{- end -}}
+{{- if not $page -}}
+  {{- $matches := where site.RegularPages "File.BaseFileName" "eq" (strings.TrimPrefix "/" $ref) -}}
+  {{- with index $matches 0 }}{{ $page = . }}{{ end -}}
+{{- end -}}
+{{- if $page -}}
+  <a class="reference-card" href="{{ $page.RelPermalink }}">
+    <span class="reference-card-type">{{ $page.Type }}</span>
+    <strong class="reference-card-title">{{ default $page.Title $label }}</strong>
+    {{ with $page.Description }}<span class="reference-card-desc">{{ . }}</span>{{ end }}
+  </a>
+{{- else -}}
+  {{- warnf "referencecard shortcode on %q could not resolve %q" .Page.Path $ref -}}
+  <span class="reference-card reference-card-missing">{{ default $ref $label }}</span>
+{{- end -}}

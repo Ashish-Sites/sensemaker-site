@@ -1,0 +1,11 @@
+{{- $body := trim .Inner " \r\n\t" -}}
+{{- if eq $body "" -}}
+  {{- warnf "math shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-invalid">
+    <p class="entry-metadata-note">Math expression is empty.</p>
+  </section>
+{{- else -}}
+  <div class="math-block">$$
+{{ $body }}
+$$</div>
+{{- end -}}

@@ -1,0 +1,13 @@
+{{- $src := default "" (.Get "src") -}}
+{{- $title := default "Embedded content" (.Get "title") -}}
+{{- $ratio := lower (default "16:9" (.Get "ratio")) -}}
+{{- if eq $src "" -}}
+  {{- warnf "embed shortcode on %q requires src" .Page.Path -}}
+  <section class="content-block content-block-invalid">
+    <p class="entry-metadata-note">Embed source is required.</p>
+  </section>
+{{- else -}}
+  <div class="embed-wrapper embed-wrapper-{{ replace $ratio ":" "-" }}">
+    <iframe src="{{ $src | safeURL }}" title="{{ $title }}" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+  </div>
+{{- end -}}

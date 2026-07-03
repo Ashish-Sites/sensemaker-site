@@ -81,3 +81,64 @@ This is a warning callout. Use it for constraints, caveats, or temporary notes.
 {{< callout variant="success" title="Ready" >}}
 This is a success callout. Use it for confirmation or completed steps.
 {{< /callout >}}
+
+## Details
+
+{{< details title="Why this exists" >}}
+This keeps longer supporting context collapsed until the reader asks for it.
+{{< /details >}}
+
+## Definition
+
+{{< definition term="Knowledge System" >}}
+A knowledge system is the set of processes, structures, and tools used to capture, organize, and revisit thinking.
+{{< /definition >}}
+
+## Tabs
+
+{{< tabs id="demo-tabs" >}}
+Plan
+Outline the work before committing to the structure.
+---
+Build
+Implement the smallest useful slice and validate it.
+---
+Publish
+Push to `main` and deploy from the GitHub Actions workflow.
+{{< /tabs >}}
+
+## Timeline
+
+{{< timeline id="demo-timeline" >}}
+2026-06-20 | Research
+Reviewed how notes, diagrams, and links should work together.
+---
+2026-07-01 | Implementation
+Added the core shortcode toolkit and supporting styles.
+---
+2026-07-03 | Validation
+Confirmed the generated page renders the new content types.
+{{< /timeline >}}
+
+## Checklist
+
+{{< checklist >}}
+- [x] Add the shortcode
+- [x] Add the styles
+- [ ] Use it in a new page
+- [ ] Deploy to GitHub Pages
+{{< /checklist >}}
+
+## Embed
+
+{{< embed src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Example embed" ratio="16:9" >}}
+
+## Reference Card
+
+{{< referencecard ref="/articles/why-personal-knowledge-systems-matter" label="Background article" >}}
+
+## Math
+
+{{< math >}}
+E = mc^2
+{{< /math >}}

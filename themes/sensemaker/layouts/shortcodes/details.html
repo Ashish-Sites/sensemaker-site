@@ -1,0 +1,14 @@
+{{- $title := default "Details" (.Get "title") -}}
+{{- $open := eq (lower (default "false" (.Get "open"))) "true" -}}
+{{- $body := trim .Inner " \r\n\t" -}}
+{{- if eq $body "" -}}
+  {{- warnf "details shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-invalid">
+    <p class="entry-metadata-note">Details body is empty.</p>
+  </section>
+{{- else -}}
+  <details class="content-details"{{ if $open }} open{{ end }}>
+    <summary>{{ $title }}</summary>
+    <div class="content-details-body prose">{{ $body | markdownify }}</div>
+  </details>
+{{- end -}}

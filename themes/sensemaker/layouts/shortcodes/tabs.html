@@ -1,0 +1,24 @@
+{{- $group := default (printf "tabs-%d" .Ordinal) (.Get "id") -}}
+{{- $raw := trim .Inner " \r\n\t" -}}
+{{- if eq $raw "" -}}
+  {{- warnf "tabs shortcode on %q is empty" .Page.Path -}}
+{{- else -}}
+  {{- $normalized := replaceRE "(?m)\r?\n---\r?\n" "\n[[TABS-SPLIT]]\n" $raw -}}
+  {{- $sections := split $normalized "[[TABS-SPLIT]]" -}}
+  <div class="content-tabs" data-tabs="{{ $group }}">
+    {{- range $index, $section := $sections -}}
+      {{- $section = trim $section " \r\n\t" -}}
+      {{- if ne $section "" -}}
+        {{- $lines := split $section "\n" -}}
+        {{- $title := trim (index $lines 0) " \r\n\t" -}}
+        {{- $body := trim (delimit (after 1 $lines) "\n") " \r\n\t" -}}
+        {{- $tabId := printf "%s-%d" $group $index -}}
+        <div class="content-tabs-item">
+          <input type="radio" class="content-tabs-input" name="{{ $group }}" id="{{ $tabId }}"{{ if eq $index 0 }} checked{{ end }}>
+          <label class="content-tabs-label" for="{{ $tabId }}">{{ $title }}</label>
+          <div class="content-tabs-panel prose">{{ $body | markdownify }}</div>
+        </div>
+      {{- end -}}
+    {{- end -}}
+  </div>
+{{- end -}}

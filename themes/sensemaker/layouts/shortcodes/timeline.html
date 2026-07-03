@@ -1,0 +1,28 @@
+{{- $group := default (printf "timeline-%d" .Ordinal) (.Get "id") -}}
+{{- $raw := trim .Inner " \r\n\t" -}}
+{{- if eq $raw "" -}}
+  {{- warnf "timeline shortcode on %q is empty" .Page.Path -}}
+{{- else -}}
+  {{- $normalized := replaceRE "(?m)\r?\n---\r?\n" "\n[[TIMELINE-SPLIT]]\n" $raw -}}
+  {{- $sections := split $normalized "[[TIMELINE-SPLIT]]" -}}
+  <ol class="content-timeline" data-timeline="{{ $group }}">
+    {{- range $section := $sections -}}
+      {{- $section = trim $section " \r\n\t" -}}
+      {{- if ne $section "" -}}
+        {{- $lines := split $section "\n" -}}
+        {{- $metaLine := trim (index $lines 0) " \r\n\t" -}}
+        {{- $parts := split $metaLine "|" -}}
+        {{- $date := trim (index $parts 0) " \r\n\t" -}}
+        {{- $title := default "" (trim (index $parts 1) " \r\n\t") -}}
+        {{- $body := trim (delimit (after 1 $lines) "\n") " \r\n\t" -}}
+        <li class="content-timeline-item">
+          <div class="content-timeline-meta">
+            {{- if ne $date "" }}<span class="content-timeline-date">{{ $date }}</span>{{ end -}}
+          </div>
+          {{- if ne $title "" }}<h3 class="content-timeline-title">{{ $title }}</h3>{{ end -}}
+          {{- if ne $body "" }}<div class="content-timeline-body prose">{{ $body | markdownify }}</div>{{ end -}}
+        </li>
+      {{- end -}}
+    {{- end -}}
+  </ol>
+{{- end -}}
