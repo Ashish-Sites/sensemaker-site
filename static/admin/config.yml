@@ -130,13 +130,14 @@ collections:
         value_field: "{{slug}}"
         multiple: true
         required: false
-      - label: Content Blocks
+      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
+      - label: Advanced Structured Blocks
         name: content_blocks
         widget: list
         required: false
         collapsed: true
         summary: "{{fields.type}}"
-        hint: "Optional drag-and-drop blocks. If empty, Body markdown is used."
+        hint: "Optional drag-and-drop blocks for advanced layouts. Prefer the body editor for normal writing."
         types:
           - label: Markdown
             name: markdown
@@ -266,7 +267,6 @@ collections:
               - { label: Block Type, name: type, widget: hidden, default: math }
               - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Use this as the main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
 
   - name: articles
     label: Articles
@@ -336,13 +336,14 @@ collections:
         multiple: false
         required: false
         hint: "Optional primary home investigation when attached to multiple investigations"
-      - label: Content Blocks
+      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
+      - label: Advanced Structured Blocks
         name: content_blocks
         widget: list
         required: false
         collapsed: true
         summary: "{{fields.type}}"
-        hint: "Optional drag-and-drop blocks. If empty, Body markdown is used."
+        hint: "Optional drag-and-drop blocks for advanced layouts. Prefer the body editor for normal writing."
         types:
           - label: Markdown
             name: markdown
@@ -473,7 +474,6 @@ collections:
               - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Markdown / Shortcodes), name: body, widget: markdown, required: false, hint: "Use this as the main authoring surface. Insert structured blocks from the toolbar or type shortcode patterns directly." }
 
   - name: areas_terms
     label: Areas
