@@ -310,6 +310,24 @@ document.addEventListener('DOMContentLoaded', function() {
       relatedLink: '#484f58'
     };
 
+    // Seed a deterministic mind-map layout so sibling nodes do not stack.
+    const centerNode = data.nodes.find((node) => node.id === data.current);
+    if (centerNode) {
+      centerNode.fx = 0;
+      centerNode.fy = 0;
+
+      const leaves = data.nodes.filter((node) => node.id !== data.current);
+      const leafCount = leaves.length;
+      leaves.forEach((node, index) => {
+        const angle = ((Math.PI * 2) / Math.max(leafCount, 1)) * index;
+        const radius = 220;
+        if (!Number.isFinite(node.x) || !Number.isFinite(node.y)) {
+          node.x = Math.cos(angle) * radius;
+          node.y = Math.sin(angle) * radius;
+        }
+      });
+    }
+
     const nodeColor = (node) => {
       if (node.kind === 'related-investigation') return palette.relatedInvestigation;
       if (node.kind === 'primary-investigation') return palette.primaryInvestigation;
@@ -454,6 +472,15 @@ document.addEventListener('DOMContentLoaded', function() {
       .linkDirectionalParticleSpeed(0)
       .linkDistance(d => d.type === 'attached' ? 260 : 290)
       .linkCurvature(0)
+      .onNodeDrag(node => {
+        // Keep dragged positions fixed so user-arranged layout persists.
+        node.fx = node.x;
+        node.fy = node.y;
+      })
+      .onNodeDragEnd(node => {
+        node.fx = node.x;
+        node.fy = node.y;
+      })
       .onNodeClick(node => {
         const base = node.type === 'investigation' ? investigationBase : articleBase;
         window.location.href = base + node.id + '/';
@@ -462,6 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .height(container.clientHeight || 600)
       .d3VelocityDecay(0.5)
       .d3Force('charge', window.d3.forceManyBody().strength(-900))
+      .d3Force('radial', window.d3.forceRadial((node) => (node.id === data.current ? 0 : 250), 0, 0).strength(0.35))
       .d3Force('collide', window.d3.forceCollide().radius((node) => ((node.__boxWidth || 196) / 2) + 24).iterations(3))
       .numDimensions(2)
       .warmupTicks(160)
