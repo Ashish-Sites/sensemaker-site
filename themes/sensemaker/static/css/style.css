@@ -1477,6 +1477,16 @@ th {
   margin-bottom: 0;
 }
 
+.content-block-image figure {
+  margin: 0;
+}
+
+.content-block-image figcaption {
+  margin-top: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
 .search-result h3 {
   margin: 0 0 var(--spacing-md) 0;
 }

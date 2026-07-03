@@ -111,9 +111,11 @@
       {{ $blocks := default (slice) .Params.content_blocks }}
       {{ if gt (len $blocks) 0 }}
         {{ partial "content-blocks.html" . }}
-      {{ else if .Content }}
+      {{ end }}
+
+      {{ if .Content }}
         {{ .Content }}
-      {{ else }}
+      {{ else if eq (len $blocks) 0 }}
         <p>No body content yet for this investigation.</p>
       {{ end }}
 

@@ -163,6 +163,14 @@ collections:
             fields:
               - { label: Block Type, name: type, widget: hidden, default: table }
               - { label: Table Markdown, name: markdown, widget: text, hint: "Paste a Markdown table" }
+          - label: Image
+            name: image
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: image }
+              - { label: Image, name: src, widget: image }
+              - { label: Alt Text, name: alt, widget: string, required: false }
+              - { label: Caption, name: title, widget: string, required: false }
           - label: Chart
             name: chart
             widget: object
@@ -173,7 +181,7 @@ collections:
               - { label: Labels (pipe separated), name: labels, widget: string, hint: "Example: Jan|Feb|Mar" }
               - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Fallback Markdown), name: body, widget: markdown, hint: "Used when Content Blocks are empty; keeps legacy entries working." }
+      - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
 
   - name: articles
     label: Articles
@@ -276,6 +284,14 @@ collections:
             fields:
               - { label: Block Type, name: type, widget: hidden, default: table }
               - { label: Table Markdown, name: markdown, widget: text, hint: "Paste a Markdown table" }
+          - label: Image
+            name: image
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: image }
+              - { label: Image, name: src, widget: image }
+              - { label: Alt Text, name: alt, widget: string, required: false }
+              - { label: Caption, name: title, widget: string, required: false }
           - label: Chart
             name: chart
             widget: object
@@ -287,7 +303,7 @@ collections:
               - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
-      - { label: Body (Fallback Markdown), name: body, widget: markdown, hint: "Used when Content Blocks are empty; keeps legacy entries working." }
+      - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
 
   - name: areas_terms
     label: Areas

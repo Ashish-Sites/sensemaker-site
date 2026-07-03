@@ -9,7 +9,8 @@
       </section>
     {{ end }}
   {{ else if eq $type "code" }}
-    {{ $language := default "text" (index $block "language") }}
+    {{ $language := lower (default "text" (index $block "language")) }}
+    {{ if eq $language "jav" }}{{ $language = "java" }}{{ end }}
     {{ with (index $block "code") }}
       <section class="content-block content-block-code">
         {{ highlight . $language "" }}
@@ -25,6 +26,18 @@
     {{ with (index $block "markdown") }}
       <section class="content-block content-block-table">
         {{ . | markdownify }}
+      </section>
+    {{ end }}
+  {{ else if eq $type "image" }}
+    {{ $src := default "" (index $block "src") }}
+    {{ if $src }}
+      {{ $alt := default "" (index $block "alt") }}
+      {{ $title := default "" (index $block "title") }}
+      <section class="content-block content-block-image">
+        <figure>
+          <img src="{{ $src | safeURL }}" alt="{{ $alt }}">
+          {{ if $title }}<figcaption>{{ $title }}</figcaption>{{ end }}
+        </figure>
       </section>
     {{ end }}
   {{ else if eq $type "chart" }}
