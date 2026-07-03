@@ -1,0 +1,28 @@
+{{ define "content" }}
+<section class="help-guide">
+  <section class="help-hero">
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.description }}
+      <p>{{ . }}</p>
+    {{ end }}
+  </section>
+
+  <section class="help-grid">
+    <section class="help-card">
+      {{ .Content }}
+    </section>
+
+    <aside class="help-card">
+      <h2>Help Pages</h2>
+      <ul>
+        {{ range .RegularPages.ByTitle }}
+          <li>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{ with .Params.description }}<span> - {{ . }}</span>{{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    </aside>
+  </section>
+</section>
+{{ end }}

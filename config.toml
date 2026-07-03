@@ -12,6 +12,9 @@ removePathAccents = true
 # Output formats
 [outputs]
   home = ["HTML", "JSON"]
+  section = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML"]
 
 # Taxonomies - Core organization
 [taxonomies]
