@@ -10,7 +10,7 @@ tags:
   - knowledge-work
 confidence: medium
 lifecycle: active
-draft: true
+draft: false
 ---
 # Heading
 
