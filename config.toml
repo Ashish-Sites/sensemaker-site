@@ -57,8 +57,30 @@ removePathAccents = true
   weight = 7
 
 [[menu.main]]
-  name = "Manage"
+  name = "Help"
   weight = 8
+
+[[menu.main]]
+  name = "Manage"
+  weight = 9
+
+[[menu.main]]
+  name = "Site Help"
+  url = "/help/site-help/"
+  parent = "Help"
+  weight = 1
+
+[[menu.main]]
+  name = "Rendering Demo"
+  url = "/help/content-block-demo/"
+  parent = "Help"
+  weight = 2
+
+[[menu.main]]
+  name = "Content Block Guide"
+  url = "/help/content-blocks-guide/"
+  parent = "Help"
+  weight = 3
 
 [[menu.main]]
   name = "Admin"

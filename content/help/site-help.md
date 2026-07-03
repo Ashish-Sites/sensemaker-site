@@ -1,8 +1,15 @@
 ---
-title: "Help"
+title: "Site Help"
 description: "User guide for navigation and terminology used across SenseMaker."
 draft: false
 ---
+
+## Table of Contents
+
+- [Navigation Guide](#navigation-guide)
+- [Terminology](#terminology)
+- [Reading Detail Pages](#reading-detail-pages)
+- [Tips](#tips)
 
 ## Navigation Guide
 
