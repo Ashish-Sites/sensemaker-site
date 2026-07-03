@@ -319,6 +319,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const nodeRadius = () => 12;
 
     const linkColor = (link) => link.type === 'attached' ? palette.attachedLink : palette.relatedLink;
+    const truncateLabel = (label) => {
+      const text = String(label || '');
+      return text.length > 10 ? text.slice(0, 10) : text;
+    };
 
     const normalizeRef = (ref) => (ref && typeof ref === 'object' ? ref : null);
     const findNode = (ref) => {
@@ -354,11 +358,11 @@ document.addEventListener('DOMContentLoaded', function() {
       (container)
       .graphData(data)
       .nodeId('id')
-      .nodeLabel(d => `${d.label} (${d.kind || d.type})`)
+      .nodeLabel(d => d.label)
       .nodeColor(nodeColor)
       .nodeVal(nodeRadius)
       .nodeCanvasObject((node, ctx) => {
-        const label = node.label;
+        const label = truncateLabel(node.label);
         const dot = nodeColor(node);
         const isCurrent = node.id === data.current;
 
