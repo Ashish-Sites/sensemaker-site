@@ -1,0 +1,13 @@
+{{- $tableMarkdown := trim .Inner " \r\n\t" -}}
+{{- $caption := default "" (.Get "caption") -}}
+{{- if eq $tableMarkdown "" -}}
+  {{- warnf "table shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-table content-block-invalid">
+    <p class="entry-metadata-note">Table content is empty.</p>
+  </section>
+{{- else -}}
+  <section class="content-block content-block-table">
+    {{- with $caption }}<p class="table-caption">{{ . }}</p>{{ end -}}
+    {{- $tableMarkdown | markdownify -}}
+  </section>
+{{- end -}}

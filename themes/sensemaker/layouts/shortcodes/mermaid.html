@@ -1,0 +1,11 @@
+{{- $diagram := trim .Inner " \r\n\t" -}}
+{{- if eq $diagram "" -}}
+  {{- warnf "mermaid shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-mermaid content-block-invalid">
+    <p class="entry-metadata-note">Mermaid diagram is empty.</p>
+  </section>
+{{- else -}}
+  <section class="content-block content-block-mermaid">
+    <div class="mermaid">{{ $diagram | htmlEscape | safeHTML }}</div>
+  </section>
+{{- end -}}

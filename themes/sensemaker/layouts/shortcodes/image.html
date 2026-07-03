@@ -1,0 +1,17 @@
+{{- $src := default "" (.Get "src") -}}
+{{- if eq $src "" -}}
+  {{- warnf "image shortcode on %q requires src" .Page.Path -}}
+  <section class="content-block content-block-image content-block-invalid">
+    <p class="entry-metadata-note">Image source is required.</p>
+  </section>
+{{- else -}}
+  {{- $alt := default "" (.Get "alt") -}}
+  {{- $title := default "" (.Get "title") -}}
+  {{- $normalizedSrc := $src | strings.TrimPrefix "/" | relURL -}}
+  <section class="content-block content-block-image">
+    <figure>
+      <img src="{{ $normalizedSrc }}" alt="{{ $alt }}" loading="lazy"{{ with $title }} title="{{ . }}"{{ end }}>
+      {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end -}}
+    </figure>
+  </section>
+{{- end -}}

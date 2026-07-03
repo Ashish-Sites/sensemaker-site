@@ -1,0 +1,22 @@
+{{- $text := trim .Inner " \r\n\t" -}}
+{{- $source := default "" (.Get "source") -}}
+{{- $cite := default "" (.Get "cite") -}}
+{{- $date := default "" (.Get "date") -}}
+{{- if eq $text "" -}}
+  {{- warnf "quote shortcode on %q is empty" .Page.Path -}}
+  <section class="quote-item content-block-invalid">
+    <p class="entry-metadata-note">Quote text is empty.</p>
+  </section>
+{{- else -}}
+  <figure class="quote-item quote-block">
+    <blockquote class="quote-text prose">{{ $text | markdownify }}</blockquote>
+    {{- if or $source $cite $date -}}
+      <figcaption>
+        {{- if $source -}}<span class="quote-source">— {{ $source }}</span>{{ end -}}
+        {{- if and $source $cite }}<span class="quote-separator"> </span>{{ end -}}
+        {{- if $cite -}}<span class="quote-source">{{ $cite }}</span>{{ end -}}
+        {{- if $date -}}<span class="quote-date">{{ $date }}</span>{{ end -}}
+      </figcaption>
+    {{- end -}}
+  </figure>
+{{- end -}}

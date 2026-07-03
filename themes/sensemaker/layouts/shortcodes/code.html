@@ -1,0 +1,22 @@
+{{- $language := lower (default "text" (.Get "lang")) -}}
+{{- if eq $language "" -}}
+  {{- $language = "text" -}}
+{{- end -}}
+{{- if eq $language "jav" -}}
+  {{- $language = "java" -}}
+{{- end -}}
+{{- $source := trim .Inner " \r\n\t" -}}
+{{- if eq $source "" -}}
+  {{- warnf "code shortcode on %q is empty" .Page.Path -}}
+  <section class="content-block content-block-code content-block-invalid">
+    <p class="entry-metadata-note">Code block is empty.</p>
+  </section>
+{{- else -}}
+  {{- if and (ne $language "text") (not (transform.CanHighlight $language)) -}}
+    {{- warnf "code shortcode on %q requested unsupported language %q; using text" .Page.Path $language -}}
+    {{- $language = "text" -}}
+  {{- end -}}
+  <section class="content-block content-block-code">
+    {{- highlight $source $language "" -}}
+  </section>
+{{- end -}}

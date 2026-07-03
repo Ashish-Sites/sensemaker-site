@@ -1,0 +1,25 @@
+{{- $ref := default "" (.Get "ref") -}}
+{{- if eq $ref "" -}}
+  {{- $ref = default "" (.Get 0) -}}
+{{- end -}}
+{{- $label := default "" (.Get "label") -}}
+{{- $page := site.GetPage $ref -}}
+{{- if not $page -}}
+  {{- $cleanRef := strings.TrimPrefix "/" $ref -}}
+  {{- $page = site.GetPage $cleanRef -}}
+{{- end -}}
+{{- if not $page -}}
+  {{- $cleanRef := strings.TrimPrefix "/" $ref -}}
+  {{- $matches := where site.RegularPages "File.BaseFileName" "eq" $cleanRef -}}
+  {{- with index $matches 0 }}{{ $page = . }}{{ end -}}
+{{- end -}}
+{{- if not $page -}}
+  {{- $matches := where site.RegularPages "Title" "eq" $ref -}}
+  {{- with index $matches 0 }}{{ $page = . }}{{ end -}}
+{{- end -}}
+{{- if $page -}}
+  <a class="content-inline-link" href="{{ $page.RelPermalink }}">{{ default $page.Title $label }}</a>
+{{- else -}}
+  {{- warnf "contentlink shortcode on %q could not resolve %q" .Page.Path $ref -}}
+  <span class="content-inline-link content-inline-link-missing">{{ default $ref $label }}</span>
+{{- end -}}

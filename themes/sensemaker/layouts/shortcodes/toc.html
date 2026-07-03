@@ -1,0 +1,8 @@
+{{- $title := default "On this page" (.Get "title") -}}
+{{- $toc := .Page.TableOfContents -}}
+{{- if ne (trim $toc " \r\n\t") "" -}}
+  <nav class="content-toc" aria-label="Table of contents">
+    <h2>{{ $title }}</h2>
+    {{ $toc }}
+  </nav>
+{{- end -}}

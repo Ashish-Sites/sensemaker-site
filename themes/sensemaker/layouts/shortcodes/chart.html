@@ -1,0 +1,26 @@
+{{- $chartType := lower (default "line" (.Get "type")) -}}
+{{- if eq $chartType "" -}}
+  {{- $chartType = "line" -}}
+{{- end -}}
+{{- $series := default "Series" (.Get "series") -}}
+{{- $labels := default "" (.Get "labels") -}}
+{{- $values := default "" (.Get "values") -}}
+{{- $labelCount := len (split $labels "|") -}}
+{{- $valueCount := len (split $values "|") -}}
+{{- if or (eq $labels "") (eq $values "") -}}
+  {{- warnf "chart shortcode on %q requires labels and values" .Page.Path -}}
+  <section class="content-block content-block-chart content-block-invalid">
+    <p class="entry-metadata-note">Chart requires labels and values.</p>
+  </section>
+{{- else if ne $labelCount $valueCount -}}
+  {{- warnf "chart shortcode on %q has %d labels but %d values" .Page.Path $labelCount $valueCount -}}
+  <section class="content-block content-block-chart content-block-invalid">
+    <p class="entry-metadata-note">Chart labels and values must have the same count.</p>
+  </section>
+{{- else -}}
+  <section class="content-block content-block-chart">
+    <div class="content-chart-wrap">
+      <canvas class="interactive-chart" data-type="{{ $chartType }}" data-series="{{ $series }}" data-labels="{{ $labels }}" data-values="{{ $values }}"></canvas>
+    </div>
+  </section>
+{{- end -}}
