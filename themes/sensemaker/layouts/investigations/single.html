@@ -208,7 +208,11 @@
       <div class="graph-legend">
         <div class="legend-item">
           <span class="legend-node legend-node-investigation"></span>
-          <span class="legend-label">Investigation</span>
+          <span class="legend-label">Primary Investigation</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-node legend-node-related-investigation"></span>
+          <span class="legend-label">Related Investigation</span>
         </div>
         <div class="legend-item">
           <span class="legend-node legend-node-article"></span>
@@ -229,17 +233,17 @@
           "current": "{{ .File.BaseFileName }}",
           "title": "{{ .Title }}",
           "nodes": [
-            { "id": "{{ .File.BaseFileName }}", "label": "{{ .Title }}", "type": "investigation", "group": "investigation" }{{ if or (gt (len $attached) 0) (gt (len $relatedInv) 0) }},{{ end }}
+            { "id": "{{ .File.BaseFileName }}", "label": "{{ .Title }}", "type": "investigation", "kind": "primary-investigation", "group": "investigation" }{{ if or (gt (len $attached) 0) (gt (len $relatedInv) 0) }},{{ end }}
             {{ range $i, $art := $attached }}
-            { "id": "{{ $art.File.BaseFileName }}", "label": "{{ $art.Title }}", "type": "article", "group": "article" }{{ if lt (add $i 1) (add (len $attached) (len $relatedInv)) }},{{ end }}
+            { "id": "{{ $art.File.BaseFileName }}", "label": "{{ $art.Title }}", "type": "article", "kind": "article", "group": "article" }{{ if lt (add $i 1) (add (len $attached) (len $relatedInv)) }},{{ end }}
             {{ end }}
             {{ range $i, $rel := $relatedInv }}
-            { "id": "{{ $rel.File.BaseFileName }}", "label": "{{ $rel.Title }}", "type": "investigation", "group": "investigation" }{{ if lt (add $i 1) (len $relatedInv) }},{{ end }}
+            { "id": "{{ $rel.File.BaseFileName }}", "label": "{{ $rel.Title }}", "type": "investigation", "kind": "related-investigation", "group": "investigation" }{{ if lt (add $i 1) (len $relatedInv) }},{{ end }}
             {{ end }}
           ],
           "links": [
             {{ range $i, $art := $attached }}
-            { "source": "{{ $.File.BaseFileName }}", "target": "{{ $art.File.BaseFileName }}", "type": "attached-article" }{{ if lt (add $i 1) (add (len $attached) (len $relatedInv)) }},{{ end }}
+            { "source": "{{ $.File.BaseFileName }}", "target": "{{ $art.File.BaseFileName }}", "type": "attached" }{{ if lt (add $i 1) (add (len $attached) (len $relatedInv)) }},{{ end }}
             {{ end }}
             {{ range $i, $rel := $relatedInv }}
             {{ if gt (len $attached) 0 }},{{ end }}
@@ -289,6 +293,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('graph-container');
     
     if (!container) return;
+
+    const palette = {
+      primaryInvestigation: '#58a6ff',
+      relatedInvestigation: '#a371f7',
+      article: '#3fb950',
+      textPrimary: '#c9d1d9',
+      attachedLink: '#58a6ff',
+      relatedLink: '#a371f7'
+    };
+
+    const nodeColor = (node) => {
+      if (node.kind === 'related-investigation') return palette.relatedInvestigation;
+      if (node.kind === 'primary-investigation') return palette.primaryInvestigation;
+      return palette.article;
+    };
+
+    const nodeRadius = (node) => {
+      if (node.kind === 'primary-investigation') return 10;
+      if (node.kind === 'related-investigation') return 8;
+      return 6;
+    };
+
+    const linkColor = (link) => link.type === 'attached' ? palette.attachedLink : palette.relatedLink;
     
     // Create graph instance
     const Graph = window.ForceGraph;
@@ -297,42 +324,56 @@ document.addEventListener('DOMContentLoaded', function() {
       .graphData(data)
       .nodeId('id')
       .nodeLabel(d => `${d.label} (${d.type})`)
-      .nodeColor(d => d.type === 'investigation' ? '#4a90e2' : '#50c878')
-      .nodeVal(d => d.type === 'investigation' ? 12 : 8)
+      .nodeColor(nodeColor)
+      .nodeVal(nodeRadius)
       .nodeCanvasObject((node, ctx) => {
         const label = node.label;
-        const nodeRadius = node.type === 'investigation' ? 8 : 6;
+        const radius = nodeRadius(node);
+        const fill = nodeColor(node);
         
-        // Draw node circle
-        ctx.fillStyle = node.type === 'investigation' ? '#4a90e2' : '#50c878';
+        // Draw node with glow and depth.
+        ctx.shadowColor = fill;
+        ctx.shadowBlur = node.kind === 'primary-investigation' ? 8 : 6;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.fillStyle = fill;
         ctx.globalAlpha = 0.9;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+        ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
         
         // Add outer ring for central node
         if (node.id === data.current) {
-          ctx.strokeStyle = '#58a6ff';
+          ctx.strokeStyle = palette.primaryInvestigation;
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius + 3, 0, 2 * Math.PI);
+          ctx.stroke();
+
+          ctx.strokeStyle = 'rgba(88, 166, 255, 0.35)';
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, nodeRadius + 3, 0, 2 * Math.PI);
+          ctx.arc(node.x, node.y, radius + 7, 0, 2 * Math.PI);
           ctx.stroke();
         }
         
         // Draw simple text label
         ctx.font = '9px Arial';
-        ctx.fillStyle = '#c9d1d9';
+        ctx.fillStyle = fill;
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        const labelX = node.x + nodeRadius + 6;
+        const labelX = node.x + radius + 6;
         const labelY = node.y;
         ctx.fillText(label, labelX, labelY);
       })
-      .linkColor(d => d.type === 'attached-article' ? '#ff6b6b' : '#999')
-      .linkWidth(d => d.type === 'attached-article' ? 2.5 : 1.5)
-      .linkDirectionalParticles(d => d.type === 'attached-article' ? 2 : 0)
-      .linkDirectionalParticleSpeed(0.005)
+      .linkColor(linkColor)
+      .linkWidth(d => d.type === 'attached' ? 2.5 : 1.5)
+      .linkDirectionalParticles(d => d.type === 'attached' ? 2 : 1)
+      .linkDirectionalParticleWidth(d => d.type === 'attached' ? 2 : 1)
+      .linkDirectionalParticleColor(linkColor)
+      .linkDirectionalParticleSpeed(d => d.type === 'attached' ? 0.005 : 0.0025)
       .onNodeClick(node => {
         const base = node.type === 'investigation' ? investigationBase : articleBase;
         window.location.href = base + node.id + '/';

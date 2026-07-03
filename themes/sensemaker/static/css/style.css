@@ -691,12 +691,18 @@ th {
 }
 
 .legend-node-investigation {
-  background-color: #4a90e2;
-  box-shadow: 0 0 0 2px #58a6ff;
+  background-color: #58a6ff;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.4);
+}
+
+.legend-node-related-investigation {
+  background-color: #a371f7;
+  box-shadow: 0 0 8px rgba(163, 113, 247, 0.35);
 }
 
 .legend-node-article {
-  background-color: #50c878;
+  background-color: #3fb950;
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.35);
 }
 
 .legend-link {
@@ -707,12 +713,13 @@ th {
 }
 
 .legend-link-attached {
-  background-color: #ff6b6b;
-  box-shadow: 0 0 4px rgba(255, 107, 107, 0.5);
+  background: linear-gradient(90deg, #58a6ff 0%, rgba(88, 166, 255, 0.45) 100%);
+  box-shadow: 0 0 4px rgba(88, 166, 255, 0.35);
 }
 
 .legend-link-related {
-  background-color: #8b949e;
+  background: linear-gradient(90deg, #a371f7 0%, rgba(163, 113, 247, 0.45) 100%);
+  box-shadow: 0 0 2px rgba(163, 113, 247, 0.25);
 }
 
 .entry-metadata-note {
