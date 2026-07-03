@@ -317,8 +317,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const nodeRadius = () => 12;
-    const boxScale = 0.58;
-    const labelFontSize = 9;
+    const boxScale = 0.46;
+    const labelFontSize = 8;
     const hoverFontSize = 11;
 
     const linkColor = (link) => link.type === 'attached' ? palette.attachedLink : palette.relatedLink;
@@ -336,11 +336,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const estimateBoxWidth = (label) => {
       const visible = truncateLabel(label);
-      const baseWidth = Math.max(196, (visible.length * 8) + 52);
+      const baseWidth = Math.max(148, (visible.length * 7) + 38);
       return Math.round(baseWidth * boxScale);
     };
 
-    const estimateBoxHeight = () => Math.round(38 * boxScale);
+    const estimateBoxHeight = () => Math.round(34 * boxScale);
 
     const spreadY = (index, count, gap) => {
       if (count <= 1) return 0;
@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         ctx.font = `${labelFontSize}px Arial`;
         const textWidth = ctx.measureText(label).width;
-        const baseWidth = Math.max(196, textWidth + 52);
+        const baseWidth = Math.max(148, textWidth + 38);
         const boxWidth = Math.round(baseWidth * boxScale);
         const boxHeight = estimateBoxHeight();
         node.__boxWidth = boxWidth;
