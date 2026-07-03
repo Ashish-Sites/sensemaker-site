@@ -9,7 +9,11 @@ investigations:
 tags:
   - knowledge-work
 confidence: medium
-content_blocks: []
+content_blocks:
+  - type: details
+    title: Details
+    open: false
+    body: This is a detail
 lifecycle: active
 draft: false
 ---
