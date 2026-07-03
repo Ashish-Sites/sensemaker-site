@@ -50,6 +50,15 @@
         <canvas class="interactive-chart" data-type="{{ $chartType }}" data-series="{{ $series }}" data-labels="{{ $labels }}" data-values="{{ $values }}"></canvas>
       </div>
     </section>
+  {{ else if eq $type "callout" }}
+    {{ $variant := lower (default "note" (index $block "variant")) }}
+    {{ $title := default "" (index $block "title") }}
+    {{ with (index $block "body") }}
+      <aside class="content-block content-block-callout content-block-callout-{{ $variant }}">
+        {{ with $title }}<p class="callout-title">{{ . }}</p>{{ end }}
+        <div class="callout-body prose">{{ . | markdownify }}</div>
+      </aside>
+    {{ end }}
   {{ else }}
     <section class="content-block content-block-unsupported">
       <p class="entry-metadata-note">Unsupported block type: {{ $type }}</p>

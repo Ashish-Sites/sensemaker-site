@@ -1,0 +1,14 @@
+{{- $variant := lower (default "note" (.Get "variant")) -}}
+{{- $title := default "" (.Get "title") -}}
+{{- $body := trim .Inner " \r\n\t" -}}
+{{- if eq $body "" -}}
+  {{- warnf "callout shortcode on %q is empty" .Page.Path -}}
+  <aside class="content-block content-block-callout content-block-invalid">
+    <p class="entry-metadata-note">Callout body is empty.</p>
+  </aside>
+{{- else -}}
+  <aside class="content-block content-block-callout content-block-callout-{{ $variant }}">
+    {{- with $title }}<p class="callout-title">{{ . }}</p>{{ end -}}
+    <div class="callout-body prose">{{ $body | markdownify }}</div>
+  </aside>
+{{- end -}}

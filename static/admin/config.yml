@@ -180,6 +180,14 @@ collections:
               - { label: Series Label, name: series, widget: string, required: false, default: Series }
               - { label: Labels (pipe separated), name: labels, widget: string, hint: "Example: Jan|Feb|Mar" }
               - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
+          - label: Callout
+            name: callout
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: callout }
+              - { label: Variant, name: variant, widget: select, options: [note, info, success, warning, danger], default: note }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Body, name: body, widget: markdown }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
 
@@ -301,6 +309,14 @@ collections:
               - { label: Series Label, name: series, widget: string, required: false, default: Series }
               - { label: Labels (pipe separated), name: labels, widget: string, hint: "Example: Jan|Feb|Mar" }
               - { label: Values (pipe separated), name: values, widget: string, hint: "Example: 10|20|15" }
+          - label: Callout
+            name: callout
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: callout }
+              - { label: Variant, name: variant, widget: select, options: [note, info, success, warning, danger], default: note }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Body, name: body, widget: markdown }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }

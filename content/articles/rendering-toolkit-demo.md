@@ -71,3 +71,13 @@ A system is not something you build and then it's done. It's something you live 
 {{< quote source="F. Scott Fitzgerald" date="2026-06-18" >}}
 The test of a first-rate intelligence is the ability to hold two opposed ideas in mind at the same time and still retain the ability to function.
 {{< /quote >}}
+
+## Callout
+
+{{< callout variant="warning" title="Draft content" >}}
+This is a warning callout. Use it for constraints, caveats, or temporary notes.
+{{< /callout >}}
+
+{{< callout variant="success" title="Ready" >}}
+This is a success callout. Use it for confirmation or completed steps.
+{{< /callout >}}
