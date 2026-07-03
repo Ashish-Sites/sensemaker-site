@@ -59,6 +59,101 @@
         <div class="callout-body prose">{{ . | markdownify }}</div>
       </aside>
     {{ end }}
+  {{ else if eq $type "quote" }}
+    {{ $source := default "" (index $block "source") }}
+    {{ $date := default "" (index $block "date") }}
+    {{ $body := default "" (index $block "body") }}
+    <figure class="quote-item quote-block">
+      <blockquote class="quote-text prose">{{ $body | markdownify }}</blockquote>
+      {{ if or $source $date }}
+        <figcaption>
+          {{ if $source }}<span class="quote-source">— {{ $source }}</span>{{ end }}
+          {{ if $date }}<span class="quote-date">{{ $date }}</span>{{ end }}
+        </figcaption>
+      {{ end }}
+    </figure>
+  {{ else if eq $type "details" }}
+    {{ $title := default "Details" (index $block "title") }}
+    {{ $open := default false (index $block "open") }}
+    {{ $body := default "" (index $block "body") }}
+    <details class="content-details"{{ if $open }} open{{ end }}>
+      <summary>{{ $title }}</summary>
+      <div class="content-details-body prose">{{ $body | markdownify }}</div>
+    </details>
+  {{ else if eq $type "definition" }}
+    {{ $term := default "Term" (index $block "term") }}
+    {{ $body := default "" (index $block "body") }}
+    <dl class="definition-card">
+      <dt>{{ $term }}</dt>
+      <dd class="prose">{{ $body | markdownify }}</dd>
+    </dl>
+  {{ else if eq $type "tabs" }}
+    {{ $group := default (printf "tabs-%d" $index) (index $block "id") }}
+    {{ $items := default (slice) (index $block "items") }}
+    <div class="content-tabs" data-tabs="{{ $group }}">
+      {{ range $tabIndex, $item := $items }}
+        {{ $tabTitle := default (printf "Tab %d" (add $tabIndex 1)) (index $item "title") }}
+        {{ $tabBody := default "" (index $item "body") }}
+        {{ $tabId := printf "%s-%d" $group $tabIndex }}
+        <div class="content-tabs-item">
+          <input type="radio" class="content-tabs-input" name="{{ $group }}" id="{{ $tabId }}"{{ if eq $tabIndex 0 }} checked{{ end }}>
+          <label class="content-tabs-label" for="{{ $tabId }}">{{ $tabTitle }}</label>
+          <div class="content-tabs-panel prose">{{ $tabBody | markdownify }}</div>
+        </div>
+      {{ end }}
+    </div>
+  {{ else if eq $type "timeline" }}
+    {{ $group := default (printf "timeline-%d" $index) (index $block "id") }}
+    {{ $events := default (slice) (index $block "events") }}
+    <ol class="content-timeline" data-timeline="{{ $group }}">
+      {{ range $event := $events }}
+        {{ $date := default "" (index $event "date") }}
+        {{ $title := default "" (index $event "title") }}
+        {{ $body := default "" (index $event "body") }}
+        <li class="content-timeline-item">
+          <div class="content-timeline-meta">{{ if $date }}<span class="content-timeline-date">{{ $date }}</span>{{ end }}</div>
+          {{ if $title }}<h3 class="content-timeline-title">{{ $title }}</h3>{{ end }}
+          {{ if $body }}<div class="content-timeline-body prose">{{ $body | markdownify }}</div>{{ end }}
+        </li>
+      {{ end }}
+    </ol>
+  {{ else if eq $type "checklist" }}
+    {{ $body := default "" (index $block "body") }}
+    <section class="content-checklist">
+      <div class="prose">{{ $body | markdownify }}</div>
+    </section>
+  {{ else if eq $type "embed" }}
+    {{ $src := default "" (index $block "src") }}
+    {{ $title := default "Embedded content" (index $block "title") }}
+    {{ $ratio := lower (default "16:9" (index $block "ratio")) }}
+    <div class="embed-wrapper embed-wrapper-{{ replace $ratio ":" "-" }}">
+      <iframe src="{{ $src | safeURL }}" title="{{ $title }}" loading="lazy" referrerpolicy="no-referrer" allowfullscreen></iframe>
+    </div>
+  {{ else if eq $type "referencecard" }}
+    {{ $ref := default "" (index $block "ref") }}
+    {{ $label := default "" (index $block "label") }}
+    {{ $page := site.GetPage $ref }}
+    {{ if not $page }}
+      {{ $page = site.GetPage (strings.TrimPrefix "/" $ref) }}
+    {{ end }}
+    {{ if not $page }}
+      {{ $matches := where site.RegularPages "File.BaseFileName" "eq" (strings.TrimPrefix "/" $ref) }}
+      {{ with index $matches 0 }}{{ $page = . }}{{ end }}
+    {{ end }}
+    {{ if $page }}
+      <a class="reference-card" href="{{ $page.RelPermalink }}">
+        <span class="reference-card-type">{{ $page.Type }}</span>
+        <strong class="reference-card-title">{{ default $page.Title $label }}</strong>
+        {{ with $page.Description }}<span class="reference-card-desc">{{ . }}</span>{{ end }}
+      </a>
+    {{ else }}
+      <span class="reference-card reference-card-missing">{{ default $ref $label }}</span>
+    {{ end }}
+  {{ else if eq $type "math" }}
+    {{ $expression := default "" (index $block "expression") }}
+    <div class="math-block">$$
+{{ $expression }}
+$$</div>
   {{ else }}
     <section class="content-block content-block-unsupported">
       <p class="entry-metadata-note">Unsupported block type: {{ $type }}</p>

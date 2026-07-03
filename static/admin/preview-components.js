@@ -10,6 +10,11 @@
     return value === undefined || value === null || value === "" ? fallback : value;
   };
 
+  const toPlain = (value) => {
+    if (value && typeof value.toJS === "function") return value.toJS();
+    return value;
+  };
+
   const parseTableMarkdown = (markdown) => {
     const text = String(markdown || "").trim();
     if (!text) return null;
@@ -139,10 +144,15 @@
 
   if (h && ReactRef && ReactRef.Component) {
     const renderBlock = (block, idx) => {
-      const type = getValue(block, "type", "markdown");
+      const data = toPlain(block) || {};
+      const type = getValue(block, "type", data.type || "markdown");
+      const plain = (key, fallback) => {
+        const value = data[key];
+        return value === undefined || value === null || value === "" ? fallback : value;
+      };
 
       if (type === "markdown") {
-        const content = getValue(block, "markdown", "");
+        const content = plain("markdown", "");
         return h(
           "div",
           { key: `block-${idx}`, className: "cms-block cms-block-markdown" },
@@ -152,8 +162,8 @@
       }
 
       if (type === "code") {
-        const language = getValue(block, "language", "text");
-        const code = getValue(block, "code", "");
+        const language = plain("language", "text");
+        const code = plain("code", "");
         return h(
           "div",
           { key: `block-${idx}`, className: "cms-block cms-block-code" },
@@ -163,7 +173,7 @@
       }
 
       if (type === "mermaid") {
-        const diagram = getValue(block, "diagram", "");
+        const diagram = plain("diagram", "");
         return h(
           "div",
           { key: `block-${idx}`, className: "cms-block cms-block-mermaid" },
@@ -173,7 +183,7 @@
       }
 
       if (type === "table") {
-        const markdown = getValue(block, "markdown", "");
+        const markdown = plain("markdown", "");
         const parsed = parseTableMarkdown(markdown);
 
         if (!parsed) {
@@ -203,9 +213,9 @@
       }
 
       if (type === "image") {
-        const src = getValue(block, "src", "");
-        const alt = getValue(block, "alt", "");
-        const caption = getValue(block, "title", "");
+        const src = plain("src", "");
+        const alt = plain("alt", "");
+        const caption = plain("title", "");
 
         return h(
           "div",
@@ -217,10 +227,10 @@
       }
 
       if (type === "chart") {
-        const chartType = getValue(block, "chart_type", "line");
-        const labels = getValue(block, "labels", "");
-        const values = getValue(block, "values", "");
-        const series = getValue(block, "series", "Series");
+        const chartType = plain("chart_type", "line");
+        const labels = plain("labels", "");
+        const values = plain("values", "");
+        const series = plain("series", "Series");
 
         return h(
           "div",
@@ -237,6 +247,121 @@
               "data-series": series
             })
           )
+        );
+      }
+
+      if (type === "quote") {
+        const source = plain("source", "");
+        const date = plain("date", "");
+        const body = plain("body", "");
+        return h(
+          "figure",
+          { key: `block-${idx}`, className: "cms-block cms-block-quote quote-item quote-block" },
+          h("blockquote", { className: "quote-text prose" }, body),
+          h(
+            "figcaption",
+            null,
+            source ? h("span", { className: "quote-source" }, `— ${source}`) : null,
+            date ? h("span", { className: "quote-date" }, date) : null
+          )
+        );
+      }
+
+      if (type === "details") {
+        const title = plain("title", "Details");
+        const body = plain("body", "");
+        return h(
+          "details",
+          { key: `block-${idx}`, className: "cms-block cms-block-details content-details" },
+          h("summary", null, title),
+          h("div", { className: "content-details-body prose" }, h("pre", null, body))
+        );
+      }
+
+      if (type === "definition") {
+        const term = plain("term", "Term");
+        const body = plain("body", "");
+        return h(
+          "dl",
+          { key: `block-${idx}`, className: "cms-block cms-block-definition definition-card" },
+          h("dt", null, term),
+          h("dd", { className: "prose" }, h("pre", null, body))
+        );
+      }
+
+      if (type === "tabs") {
+        const items = Array.isArray(data.items) ? data.items : [];
+        return h(
+          "div",
+          { key: `block-${idx}`, className: "cms-block cms-block-tabs content-tabs" },
+          items.map((item, tabIdx) => {
+            const itemData = toPlain(item) || {};
+            return h(
+              "div",
+              { key: `tab-${tabIdx}`, className: "content-tabs-item" },
+              h("div", { className: "content-tabs-label" }, itemData.title || `Tab ${tabIdx + 1}`),
+              h("div", { className: "content-tabs-panel prose" }, h("pre", null, itemData.body || ""))
+            );
+          })
+        );
+      }
+
+      if (type === "timeline") {
+        const events = Array.isArray(data.events) ? data.events : [];
+        return h(
+          "ol",
+          { key: `block-${idx}`, className: "cms-block cms-block-timeline content-timeline" },
+          events.map((item, eventIdx) => {
+            const itemData = toPlain(item) || {};
+            return h(
+              "li",
+              { key: `event-${eventIdx}`, className: "content-timeline-item" },
+              h("div", { className: "content-timeline-meta" }, itemData.date ? h("span", { className: "content-timeline-date" }, itemData.date) : null),
+              itemData.title ? h("h3", { className: "content-timeline-title" }, itemData.title) : null,
+              h("div", { className: "content-timeline-body prose" }, h("pre", null, itemData.body || ""))
+            );
+          })
+        );
+      }
+
+      if (type === "checklist") {
+        const body = plain("body", "");
+        return h(
+          "section",
+          { key: `block-${idx}`, className: "cms-block cms-block-checklist content-checklist" },
+          h("pre", null, body)
+        );
+      }
+
+      if (type === "embed") {
+        const src = plain("src", "");
+        const title = plain("title", "Embedded content");
+        const ratio = plain("ratio", "16:9");
+        return h(
+          "div",
+          { key: `block-${idx}`, className: `cms-block cms-block-embed embed-wrapper embed-wrapper-${String(ratio).replace(":", "-")}` },
+          src ? h("iframe", { src, title, loading: "lazy", referrerPolicy: "no-referrer", allowFullScreen: true }) : null
+        );
+      }
+
+      if (type === "referencecard") {
+        const ref = plain("ref", "");
+        const label = plain("label", "");
+        return h(
+          "div",
+          { key: `block-${idx}`, className: "cms-block cms-block-referencecard reference-card" },
+          h("span", { className: "reference-card-type" }, "reference"),
+          h("strong", { className: "reference-card-title" }, label || ref || "Reference"),
+          h("span", { className: "reference-card-desc" }, ref || "No reference selected")
+        );
+      }
+
+      if (type === "math") {
+        const expression = plain("expression", "");
+        return h(
+          "div",
+          { key: `block-${idx}`, className: "cms-block cms-block-math math-block" },
+          h("pre", null, `$$\n${expression}\n$$`)
         );
       }
 

@@ -188,6 +188,83 @@ collections:
               - { label: Variant, name: variant, widget: select, options: [note, info, success, warning, danger], default: note }
               - { label: Title, name: title, widget: string, required: false }
               - { label: Body, name: body, widget: markdown }
+          - label: Quote
+            name: quote
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: quote }
+              - { label: Source, name: source, widget: string, required: false }
+              - { label: Date, name: date, widget: string, required: false, hint: "YYYY-MM-DD" }
+              - { label: Body, name: body, widget: markdown }
+          - label: Details
+            name: details
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: details }
+              - { label: Title, name: title, widget: string, required: false, default: Details }
+              - { label: Open, name: open, widget: boolean, required: false, default: false }
+              - { label: Body, name: body, widget: markdown }
+          - label: Definition
+            name: definition
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: definition }
+              - { label: Term, name: term, widget: string, required: false, default: Term }
+              - { label: Body, name: body, widget: markdown }
+          - label: Tabs
+            name: tabs
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: tabs }
+              - { label: Tabs ID, name: id, widget: string, required: false, hint: "Optional unique id for the tab group" }
+              - label: Tabs
+                name: items
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Body, name: body, widget: markdown }
+          - label: Timeline
+            name: timeline
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: timeline }
+              - { label: Timeline ID, name: id, widget: string, required: false, hint: "Optional unique id for the timeline" }
+              - label: Events
+                name: events
+                widget: list
+                summary: "{{fields.date}} · {{fields.title}}"
+                fields:
+                  - { label: Date, name: date, widget: string, required: false, hint: "YYYY-MM-DD" }
+                  - { label: Title, name: title, widget: string, required: false }
+                  - { label: Body, name: body, widget: markdown }
+          - label: Checklist
+            name: checklist
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: checklist }
+              - { label: Body, name: body, widget: markdown, hint: "Use markdown task list items" }
+          - label: Embed
+            name: embed
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: embed }
+              - { label: Source URL, name: src, widget: string }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Aspect Ratio, name: ratio, widget: select, options: [16:9, 4:3, 1:1], default: 16:9 }
+          - label: Reference Card
+            name: referencecard
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: referencecard }
+              - { label: Reference Path, name: ref, widget: string, hint: "Example: /articles/why-personal-knowledge-systems-matter" }
+              - { label: Label, name: label, widget: string, required: false }
+          - label: Math
+            name: math
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: math }
+              - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
 
@@ -317,6 +394,83 @@ collections:
               - { label: Variant, name: variant, widget: select, options: [note, info, success, warning, danger], default: note }
               - { label: Title, name: title, widget: string, required: false }
               - { label: Body, name: body, widget: markdown }
+          - label: Quote
+            name: quote
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: quote }
+              - { label: Source, name: source, widget: string, required: false }
+              - { label: Date, name: date, widget: string, required: false, hint: "YYYY-MM-DD" }
+              - { label: Body, name: body, widget: markdown }
+          - label: Details
+            name: details
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: details }
+              - { label: Title, name: title, widget: string, required: false, default: Details }
+              - { label: Open, name: open, widget: boolean, required: false, default: false }
+              - { label: Body, name: body, widget: markdown }
+          - label: Definition
+            name: definition
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: definition }
+              - { label: Term, name: term, widget: string, required: false, default: Term }
+              - { label: Body, name: body, widget: markdown }
+          - label: Tabs
+            name: tabs
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: tabs }
+              - { label: Tabs ID, name: id, widget: string, required: false, hint: "Optional unique id for the tab group" }
+              - label: Tabs
+                name: items
+                widget: list
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: Title, name: title, widget: string }
+                  - { label: Body, name: body, widget: markdown }
+          - label: Timeline
+            name: timeline
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: timeline }
+              - { label: Timeline ID, name: id, widget: string, required: false, hint: "Optional unique id for the timeline" }
+              - label: Events
+                name: events
+                widget: list
+                summary: "{{fields.date}} · {{fields.title}}"
+                fields:
+                  - { label: Date, name: date, widget: string, required: false, hint: "YYYY-MM-DD" }
+                  - { label: Title, name: title, widget: string, required: false }
+                  - { label: Body, name: body, widget: markdown }
+          - label: Checklist
+            name: checklist
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: checklist }
+              - { label: Body, name: body, widget: markdown, hint: "Use markdown task list items" }
+          - label: Embed
+            name: embed
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: embed }
+              - { label: Source URL, name: src, widget: string }
+              - { label: Title, name: title, widget: string, required: false }
+              - { label: Aspect Ratio, name: ratio, widget: select, options: [16:9, 4:3, 1:1], default: 16:9 }
+          - label: Reference Card
+            name: referencecard
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: referencecard }
+              - { label: Reference Path, name: ref, widget: string, hint: "Example: /articles/why-personal-knowledge-systems-matter" }
+              - { label: Label, name: label, widget: string, required: false }
+          - label: Math
+            name: math
+            widget: object
+            fields:
+              - { label: Block Type, name: type, widget: hidden, default: math }
+              - { label: Expression, name: expression, widget: text, hint: "KaTeX/LaTeX expression" }
       - { label: Lifecycle, name: lifecycle, widget: select, options: [active, archived], default: active }
       - { label: Draft, name: draft, widget: boolean, default: true }
       - { label: Body (Legacy Markdown), name: body, widget: markdown, required: false, hint: "Optional legacy content. Content Blocks are reorderable and recommended." }
