@@ -17,6 +17,12 @@ content_blocks:
 lifecycle: active
 draft: false
 ---
+{{< timeline id="fsaf" >}}
+01-Jan-1900 | Great start | This is a great start
+---
+01-Feb-1900 | Great end | This is a great end
+{{< /timeline >}}
+
 # Heading
 
 * One 
@@ -49,7 +55,5 @@ draft: false
    ![](/images/uploads/screenshot-2026-07-02-112706.png)
 
 ## Another heading
-
-
 
 ![](/images/uploads/screenshot-2026-07-03-102629.png)
