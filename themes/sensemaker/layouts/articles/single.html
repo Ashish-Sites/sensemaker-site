@@ -29,7 +29,11 @@
           <span class="entry-context-label">Attached Investigations</span>
           <div class="tags">
             {{ range $target := $targets }}
-              {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+              {{ $targetSlug := urlize $target }}
+              {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") "File.BaseFileName" "eq" $targetSlug) }}
+              {{ if not $match }}
+                {{ $match = first 1 (where (where $.Site.RegularPages "Type" "investigations") "Title" "eq" $target) }}
+              {{ end }}
               {{ if $match }}
                 {{ range $match }}
                   <a href="{{ .RelPermalink }}" class="tag tag-area trim-name" title="{{ .Title }}">{{ .Title }}</a>
@@ -82,7 +86,11 @@
         {{ if gt (len $targets) 0 }}
           <ul class="entry-lineage-list">
             {{ range $target := $targets }}
-              {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") ".File.BaseFileName" "eq" $target) }}
+              {{ $targetSlug := urlize $target }}
+              {{ $match := first 1 (where (where $.Site.RegularPages "Type" "investigations") "File.BaseFileName" "eq" $targetSlug) }}
+              {{ if not $match }}
+                {{ $match = first 1 (where (where $.Site.RegularPages "Type" "investigations") "Title" "eq" $target) }}
+              {{ end }}
               {{ if $match }}
                 {{ range $match }}
                   <li>

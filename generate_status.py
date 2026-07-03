@@ -11,6 +11,7 @@ import sys
 import json
 import argparse
 import subprocess
+import re
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 
@@ -89,27 +90,62 @@ def parse_content_files(content_dir):
     return items
 
 
+def _normalize_ref(text):
+    """Normalize slugs/titles into a slug-like key for robust matching."""
+    if text is None:
+        return ""
+    cleaned = re.sub(r"[^a-z0-9]+", "-", str(text).strip().lower())
+    return cleaned.strip("-")
+
+
+def build_ref_lookup(items, target_type):
+    """Map multiple identifier forms (slug/title/urlized-title) to canonical slug."""
+    lookup = {}
+    for item_type, slug, data in items:
+        if item_type != target_type:
+            continue
+
+        title = data.get("title", "")
+        for candidate in [slug, title, _normalize_ref(title)]:
+            key = _normalize_ref(candidate)
+            if key:
+                lookup.setdefault(key, slug)
+    return lookup
+
+
+def resolve_ref_slug(raw_ref, lookup):
+    """Resolve a raw reference to a canonical slug using normalized lookup keys."""
+    return lookup.get(_normalize_ref(raw_ref))
+
+
 # ---------------------------------------------------------------------------
 # Graph / structural integrity
 # ---------------------------------------------------------------------------
 
 def build_graph(items):
     G = nx.DiGraph()
+    investigation_lookup = build_ref_lookup(items, "investigation")
+    article_lookup = build_ref_lookup(items, "article")
+
     for item_type, slug, data in items:
         G.add_node((item_type, slug), title=data["title"], type=item_type)
+
     for item_type, slug, data in items:
         source = (item_type, slug)
         if item_type == "investigation":
             for t in data.get("related", []):
-                if ("investigation", t) in G:
-                    G.add_edge(source, ("investigation", t), relation="related")
+                target_slug = resolve_ref_slug(t, investigation_lookup)
+                if target_slug and ("investigation", target_slug) in G:
+                    G.add_edge(source, ("investigation", target_slug), relation="related")
             for t in data.get("attached_articles", []):
-                if ("article", t) in G:
-                    G.add_edge(source, ("article", t), relation="attached")
+                target_slug = resolve_ref_slug(t, article_lookup)
+                if target_slug and ("article", target_slug) in G:
+                    G.add_edge(source, ("article", target_slug), relation="attached")
         elif item_type == "article":
             for t in data.get("investigations", []):
-                if ("investigation", t) in G:
-                    G.add_edge(source, ("investigation", t), relation="attached_from")
+                target_slug = resolve_ref_slug(t, investigation_lookup)
+                if target_slug and ("investigation", target_slug) in G:
+                    G.add_edge(source, ("investigation", target_slug), relation="attached_from")
     return G
 
 
@@ -305,10 +341,11 @@ def analyze_item(client, item_type, slug, data, model):
 # Report generation
 # ---------------------------------------------------------------------------
 
-SITE_BASE = "/sensemaker-site"
+SITE_BASE = ""
 
 def item_link(item_type, slug, title):
-    return f"[{title}]({SITE_BASE}/{item_type}s/{slug}/)"
+    base = (SITE_BASE or "").rstrip("/")
+    return f"[{title}]({base}/{item_type}s/{slug}/)"
 
 
 MATCH_ICON = {"good": "✓", "partial": "⚠️", "poor": "❌"}
@@ -449,9 +486,16 @@ def main():
     parser.add_argument("--content-dir", default="./content")
     parser.add_argument("--output-dir",  default="./content/status")
     parser.add_argument("--stale-days",  type=int, default=30)
+    parser.add_argument(
+        "--site-base",
+        default=os.getenv("STATUS_SITE_BASE", ""),
+        help="Optional site base path prefix for generated links (e.g. /sensemaker-site)",
+    )
     args = parser.parse_args()
 
     args_stale_days = args.stale_days
+    global SITE_BASE
+    SITE_BASE = (args.site_base or "").strip()
 
     content_dir = Path(args.content_dir)
     output_dir  = Path(args.output_dir)

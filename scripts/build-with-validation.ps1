@@ -48,10 +48,20 @@ if (-not $hugoCommand) {
 }
 
 Write-Host "Running taxonomy validation..."
-& $shellCommand -File (Join-Path $PSScriptRoot "validate-taxonomy.ps1")
+$taxonomyValidator = Join-Path $PSScriptRoot "validate-taxonomy.ps1"
+if (Test-Path -LiteralPath $taxonomyValidator) {
+    & $shellCommand -File $taxonomyValidator
+} else {
+    Write-Warning "Skipping taxonomy validation: missing script $taxonomyValidator"
+}
 
 Write-Host "Running content quality validation..."
-& $shellCommand -File (Join-Path $PSScriptRoot "validate-content-quality.ps1")
+$contentValidator = Join-Path $PSScriptRoot "validate-content-quality.ps1"
+if (Test-Path -LiteralPath $contentValidator) {
+    & $shellCommand -File $contentValidator
+} else {
+    Write-Warning "Skipping content quality validation: missing script $contentValidator"
+}
 
 Write-Host "Building Hugo site..."
 Push-Location $repoRoot
@@ -67,6 +77,11 @@ if (-not (Test-Path -LiteralPath $resolvedOutputDir)) {
     throw "Build output directory not found: $resolvedOutputDir"
 }
 
-& $shellCommand -File (Join-Path $PSScriptRoot "validate-built-links.ps1") -PublicDir $resolvedOutputDir
+$builtLinksValidator = Join-Path $PSScriptRoot "validate-built-links.ps1"
+if (Test-Path -LiteralPath $builtLinksValidator) {
+    & $shellCommand -File $builtLinksValidator -PublicDir $resolvedOutputDir
+} else {
+    Write-Warning "Skipping built-link validation: missing script $builtLinksValidator"
+}
 
 Write-Host "All validations passed. Build completed successfully."

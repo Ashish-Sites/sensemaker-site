@@ -5,7 +5,7 @@ article_type: evidence
 created: 2026-06-25
 description: "Data point: Obsidian's plugin architecture as a case study in extensibility"
 tags: ["tools", "extensibility"]
-investigations: ["Building a Personal Knowledge System"]
+investigations: ["personal-knowledge-system"]
 source_link: "https://obsidian.md/plugins"
 confidence: "high"
 lifecycle: active

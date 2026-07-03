@@ -255,6 +255,9 @@
 <script src="https://cdn.jsdelivr.net/npm/force-graph@1.43.0/dist/force-graph.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const investigationBase = {{ "investigations/" | relURL | jsonify }};
+  const articleBase = {{ "articles/" | relURL | jsonify }};
+
   // Tab switching
   const tabButtons = document.querySelectorAll('.entry-tab-button');
   const tabPanels = document.querySelectorAll('.entry-tab-panel');
@@ -331,7 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
       .linkDirectionalParticles(d => d.type === 'attached-article' ? 2 : 0)
       .linkDirectionalParticleSpeed(0.005)
       .onNodeClick(node => {
-        window.location.href = '/sensemaker-site/' + (node.type === 'investigation' ? 'investigations' : 'articles') + '/' + node.id + '/';
+        const base = node.type === 'investigation' ? investigationBase : articleBase;
+        window.location.href = base + node.id + '/';
       })
       .width(container.clientWidth)
       .height(container.clientHeight || 600)
