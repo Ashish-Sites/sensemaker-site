@@ -1,0 +1,6 @@
+# This is a private knowledge base. All crawling is disallowed.
+# Note: when deployed to a GitHub Pages subdirectory, crawlers look for
+# robots.txt at the domain root (controlled by GitHub). The meta robots
+# tag on each page is the primary crawl protection in that case.
+User-agent: *
+Disallow: /
