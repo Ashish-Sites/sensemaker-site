@@ -95,9 +95,9 @@
           <ul class="questions-list">
             {{ range $q := .Params.questions }}
               {{ $questionLink := absURL (print "questions/" (urlize $q) "/") }}
-              {{ range $.Site.Taxonomies.questions.ByCount }}
-                {{ if or (eq (urlize .Term) (urlize $q)) (eq (urlize .Page.Title) (urlize $q)) }}
-                  {{ $questionLink = .Page.RelPermalink }}
+              {{ range where (where $.Site.Pages "Section" "questions") "File" "!=" nil }}
+                {{ if and (eq .File.BaseFileName "_index") (eq (urlize .Title) (urlize $q)) }}
+                  {{ $questionLink = .RelPermalink }}
                 {{ end }}
               {{ end }}
               <li><a href="{{ $questionLink }}">{{ $q }}</a></li>

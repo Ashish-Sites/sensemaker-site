@@ -2,16 +2,44 @@
 <div class="taxonomy-page">
   <h1>{{ .Title }}</h1>
 
-  {{ $terms := .Data.Terms.ByCount }}
-  {{/* Fall back to physical section pages when no content references these terms */}}
-  {{ $termPages := .Pages }}
+  {{/* Prefer CMS-managed term pages (backed by content files) to avoid duplicate rows from generated taxonomy-only terms. */}}
+  {{ $managedTermPages := where (where .Pages "Section" .Data.Plural) "File" "!=" nil }}
+  {{ $termPages := $managedTermPages }}
   {{ if eq (len $termPages) 0 }}
-    {{ $termPages = where .Site.Pages "Section" .Data.Plural }}
+    {{ $termPages = .Pages }}
   {{ end }}
   {{ $paginator := .Paginate $termPages 20 }}
   {{ $termTotal := len $termPages }}
   {{ $assocCount := 0 }}
-  {{ range $terms }}{{ $assocCount = add $assocCount .Count }}{{ end }}
+  {{ $mostActiveTitle := "None" }}
+  {{ $mostActiveCount := 0 }}
+  {{ $latestLabel := "No updates" }}
+  {{ $latestStamp := 0 }}
+  {{ range $termPages }}
+    {{ $page := . }}
+    {{ $linked := 0 }}
+    {{ range where $.Site.RegularPages "Section" "investigations" }}
+      {{ $matched := false }}
+      {{ range default (slice) .Params.questions }}
+        {{ if eq (urlize .) (urlize $page.Title) }}
+          {{ $matched = true }}
+        {{ end }}
+      {{ end }}
+      {{ if $matched }}
+        {{ $linked = add $linked 1 }}
+      {{ end }}
+    {{ end }}
+    {{ $assocCount = add $assocCount $linked }}
+    {{ if gt $linked $mostActiveCount }}
+      {{ $mostActiveCount = $linked }}
+      {{ $mostActiveTitle = .Title }}
+    {{ end }}
+    {{ $stamp := .Lastmod.Unix }}
+    {{ if gt $stamp $latestStamp }}
+      {{ $latestStamp = $stamp }}
+      {{ $latestLabel = dateFormat "02-Jan-2006" .Lastmod }}
+    {{ end }}
+  {{ end }}
 
   <section class="list-summary">
     <div class="summary-card">
@@ -24,11 +52,11 @@
     </div>
     <div class="summary-card">
       <span class="summary-label">Most active term</span>
-      <span class="summary-value summary-value-small">{{ with index $terms 0 }}{{ .Page.Title }} ({{ .Count }}){{ else }}None{{ end }}</span>
+      <span class="summary-value summary-value-small">{{ if gt $mostActiveCount 0 }}{{ $mostActiveTitle }} ({{ $mostActiveCount }}){{ else }}None{{ end }}</span>
     </div>
     <div class="summary-card">
       <span class="summary-label">Latest term update</span>
-      <span class="summary-value summary-value-small">{{ with index $terms 0 }}{{ dateFormat "02-Jan-2006" .Page.Lastmod }}{{ else }}No updates{{ end }}</span>
+      <span class="summary-value summary-value-small">{{ $latestLabel }}</span>
     </div>
   </section>
 
@@ -49,12 +77,25 @@
         </thead>
         <tbody>
           {{ range $paginator.Pages }}
+            {{ $page := . }}
             {{ $desc := .Params.description }}
             {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 160) }}{{ end }}
+            {{ $linked := 0 }}
+            {{ range where $.Site.RegularPages "Section" "investigations" }}
+              {{ $matched := false }}
+              {{ range default (slice) .Params.questions }}
+                {{ if eq (urlize .) (urlize $page.Title) }}
+                  {{ $matched = true }}
+                {{ end }}
+              {{ end }}
+              {{ if $matched }}
+                {{ $linked = add $linked 1 }}
+              {{ end }}
+            {{ end }}
             <tr>
               <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
               <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
-              <td data-sort-value="{{ len .Pages }}">{{ len .Pages }}</td>
+              <td data-sort-value="{{ $linked }}">{{ $linked }}</td>
               <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
             </tr>
           {{ end }}
