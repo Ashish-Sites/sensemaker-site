@@ -13,7 +13,7 @@ questions:
 tags:
   - knowledge-work
   - personal-knowledge
-draft: true
+draft: false
 ---
 {{< callout variant="info" title="North star of career" >}}
 I think I have missed the north star.
