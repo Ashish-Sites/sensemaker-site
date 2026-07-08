@@ -5,7 +5,7 @@ article_type: synthesis
 created: 2026-06-20
 description: "Integration of research on personal information management, note-taking, and systems thinking"
 tags: ["systems", "knowledge-work"]
-investigations: ["Building a Personal Knowledge System"]
+investigations: ["personal-knowledge-system"]
 lifecycle: active
 draft: false
 ---
