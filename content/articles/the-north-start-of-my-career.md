@@ -12,8 +12,7 @@ confidence: low
 lifecycle: active
 draft: false
 ---
-This is in response to the following question:\
-
+This is in response to the following question:
 {{< contentlink ref="/questions/where-is-my-career-going" label="Where-is-my-career-going?" >}}
 
 I need to find some north star.
