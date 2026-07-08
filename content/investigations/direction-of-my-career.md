@@ -4,7 +4,16 @@ title: Direction of my career
 description: This is about the direction my career is taking.
 created: 2026-07-08
 status: Thinking
-draft: true
+areas:
+  - Personal
+topics:
+  - Career
+questions:
+  - Where is my career going?
+tags:
+  - knowledge-work
+  - personal-knowledge
+draft: false
 ---
 {{< callout variant="info" title="North star of career" >}}
 I think I have missed the north star.
