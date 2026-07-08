@@ -487,6 +487,7 @@ collections:
       value: area_term
     extension: md
     format: frontmatter
+    slug: "{{slug}}/_index"
     summary: "{{title}}"
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: area_term }
@@ -508,6 +509,7 @@ collections:
       value: topic_term
     extension: md
     format: frontmatter
+    slug: "{{slug}}/_index"
     summary: "{{title}}"
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: topic_term }
@@ -542,6 +544,7 @@ collections:
       value: tag_term
     extension: md
     format: frontmatter
+    slug: "{{slug}}/_index"
     summary: "{{title}}"
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: tag_term }
@@ -557,12 +560,14 @@ collections:
     folder: content/questions
     create: true
     delete: true
-    exclude: ["_index.md", "**/_index.md"]
+    nested: { depth: 100 }
+    exclude: ["_index.md"]
     filter:
       field: entry_type
       value: question_term
     extension: md
     format: frontmatter
+    slug: "{{slug}}/_index"
     summary: "{{title}}"
     fields:
       - { label: Entry Type, name: entry_type, widget: hidden, default: question_term }
