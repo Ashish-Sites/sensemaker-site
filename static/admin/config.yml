@@ -301,6 +301,14 @@ collections:
           - quote
           - definition
           - synthesis
+          - case-study
+          - retrospective
+          - plan
+          - to-do
+          - comparison
+          - experiment-log
+          - decision-record
+          - faq
         default: idea
       - label: Attached Investigations
         name: investigations

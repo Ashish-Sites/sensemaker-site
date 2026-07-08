@@ -5,10 +5,60 @@
 {{ if and (eq (len $targets) 0) .Params.investigation }}
   {{ $targets = $targets | append .Params.investigation }}
 {{ end }}
+{{ $articleType := lower (default "idea" .Params.article_type) }}
+{{ $articleTypeCodeMap := dict
+  "idea" "ID"
+  "sub-article" "SUB"
+  "comment" "COM"
+  "evidence" "EVD"
+  "summary" "SUM"
+  "counterpoint" "CTR"
+  "quote" "QTE"
+  "definition" "DEF"
+  "synthesis" "SYN"
+  "case-study" "CAS"
+  "retrospective" "RET"
+  "plan" "PLN"
+  "to-do" "TODO"
+  "comparison" "CMP"
+  "experiment-log" "EXP"
+  "decision-record" "DEC"
+  "faq" "FAQ"
+}}
+{{ $articleTypeDescriptionMap := dict
+  "idea" "Early concept intended for expansion."
+  "sub-article" "Focused supporting piece attached to broader investigation work."
+  "comment" "Short reflection or annotation on related thinking."
+  "evidence" "Source-backed claim, data point, or citation."
+  "summary" "Condensed version of a larger thread of thought."
+  "counterpoint" "Alternative argument challenging an existing interpretation."
+  "quote" "Quoted source with optional context and interpretation."
+  "definition" "Term clarification for shared conceptual precision."
+  "synthesis" "Integrated perspective combining multiple threads."
+  "case-study" "Context, intervention, outcomes, and transferable lessons."
+  "retrospective" "What changed over time and what to do differently next."
+  "plan" "Forward-looking sequence with goals and execution steps."
+  "to-do" "Action backlog for concrete next steps and follow-up."
+  "comparison" "Side-by-side evaluation with explicit trade-offs."
+  "experiment-log" "Hypothesis, method, result, and confidence notes."
+  "decision-record" "Decision rationale, alternatives considered, and consequences."
+  "faq" "Reusable answers to recurring questions."
+}}
+{{ $articleTypeCode := index $articleTypeCodeMap $articleType }}
+{{ if not $articleTypeCode }}{{ $articleTypeCode = "TYPE" }}{{ end }}
+{{ $articleTypeDescription := index $articleTypeDescriptionMap $articleType }}
+{{ if not $articleTypeDescription }}{{ $articleTypeDescription = "Article module with flexible structure." }}{{ end }}
 
 <article class="entry-page entry-page-article">
   <header class="entry-title-row">
     <h1 class="investigation-title">{{ .Title }}</h1>
+    <div class="article-type-banner article-type-{{ $articleType }}">
+      <span class="article-type-badge article-type-{{ $articleType }}">
+        <span class="article-type-code">{{ $articleTypeCode }}</span>
+        <span>{{ $articleType }}</span>
+      </span>
+      <span class="article-type-banner-text">{{ $articleTypeDescription }}</span>
+    </div>
   </header>
 
   {{ if or .Params.tags (gt (len $targets) 0) }}
@@ -72,7 +122,15 @@
         <h2>Metadata</h2>
         <dl class="entry-meta-list">
           <div><dt>Type</dt><dd>article</dd></div>
-          <div><dt>Article type</dt><dd>{{ default "idea" .Params.article_type }}</dd></div>
+          <div>
+            <dt>Article type</dt>
+            <dd>
+              <span class="article-type-badge article-type-badge-small article-type-{{ $articleType }}">
+                <span class="article-type-code">{{ $articleTypeCode }}</span>
+                <span>{{ $articleType }}</span>
+              </span>
+            </dd>
+          </div>
           <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
           <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
           <div><dt>Lifecycle</dt><dd>{{ default "active" .Params.lifecycle }}</dd></div>

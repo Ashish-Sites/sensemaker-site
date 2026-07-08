@@ -1,7 +1,7 @@
 {{ define "content" }}
 <div class="investigations-list">
   <h1>Articles</h1>
-  <p class="subtitle">Attachable notes that extend investigations: idea, sub-article, comment.</p>
+  <p class="subtitle">Attachable modules that extend investigations across evidence, planning, decisions, and synthesis.</p>
 
   {{ $all := where .Site.RegularPages "Type" "articles" }}
   {{ $sorted := sort $all "Lastmod" "desc" }}
@@ -49,6 +49,28 @@
         </thead>
         <tbody>
           {{ range $paginator.Pages }}
+            {{ $articleType := lower (default "idea" .Params.article_type) }}
+            {{ $articleTypeCodeMap := dict
+              "idea" "ID"
+              "sub-article" "SUB"
+              "comment" "COM"
+              "evidence" "EVD"
+              "summary" "SUM"
+              "counterpoint" "CTR"
+              "quote" "QTE"
+              "definition" "DEF"
+              "synthesis" "SYN"
+              "case-study" "CAS"
+              "retrospective" "RET"
+              "plan" "PLN"
+              "to-do" "TODO"
+              "comparison" "CMP"
+              "experiment-log" "EXP"
+              "decision-record" "DEC"
+              "faq" "FAQ"
+            }}
+            {{ $articleTypeCode := index $articleTypeCodeMap $articleType }}
+            {{ if not $articleTypeCode }}{{ $articleTypeCode = "TYPE" }}{{ end }}
             {{ $linkedInv := default (slice) .Params.investigations }}
             {{ if and (eq (len $linkedInv) 0) .Params.investigation }}
               {{ $linkedInv = $linkedInv | append .Params.investigation }}
@@ -58,7 +80,12 @@
             <tr>
               <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
               <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
-              <td data-sort-value="{{ lower (default "idea" .Params.article_type) }}"><span class="status-badge-small status-{{ lower (default "idea" .Params.article_type) }}">{{ default "idea" .Params.article_type }}</span></td>
+              <td data-sort-value="{{ $articleType }}">
+                <span class="article-type-badge article-type-badge-small article-type-{{ $articleType }}">
+                  <span class="article-type-code">{{ $articleTypeCode }}</span>
+                  <span>{{ $articleType }}</span>
+                </span>
+              </td>
               <td data-sort-value="{{ len $linkedInv }}">{{ len $linkedInv }}</td>
               <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
             </tr>

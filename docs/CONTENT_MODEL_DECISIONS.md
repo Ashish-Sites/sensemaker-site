@@ -32,15 +32,23 @@ Keep only current, required content-model decisions and unresolved items.
 6. Questions use lifecycle: `active`, `archived`.
 7. Articles use lifecycle: `active`, `archived`.
 8. Article type set is:
-	- idea
-	- sub-article
-	- comment
-	- evidence
-	- summary
-	- counterpoint
-	- quote
-	- definition
-	- synthesis
+   - idea
+   - sub-article
+   - comment
+   - evidence
+   - summary
+   - counterpoint
+   - quote
+   - definition
+   - synthesis
+   - case-study
+   - retrospective
+   - plan
+   - to-do
+   - comparison
+   - experiment-log
+   - decision-record
+   - faq
 9. `subsection` is replaced by `sub-article`.
 10. `draft` is not an article type.
 11. Investigations remain intentionally lean; broader governance metadata is not required there.
