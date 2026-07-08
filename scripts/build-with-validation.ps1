@@ -51,6 +51,9 @@ Write-Host "Running taxonomy validation..."
 $taxonomyValidator = Join-Path $PSScriptRoot "validate-taxonomy.ps1"
 if (Test-Path -LiteralPath $taxonomyValidator) {
     & $shellCommand -File $taxonomyValidator
+    if ($LASTEXITCODE -ne 0) {
+        throw "Taxonomy validation failed with exit code $LASTEXITCODE."
+    }
 } else {
     Write-Warning "Skipping taxonomy validation: missing script $taxonomyValidator"
 }
@@ -59,6 +62,9 @@ Write-Host "Running content quality validation..."
 $contentValidator = Join-Path $PSScriptRoot "validate-content-quality.ps1"
 if (Test-Path -LiteralPath $contentValidator) {
     & $shellCommand -File $contentValidator
+    if ($LASTEXITCODE -ne 0) {
+        throw "Content quality validation failed with exit code $LASTEXITCODE."
+    }
 } else {
     Write-Warning "Skipping content quality validation: missing script $contentValidator"
 }
@@ -80,6 +86,9 @@ if (-not (Test-Path -LiteralPath $resolvedOutputDir)) {
 $builtLinksValidator = Join-Path $PSScriptRoot "validate-built-links.ps1"
 if (Test-Path -LiteralPath $builtLinksValidator) {
     & $shellCommand -File $builtLinksValidator -PublicDir $resolvedOutputDir
+    if ($LASTEXITCODE -ne 0) {
+        throw "Built-link validation failed with exit code $LASTEXITCODE."
+    }
 } else {
     Write-Warning "Skipping built-link validation: missing script $builtLinksValidator"
 }
