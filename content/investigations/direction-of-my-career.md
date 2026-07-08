@@ -11,8 +11,7 @@ topics:
 questions:
   - Where is my career going?
 tags:
-  - knowledge-work
-  - personal-knowledge
+  - my-career
 draft: false
 ---
 {{< callout variant="info" title="North star of career" >}}
