@@ -360,12 +360,13 @@ th {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.55rem;
-  margin-top: calc(var(--spacing-md) * -1);
-  margin-bottom: var(--spacing-lg);
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .article-type-banner-text {
   font-size: 0.9rem;
+  line-height: 1.35;
   color: var(--color-text-secondary);
 }
 
@@ -543,7 +544,9 @@ th {
 }
 
 .entry-title-row {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  display: grid;
+  gap: 0.45rem;
 }
 
 .entry-title-row h1 {
