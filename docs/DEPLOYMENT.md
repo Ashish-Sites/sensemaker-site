@@ -24,7 +24,7 @@ Two GitHub Actions workflows handle CI and deployment:
 | Workflow | File | Trigger | Purpose |
 |---|---|---|---|
 | Build and Validate | `build-validate.yml` | Every push to `main` | Validate + build only, no deploy |
-| Deploy to GitHub Pages | `deploy.yml` | Manual (`workflow_dispatch`) | Full deploy to GitHub Pages |
+| Deploy to GitHub Pages | `deploy.yml` | Push to `main` (content/theme/config changes) + Manual (`workflow_dispatch`) | Full deploy to GitHub Pages |
 
 ---
 
@@ -63,7 +63,7 @@ Steps:
 
 ### deploy.yml
 
-Runs manually from the Actions tab. Deploys to GitHub Pages on success.
+Runs automatically on qualifying pushes to `main`, and can also be run manually from the Actions tab. Deploys to GitHub Pages on success.
 
 Steps:
 1. Checkout repository

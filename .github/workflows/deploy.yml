@@ -1,6 +1,18 @@
 name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'content/**'
+      - 'static/**'
+      - 'themes/**'
+      - 'config.toml'
+      - 'generate_status.py'
+      - 'scripts/**'
+      - '.github/workflows/deploy.yml'
+      - '.github/workflows/build-validate.yml'
   workflow_dispatch:
 
 permissions:

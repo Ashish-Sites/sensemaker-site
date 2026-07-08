@@ -21,7 +21,7 @@ auth:
   last_name_claim: last_name
   avatar_url_claim: avatar_url
 
-local_backend: true
+local_backend: false
 
 media_folder: static/images/uploads
 public_folder: /images/uploads
