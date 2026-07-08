@@ -23,7 +23,7 @@ Two GitHub Actions workflows handle CI and deployment:
 
 | Workflow | File | Trigger | Purpose |
 |---|---|---|---|
-| Build and Validate | `build-validate.yml` | Every push to `main` | Validate + build only, no deploy |
+| Build and Validate | `build-validate.yml` | Pull requests to `main` + Manual (`workflow_dispatch`) | Validate + build only, no deploy |
 | Deploy to GitHub Pages | `deploy.yml` | Push to `main` (content/theme/config changes) + Manual (`workflow_dispatch`) | Full deploy to GitHub Pages |
 
 ---
@@ -53,7 +53,7 @@ This automatically creates the `github-pages` environment with correct permissio
 
 ### build-validate.yml
 
-Runs on every push to `main`. Does not deploy. Fails the build if any validation or Hugo build error is found.
+Runs on pull requests to `main` (and manually on demand). Does not deploy. Fails the build if any validation or Hugo build error is found.
 
 Steps:
 1. Checkout repository
