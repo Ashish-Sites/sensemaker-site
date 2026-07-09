@@ -46,6 +46,7 @@
             </div>
           </details>
 
+          <a href="{{ "links/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/links/" }}active{{ end }}">Links</a>
           <a href="{{ "search/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/search/" }}active{{ end }}">Search</a>
           <a href="{{ "help/" | absURL }}" class="nav-link nav-link-strong {{ if hasPrefix $.RelPermalink "/help/" }}active{{ end }}">Help</a>
           <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">🌙</button>

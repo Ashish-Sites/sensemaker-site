@@ -31,6 +31,10 @@ draft: false
 - **Admin** opens the content management interface.
 - **Publish** opens the deployment workflow page.
 
+### Links
+
+Use Links as a quick launch page for external destinations you revisit often.
+
 ### Search
 
 Use Search to quickly find entries across investigations, articles, scratchpads, and questions. Search works on title, body content, tags, areas, topics, and associated questions.

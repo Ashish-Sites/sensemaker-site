@@ -33,6 +33,25 @@ logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 publish_mode: editorial_workflow
 
 collections:
+  - name: utility_pages
+    label: Utility Pages
+    files:
+      - label: Links
+        name: links_page
+        file: content/links/_index.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: string, required: false, hint: "Optional short intro for the links page", pattern: ["^.{0,200}$", "Description must be 200 characters or fewer"] }
+          - label: Links
+            name: links
+            widget: list
+            required: false
+            summary: "{{fields.text}}"
+            fields:
+              - { label: Text, name: text, widget: string }
+              - { label: URL, name: url, widget: string, hint: "Full URL including https://" }
+          - { label: Draft, name: draft, widget: boolean, default: false }
+
   - name: investigations
     label: Investigations
     label_singular: Investigation

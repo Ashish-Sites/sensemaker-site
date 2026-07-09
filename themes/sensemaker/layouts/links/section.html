@@ -1,0 +1,38 @@
+{{ define "content" }}
+<div class="investigations-list">
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.description }}
+    <p class="subtitle">{{ . }}</p>
+  {{ end }}
+
+  {{ if .Content }}
+    <section class="home-section" style="margin-bottom: var(--spacing-xl);">
+      <div class="prose">{{ .Content }}</div>
+    </section>
+  {{ end }}
+
+  {{ $links := default (slice) .Params.links }}
+  {{ if gt (len $links) 0 }}
+    <section class="list-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Text</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $links }}
+            <tr>
+              <td><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a></td>
+              <td><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .url }}</a></td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+  {{ else }}
+    <p class="empty-state">No links added yet.</p>
+  {{ end }}
+</div>
+{{ end }}
