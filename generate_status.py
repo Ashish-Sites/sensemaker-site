@@ -314,6 +314,122 @@ def _classify_error(e):
     return first_line
 
 
+def _extract_content_analysis_body(markdown_text):
+    match = re.search(r"^## Content Analysis\n(?P<body>[\s\S]*?)(?=^## |\Z)", markdown_text.strip(), re.MULTILINE)
+    if not match:
+        return None
+    return match.group("body").strip()
+
+
+def _is_skipped_content_analysis(section_body):
+    if not section_body:
+        return True
+    normalized = re.sub(r"\s+", " ", section_body).lower()
+    return "skipped" in normalized and ("gemini api key" in normalized or "gemini_api_key" in normalized)
+
+
+def _has_real_content_analysis(section_body):
+    if not section_body:
+        return False
+    return bool(re.search(r"^### (Investigations|Articles)\b", section_body, re.MULTILINE))
+
+
+def _is_preserved_fallback_body(section_body):
+    if not section_body:
+        return False
+    return "Preserved from the most recent successful Gemini-backed run" in section_body
+
+
+def load_preserved_content_analysis(output_path):
+    candidates = []
+
+    if output_path.exists():
+        try:
+            candidates.append(output_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    rel_path = output_path.as_posix()
+    try:
+        history = subprocess.run(
+            ["git", "log", "--format=%H", "--", rel_path],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+        )
+        commits = [line.strip() for line in history.stdout.splitlines() if line.strip()]
+        for commit in commits[:12]:
+            shown = subprocess.run(
+                ["git", "show", f"{commit}:{rel_path}"],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                check=False,
+            )
+            if shown.returncode == 0 and shown.stdout.strip():
+                candidates.append(shown.stdout)
+    except Exception:
+        pass
+
+    for candidate in candidates:
+        try:
+            markdown_text = frontmatter.loads(candidate).content
+        except Exception:
+            markdown_text = candidate
+
+        section_body = _extract_content_analysis_body(markdown_text)
+        if section_body and not _is_skipped_content_analysis(section_body) and not _is_preserved_fallback_body(section_body) and _has_real_content_analysis(section_body):
+            return section_body
+
+    return None
+
+
+def rebuild_preserved_content_analysis(section_body, items):
+    if not section_body:
+        return section_body
+
+    plural_map = {
+        "investigation": "investigations",
+        "article": "articles",
+    }
+    intro_match = re.search(r"Per-item analysis:[^\n]*", section_body)
+    intro_line = intro_match.group(0) if intro_match else "Per-item analysis: does the content match its title? What is its tone? What does it actually say?"
+
+    rebuilt = [intro_line, ""]
+
+    for group_label, group_type in [("Investigations", "investigation"), ("Articles", "article")]:
+        group_entries = []
+        plural_type = plural_map[group_type]
+
+        for item_type, slug, _ in items:
+            if item_type != group_type:
+                continue
+
+            pattern = (
+                rf"^#### (?P<header>\[.*?\]\(/{plural_type}/{re.escape(slug)}/\))\n"
+                rf"(?P<body>[\s\S]*?)(?=^#### |^### |\Z)"
+            )
+            match = re.search(pattern, section_body, re.MULTILINE)
+            if not match:
+                continue
+
+            group_entries.extend([
+                f"#### {match.group('header')}",
+                "",
+                match.group("body").strip(),
+                "",
+            ])
+
+        if group_entries:
+            rebuilt.extend([f"### {group_label}", ""])
+            rebuilt.extend(group_entries)
+
+    return "\n".join(rebuilt).strip()
+
+
 def analyze_item(client, item_type, slug, data, model):
     """Call Gemini to analyse a single content item. Returns dict."""
     title = data.get("title", slug)
@@ -471,21 +587,38 @@ def generate_report(items, items_dict, G, orphans, asymmetric, stale,
 
                 lines.append("")
     else:
-        lines += [
-            "---",
-            "",
-            "## Content Analysis",
-            "",
-            "*Skipped — no Gemini API key available. Set `GEMINI_API_KEY` to enable.*",
-            "",
-        ]
+        preserved_analysis = load_preserved_content_analysis(output_path)
+        if preserved_analysis:
+            preserved_analysis = rebuild_preserved_content_analysis(preserved_analysis, items)
+            lines += [
+                "---",
+                "",
+                "## Content Analysis",
+                "",
+                "*Preserved from the most recent successful Gemini-backed run because this run had no available Gemini client.*",
+                "",
+                preserved_analysis,
+                "",
+            ]
+        else:
+            lines += [
+                "---",
+                "",
+                "## Content Analysis",
+                "",
+                "*Skipped — no Gemini API key available. Set `GEMINI_API_KEY` to enable.*",
+                "",
+            ]
 
     body_content = "\n".join(lines)
     post = frontmatter.Post(body_content, **fm)
+    serialized = frontmatter.dumps(post)
+    if not serialized.endswith("\n"):
+        serialized += "\n"
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(frontmatter.dumps(post))
+        f.write(serialized)
 
     print(f"  Generated {output_path}")
 
@@ -640,10 +773,13 @@ def generate_unpublished_report(entries, source_commit, output_path):
 
     body_content = "\n".join(lines)
     post = frontmatter.Post(body_content, **fm)
+    serialized = frontmatter.dumps(post)
+    if not serialized.endswith("\n"):
+        serialized += "\n"
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(frontmatter.dumps(post))
+        f.write(serialized)
 
     print(f"  Generated {output_path}")
 
