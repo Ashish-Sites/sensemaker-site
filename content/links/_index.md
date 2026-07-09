@@ -6,6 +6,8 @@ links:
     url: https://www.markdownguide.org/basic-syntax/
   - url: https://app.notion.com/p/Teamspace-Home-2730fc8ee20a819fac99f9cd005d64a6
     text: Notion home page (Inbox)
+  - url: https://cloud.oracle.com/?region=ap-mumbai-1
+    text: Oracle free cloud (ashishsinhaa)
 draft: false
 ---
 
