@@ -1,9 +1,17 @@
 {{ define "content" }}
+{{ $links := default (slice) .Params.links }}
 <div class="investigations-list">
   <h1>{{ .Title }}</h1>
   {{ with .Params.description }}
     <p class="subtitle">{{ . }}</p>
   {{ end }}
+
+  <section class="list-summary links-summary">
+    <div class="summary-card">
+      <span class="summary-label">Total links</span>
+      <span class="summary-value">{{ len $links }}</span>
+    </div>
+  </section>
 
   {{ if .Content }}
     <section class="home-section" style="margin-bottom: var(--spacing-xl);">
@@ -11,21 +19,22 @@
     </section>
   {{ end }}
 
-  {{ $links := default (slice) .Params.links }}
   {{ if gt (len $links) 0 }}
-    <section class="list-table-wrap">
+    <section class="list-table-wrap links-table-wrap">
       <table class="data-table">
         <thead>
           <tr>
             <th>Text</th>
-            <th>URL</th>
+            <th>Destination</th>
+            <th>Open</th>
           </tr>
         </thead>
         <tbody>
           {{ range $links }}
             <tr>
               <td><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .text }}</a></td>
-              <td><a href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .url }}</a></td>
+              <td><a class="links-url" href="{{ .url }}" target="_blank" rel="noopener noreferrer">{{ .url }}</a></td>
+              <td><a class="links-open" href="{{ .url }}" target="_blank" rel="noopener noreferrer">Open</a></td>
             </tr>
           {{ end }}
         </tbody>
