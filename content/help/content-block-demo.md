@@ -122,7 +122,7 @@ Rendering tests finalized.
 
 ## Reference Card
 
-{{< referencecard ref="/articles/why-personal-knowledge-systems-matter" label="Demo Reference" >}}
+{{< referencecard ref="/articles/the-north-start-of-my-career" label="Demo Reference" >}}
 
 ## Math
 
@@ -132,4 +132,4 @@ E = mc^2
 
 ## Content Link
 
-{{< contentlink ref="/investigations/personal-knowledge-system" label="Demo Content Link" >}}
+{{< contentlink ref="/investigations/direction-of-my-career" label="Demo Content Link" >}}

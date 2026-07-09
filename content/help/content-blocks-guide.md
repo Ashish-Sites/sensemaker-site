@@ -255,12 +255,12 @@ Example + Rendered:
 Syntax:
 
 ```markdown
-{{</* referencecard ref="/articles/why-personal-knowledge-systems-matter" label="Read More" */>}}
+{{</* referencecard ref="/articles/the-north-start-of-my-career" label="Read More" */>}}
 ```
 
 Example + Rendered:
 
-{{< referencecard ref="/articles/why-personal-knowledge-systems-matter" label="Read More" >}}
+{{< referencecard ref="/articles/the-north-start-of-my-career" label="Read More" >}}
 
 ## Math
 
@@ -283,12 +283,12 @@ Example + Rendered:
 Syntax:
 
 ```markdown
-{{</* contentlink ref="/investigations/personal-knowledge-system" label="Open Investigation" */>}}
+{{</* contentlink ref="/investigations/direction-of-my-career" label="Open Investigation" */>}}
 ```
 
 Example + Rendered:
 
-{{< contentlink ref="/investigations/personal-knowledge-system" label="Open Investigation" >}}
+{{< contentlink ref="/investigations/direction-of-my-career" label="Open Investigation" >}}
 
 ## TOC Shortcode
 
