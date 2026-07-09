@@ -1,4 +1,8 @@
-{{ $sectionPage := site.GetPage "section" .Section }}
+{{ $ownerSection := .Section }}
+{{ if and (not $ownerSection) .Data.Plural }}
+  {{ $ownerSection = .Data.Plural }}
+{{ end }}
+{{ $sectionPage := site.GetPage "section" $ownerSection }}
 {{ if $sectionPage }}
   <a class="section-back-link" href="{{ $sectionPage.RelPermalink }}" aria-label="Back to {{ $sectionPage.Title }}">
     <span class="section-back-link-arrow" aria-hidden="true">&larr;</span>
