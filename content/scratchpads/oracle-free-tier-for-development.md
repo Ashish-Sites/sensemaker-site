@@ -5,7 +5,7 @@ description: How can I use Oracle free tier for development and deployment
 created: 2026-07-09
 draft: false
 ---
-I have an Oracle free account and I can theoretically use it deploy anything.
+I have an Oracle free account and I can theoretically use it to deploy anything.
 Some options are 
 
 1. A Wordpress site
