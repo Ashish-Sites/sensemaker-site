@@ -59,8 +59,9 @@ def get_gemini_client():
 # ---------------------------------------------------------------------------
 
 def parse_content_files(content_dir):
-    """Parse investigations, articles, questions. Return list of (type, slug, data)."""
+    """Parse publish-visible investigations, articles, questions. Return list of (type, slug, data)."""
     items = []
+    now = datetime.now()
     for content_type in ["investigations", "articles", "questions"]:
         type_dir = Path(content_dir) / content_type
         if not type_dir.exists():
@@ -71,17 +72,20 @@ def parse_content_files(content_dir):
             try:
                 with open(md_file, "r", encoding="utf-8") as f:
                     post = frontmatter.load(f)
+                metadata = post.metadata or {}
+                if not is_publish_visible(metadata, now):
+                    continue
                 slug = md_file.stem
                 data = {
-                    "title":             post.metadata.get("title", slug),
+                    "title":             metadata.get("title", slug),
                     "slug":              slug,
-                    "summary":           post.metadata.get("summary", ""),
-                    "description":       post.metadata.get("description", ""),
-                    "related":           post.metadata.get("related", []),
-                    "attached_articles": post.metadata.get("attached_articles", []),
-                    "investigations":    post.metadata.get("investigations", []),
-                    "created":           post.metadata.get("created"),
-                    "updated":           post.metadata.get("updated"),
+                    "summary":           metadata.get("summary", ""),
+                    "description":       metadata.get("description", ""),
+                    "related":           metadata.get("related", []),
+                    "attached_articles": metadata.get("attached_articles", []),
+                    "investigations":    metadata.get("investigations", []),
+                    "created":           metadata.get("created"),
+                    "updated":           metadata.get("updated"),
                     "body":              post.content,
                 }
                 items.append((content_type.rstrip("s"), slug, data))
@@ -517,6 +521,32 @@ def _infer_type_label(md_file, content_dir):
     return TYPE_LABELS.get(top_level, top_level.rstrip("s").replace("-", " ").title())
 
 
+def get_unpublished_reasons(metadata, now=None):
+    if now is None:
+        now = datetime.now()
+
+    reasons = []
+
+    if bool(metadata.get("draft", False)):
+        reasons.append("draft")
+
+    publish_value = metadata.get("publishDate") or metadata.get("publishdate")
+    publish_dt = _coerce_datetime(publish_value)
+    if publish_dt and publish_dt > now:
+        reasons.append("scheduled")
+
+    expiry_value = metadata.get("expiryDate") or metadata.get("expirydate")
+    expiry_dt = _coerce_datetime(expiry_value)
+    if expiry_dt and expiry_dt <= now:
+        reasons.append("expired")
+
+    return reasons
+
+
+def is_publish_visible(metadata, now=None):
+    return len(get_unpublished_reasons(metadata, now)) == 0
+
+
 def scan_unpublished_content(content_dir):
     now = datetime.now()
     entries = []
@@ -530,20 +560,7 @@ def scan_unpublished_content(content_dir):
             continue
 
         metadata = post.metadata or {}
-        reasons = []
-
-        if bool(metadata.get("draft", False)):
-            reasons.append("draft")
-
-        publish_value = metadata.get("publishDate") or metadata.get("publishdate")
-        publish_dt = _coerce_datetime(publish_value)
-        if publish_dt and publish_dt > now:
-            reasons.append("scheduled")
-
-        expiry_value = metadata.get("expiryDate") or metadata.get("expirydate")
-        expiry_dt = _coerce_datetime(expiry_value)
-        if expiry_dt and expiry_dt <= now:
-            reasons.append("expired")
+        reasons = get_unpublished_reasons(metadata, now)
 
         if not reasons:
             continue

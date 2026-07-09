@@ -69,7 +69,8 @@
       <div class="search-result">
         <h3><a href="${result.url}">${result.title}</a></h3>
         <div class="result-meta">
-          <span class="status-badge-small status-${result.status.toLowerCase()}">${result.status}</span>
+          <span class="result-type-badge result-type-${(result.type || 'entry').toLowerCase().replace(/[^a-z0-9]+/g, '-')}">${result.type || 'Entry'}</span>
+          <span class="status-badge-small status-${result.status.toLowerCase().replace(/[^a-z0-9]+/g, '-')}">${result.status}</span>
           <span class="areas">${result.areas || 'N/A'}</span>
         </div>
         <p class="result-snippet">${result.content.substring(0, 200)}...</p>

@@ -53,8 +53,9 @@ Core path:
 1. Content authoring/update.
 2. Validation scripts run.
 3. Hugo build generates public.
-4. Built HTML is checked for internal broken links.
-5. Deploy only if all checks pass.
+4. Generated operational reports can inspect source content directly.
+5. Built HTML is checked for internal broken links when that validator is present.
+6. Deploy only if all checks pass.
 
 ## Information Architecture
 
@@ -81,6 +82,7 @@ Relationship rules:
 2. List pages: summary stats plus sortable/filterable tables.
 3. Detail pages: two-column layout with content and right rail.
 4. Help page: full-width documentation surface.
+5. Operational pages: generated Status and Drafts reports for publish-visible and unpublished content respectively.
 
 ### Shared detail-page structure
 

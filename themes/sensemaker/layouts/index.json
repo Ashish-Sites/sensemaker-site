@@ -9,6 +9,7 @@
   "url": {{ $page.RelPermalink | jsonify }},
   "title": {{ $page.Title | jsonify }},
   "content": {{ $page.Plain | jsonify }},
+  "type": {{ $page.Type | singularize | title | jsonify }},
   "status": {{ cond (eq $page.Type "scratchpads") "Scratchpad" ($page.Params.status | default "Question") | jsonify }},
   "areas": {{ delimit (default (slice) $page.Params.areas) ", " | jsonify }},
   "topics": {{ delimit (default (slice) $page.Params.topics) ", " | jsonify }},
