@@ -29,6 +29,7 @@ SenseMaker is not a blog, wiki, or traditional note-taking application. It is a 
 - **Cross-linking** between related ideas
 - **Backlinks** showing what references each investigation
 - **Easy navigation** through hierarchical organization
+- **Scratchpad capture** for raw thinking before it deserves formal structure
 - **Long-term preservation** using Git as the database
 - **Chronological thinking** that never overwrites earlier observations
 
@@ -37,6 +38,7 @@ SenseMaker is not a blog, wiki, or traditional note-taking application. It is a 
 - **Single user optimization**: Designed entirely for one long-term thinker
 - **Append-only by default**: Never overwrite earlier thinking; only add new dated entries
 - **Hierarchical navigation**: Areas → Topics → Investigations
+- **Pre-formal capture**: Scratchpads absorb raw thought without forcing classification
 - **Connected by links**: Everything else linked through manual and automatic relationships
 - **Typography first**: Minimal design, readable, fast
 - **Future-proof structure**: Easy to add AI integration, knowledge graphs, embeddings later
@@ -48,6 +50,7 @@ wiki-site/
 ├── content/
 │   ├── investigations/          # Investigation entries
 │   ├── articles/                # Article entries
+│   ├── scratchpads/             # Raw freehand capture pages
 │   ├── areas/                   # Area taxonomy terms
 │   ├── topics/                  # Topic taxonomy terms
 │   ├── tags/                    # Tag taxonomy terms

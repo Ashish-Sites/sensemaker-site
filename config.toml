@@ -55,17 +55,22 @@ removePathAccents = true
   weight = 6
 
 [[menu.main]]
-  name = "Search"
-  url = "/search/"
+  name = "Scratchpads"
+  url = "/scratchpads/"
   weight = 7
 
 [[menu.main]]
-  name = "Help"
+  name = "Search"
+  url = "/search/"
   weight = 8
 
 [[menu.main]]
-  name = "Manage"
+  name = "Help"
   weight = 9
+
+[[menu.main]]
+  name = "Manage"
+  weight = 10
 
 [[menu.main]]
   name = "Site Help"

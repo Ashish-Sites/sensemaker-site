@@ -15,13 +15,14 @@ Status: Reviewed and trimmed
 ## Purpose
 Keep only current, required content-model decisions and unresolved items.
 
-## Content Types (6)
+## Content Types (7)
 1. Investigations
 2. Articles
-3. Questions
-4. Tags
-5. Areas
-6. Topics
+3. Scratchpads
+4. Questions
+5. Tags
+6. Areas
+7. Topics
 
 ## Locked Decisions
 1. Investigations are the narrative spine; articles are supporting modules.
@@ -52,6 +53,7 @@ Keep only current, required content-model decisions and unresolved items.
 9. `subsection` is replaced by `sub-article`.
 10. `draft` is not an article type.
 11. Investigations remain intentionally lean; broader governance metadata is not required there.
+12. Scratchpads are freehand, discardable pages outside the formal investigation/article/question relationship graph.
 
 ## Required Core Fields by Type
 
@@ -74,6 +76,13 @@ Keep only current, required content-model decisions and unresolved items.
 4. `article_type`
 5. `body`
 6. Optional: `description`, `investigations`, `tags`, `draft`, `lifecycle`, `source_link`, `confidence`, `canonical_investigation`
+
+### Scratchpads
+1. `entry_type`: scratchpad
+2. `title`
+3. `created`
+4. `body`
+5. Optional: `description`, `draft`
 
 ### Questions
 1. `entry_type`: question_term
@@ -102,6 +111,7 @@ Keep only current, required content-model decisions and unresolved items.
 4. Investigation -> Tags (optional).
 5. Articles may be standalone or attached to one/many investigations.
 6. Active-only filtering should apply in CMS relation pickers where lifecycle is present.
+7. Scratchpads stay outside direct relationships to investigations, articles, and questions.
 
 ## Deferred or Optional Metadata
 1. Tags: `tag_kind`, `aliases`, `promote_to_topic_candidate` (deferred/optional).

@@ -1,0 +1,46 @@
+{{ define "content" }}
+{{ $createdText := dateFormat "02-Jan-2006" .Date }}
+{{ with .Params.created }}{{ $createdText = dateFormat "02-Jan-2006" (time .) }}{{ end }}
+
+<article class="entry-page entry-page-scratchpad">
+  <header class="entry-title-row">
+    <h1 class="investigation-title">{{ .Title }}</h1>
+  </header>
+
+  <section class="entry-grid">
+    <div class="entry-main prose">
+      {{ with .Params.description }}
+        <p class="entry-description">{{ . }}</p>
+      {{ end }}
+
+      {{ $blocks := default (slice) .Params.content_blocks }}
+      {{ if gt (len $blocks) 0 }}
+        {{ partial "content-blocks.html" . }}
+      {{ end }}
+
+      {{ if .Content }}
+        {{ .Content }}
+      {{ else if eq (len $blocks) 0 }}
+        <p>No body content yet for this scratchpad.</p>
+      {{ end }}
+    </div>
+
+    <aside class="entry-rail">
+      <section class="entry-meta">
+        <h2>Metadata</h2>
+        <dl class="entry-meta-list">
+          <div><dt>Type</dt><dd>scratchpad</dd></div>
+          <div><dt>Created</dt><dd>{{ $createdText }}</dd></div>
+          <div><dt>Updated</dt><dd>{{ dateFormat "02-Jan-2006" .Lastmod }}</dd></div>
+          <div><dt>Draft</dt><dd>{{ if .Params.draft }}yes{{ else }}no{{ end }}</dd></div>
+        </dl>
+      </section>
+
+      <section class="entry-lineage">
+        <h2>Role</h2>
+        <p class="empty-state">Scratchpads are intentionally kept outside the formal investigation, article, and question graph.</p>
+      </section>
+    </aside>
+  </section>
+</article>
+{{ end }}

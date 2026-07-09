@@ -17,6 +17,7 @@ draft: false
 
 - **Investigations** are the primary reasoning threads.
 - **Articles** are modular supporting notes, evidence, and summaries.
+- **Scratchpads** are disposable freehand pages for raw thinking before anything enters the formal system.
 
 ### Map
 
@@ -32,7 +33,7 @@ draft: false
 
 ### Search
 
-Use Search to quickly find entries across investigations, articles, and questions. Search works on title, body content, tags, areas, topics, and associated questions.
+Use Search to quickly find entries across investigations, articles, scratchpads, and questions. Search works on title, body content, tags, areas, topics, and associated questions.
 
 ## Terminology
 
@@ -43,6 +44,10 @@ A long-form reasoning unit with narrative body, context (areas/topics/tags), met
 ### Article
 
 A reusable support artifact linked to one or more investigations.
+
+### Scratchpad
+
+A low-ceremony page for raw, discardable thought that stays outside the formal investigation and article workflow.
 
 ### Lineage
 

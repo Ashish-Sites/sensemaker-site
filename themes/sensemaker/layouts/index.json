@@ -1,20 +1,21 @@
 {{- $investigations := where .Site.RegularPages "Type" "investigations" -}}
 {{- $articles := where .Site.RegularPages "Type" "articles" -}}
+{{- $scratchpads := where .Site.RegularPages "Type" "scratchpads" -}}
 {{- $questions := where .Site.RegularPages "Type" "questions" -}}
-{{- $items := append (append $investigations $articles) $questions -}}
+{{- $items := append (append (append $investigations $articles) $scratchpads) $questions -}}
 [
 {{- range $index, $page := $items -}}
 {
   "url": {{ $page.RelPermalink | jsonify }},
   "title": {{ $page.Title | jsonify }},
   "content": {{ $page.Plain | jsonify }},
-  "status": {{ $page.Params.status | default "Question" | jsonify }},
+  "status": {{ cond (eq $page.Type "scratchpads") "Scratchpad" ($page.Params.status | default "Question") | jsonify }},
   "areas": {{ delimit (default (slice) $page.Params.areas) ", " | jsonify }},
   "topics": {{ delimit (default (slice) $page.Params.topics) ", " | jsonify }},
   "questions": {{ delimit (default (slice) $page.Params.questions) ", " | jsonify }},
   "tags": {{ delimit (default (slice) $page.Params.tags) ", " | jsonify }},
   "created": {{ $page.Params.created | jsonify }},
-  "updated": {{ $page.Params.created | jsonify }}
+  "updated": {{ $page.Lastmod.Format "2006-01-02" | jsonify }}
 }{{ if ne (add $index 1) (len $items) }},{{ end }}
 {{- end }}
 ]

@@ -1,0 +1,112 @@
+{{ define "content" }}
+<div class="investigations-list">
+  <h1>Scratchpads</h1>
+  <p class="subtitle">Low-ceremony pages for raw thought, experiments, and disposable freehand capture.</p>
+
+  {{ $all := where .Site.RegularPages "Type" "scratchpads" }}
+  {{ $sorted := sort $all "Lastmod" "desc" }}
+  {{ $pageSize := 12 }}
+  {{ $paginator := .Paginate $sorted $pageSize }}
+
+  <section class="list-summary">
+    <div class="summary-card">
+      <span class="summary-label">Total scratchpads</span>
+      <span class="summary-value">{{ len $all }}</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest change</span>
+      <span class="summary-value summary-value-small">
+        {{ with index $sorted 0 }}{{ .Title }} · {{ dateFormat "02-Jan-2006" .Lastmod }}{{ else }}No updates yet{{ end }}
+      </span>
+    </div>
+  </section>
+
+  {{ if gt (len $all) 0 }}
+    <section class="list-table-wrap">
+      <div class="table-toolbar">
+        <input type="text" id="table-filter" class="search-filter" placeholder="Filter scratchpads by title or description...">
+      </div>
+
+      <table class="data-table sortable-table" id="scratchpads-table">
+        <thead>
+          <tr>
+            <th data-sort="string">Title</th>
+            <th data-sort="string">Description</th>
+            <th data-sort="date">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $paginator.Pages }}
+            {{ $desc := .Params.description }}
+            {{ if not $desc }}{{ $desc = (.Summary | plainify | truncate 180) }}{{ end }}
+            <tr>
+              <td data-sort-value="{{ lower .Title }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td data-sort-value="{{ lower $desc }}" class="table-description">{{ $desc }}</td>
+              <td data-sort-value="{{ .Lastmod.Format "2006-01-02" }}">{{ dateFormat "02-Jan-2006" .Lastmod }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+
+      {{ if gt $paginator.TotalPages 1 }}
+        <nav class="pagination" aria-label="Scratchpads pagination">
+          {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}" class="page-link">Previous</a>
+          {{ end }}
+          <span class="page-state">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+          {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}" class="page-link">Next</a>
+          {{ end }}
+        </nav>
+      {{ end }}
+    </section>
+  {{ else }}
+    <p class="empty-state">No scratchpads yet.</p>
+  {{ end }}
+</div>
+
+<script>
+  (function() {
+    const table = document.getElementById('scratchpads-table');
+    const filterInput = document.getElementById('table-filter');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    const headers = table.querySelectorAll('th[data-sort]');
+
+    headers.forEach((header, index) => {
+      let asc = true;
+      header.addEventListener('click', () => {
+        const type = header.dataset.sort;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+          const aCell = a.children[index];
+          const bCell = b.children[index];
+          const aValue = (aCell.dataset.sortValue || aCell.textContent).trim();
+          const bValue = (bCell.dataset.sortValue || bCell.textContent).trim();
+
+          if (type === 'date') {
+            return asc ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+          }
+
+          return asc
+            ? aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' })
+            : bValue.localeCompare(aValue, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        asc = !asc;
+      });
+    });
+
+    filterInput?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      tbody.querySelectorAll('tr').forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  })();
+</script>
+{{ end }}

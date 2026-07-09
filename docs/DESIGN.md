@@ -62,14 +62,16 @@ Primary entity types:
 
 1. Investigations: narrative spine and primary thinking artifact.
 2. Articles: attachable supporting modules.
-3. Taxonomy terms: areas, topics, tags, questions.
+3. Scratchpads: freehand, discardable thinking pages outside the formal graph.
+4. Taxonomy terms: areas, topics, tags, questions.
 
 Relationship rules:
 
 1. Investigation -> areas, topics, questions are required context.
 2. Investigation -> tags and attached/related articles are optional.
 3. Articles may be standalone or linked to one or more investigations.
-4. Term pages aggregate linked content and metadata.
+4. Scratchpads remain unlinked from investigations, articles, and questions by design.
+5. Term pages aggregate linked content and metadata.
 
 ## Page and UI Architecture
 
