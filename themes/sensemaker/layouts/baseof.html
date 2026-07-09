@@ -42,6 +42,7 @@
             <div class="nav-dropdown">
               <a href="{{ "admin/" | absURL }}" class="nav-link" target="_blank" rel="noopener noreferrer">Admin</a>
               <a href="https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml" class="nav-link" target="_blank" rel="noopener noreferrer">Publish</a>
+              <a href="{{ "status/drafts/" | absURL }}" class="nav-link {{ if eq $.RelPermalink "/status/drafts/" }}active{{ end }}">Drafts</a>
               <a href="{{ "status/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/status/" }}active{{ end }}">Status</a>
             </div>
           </details>

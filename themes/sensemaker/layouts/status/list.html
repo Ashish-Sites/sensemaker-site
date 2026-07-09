@@ -20,6 +20,12 @@
   {{ if .Pages }}
   <div class="list-items">
     {{ range .Pages.ByDate.Reverse }}
+    {{ $summary := "Machine-generated operational view for the current corpus." }}
+    {{ if eq .File.BaseFileName "drafts" }}
+      {{ $summary = "Count and list of draft, scheduled, or otherwise unpublished source content." }}
+    {{ else if eq .File.BaseFileName "report" }}
+      {{ $summary = "Structural integrity and content analysis across authored entries." }}
+    {{ end }}
     <article class="list-item">
       <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
       {{ if .Params.generated_at }}
@@ -27,6 +33,7 @@
         <small>Generated: {{ .Params.generated_at }}</small>
       </div>
       {{ end }}
+      <p class="list-summary">{{ $summary }}</p>
     </article>
     {{ end }}
   </div>
