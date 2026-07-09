@@ -10,6 +10,7 @@
   </div>
 
   {{ $allInvestigations := where .Site.RegularPages "Type" "investigations" }}
+  {{ $allScratchpads := where .Site.RegularPages "Type" "scratchpads" }}
   {{ $recent := sort $allInvestigations "Lastmod" "desc" }}
   {{ $newest := sort $allInvestigations "Date" "desc" }}
   {{ $open := where $allInvestigations ".Params.status" "in" (slice "Seed" "Thinking" "Reading" "Exploring" "Model Emerging") }}
@@ -31,6 +32,10 @@
     <a href="{{ "questions/" | absURL }}" class="stat-card">
       <span class="stat-label">Questions</span>
       <span class="stat-value">{{ len .Site.Taxonomies.questions }}</span>
+    </a>
+    <a href="{{ "scratchpads/" | absURL }}" class="stat-card">
+      <span class="stat-label">Scratchpads</span>
+      <span class="stat-value">{{ len $allScratchpads }}</span>
     </a>
   </section>
 
