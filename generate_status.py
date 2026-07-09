@@ -343,6 +343,20 @@ def analyze_item(client, item_type, slug, data, model):
 
 SITE_BASE = ""
 
+TYPE_LABELS = {
+    "investigations": "Investigation",
+    "articles": "Article",
+    "scratchpads": "Scratchpad",
+    "questions": "Question",
+    "areas": "Area",
+    "topics": "Topic",
+    "tags": "Tag",
+    "help": "Help",
+    "search": "Search",
+    "status": "Status",
+    "links": "Links",
+}
+
 def item_link(item_type, slug, title):
     base = (SITE_BASE or "").rstrip("/")
     return f"[{title}]({base}/{item_type}s/{slug}/)"
@@ -472,6 +486,151 @@ def generate_report(items, items_dict, G, orphans, asymmetric, stale,
     print(f"  Generated {output_path}")
 
 
+def _coerce_datetime(value):
+    if value is None:
+        return None
+    if isinstance(value, datetime):
+        return value.replace(tzinfo=None)
+    if hasattr(value, "year") and hasattr(value, "month") and hasattr(value, "day"):
+        return datetime.combine(value, datetime.min.time())
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return None
+        try:
+            return datetime.fromisoformat(text.replace("Z", "+00:00")).replace(tzinfo=None)
+        except ValueError:
+            for fmt in ("%Y-%m-%d", "%d-%b-%Y"):
+                try:
+                    return datetime.strptime(text, fmt)
+                except ValueError:
+                    continue
+    return None
+
+
+def _infer_type_label(md_file, content_dir):
+    try:
+        relative = md_file.relative_to(content_dir)
+    except ValueError:
+        relative = md_file
+    top_level = relative.parts[0] if relative.parts else md_file.parent.name
+    return TYPE_LABELS.get(top_level, top_level.rstrip("s").replace("-", " ").title())
+
+
+def scan_unpublished_content(content_dir):
+    now = datetime.now()
+    entries = []
+
+    for md_file in sorted(content_dir.rglob("*.md")):
+        try:
+            with open(md_file, "r", encoding="utf-8") as f:
+                post = frontmatter.load(f)
+        except Exception as e:
+            print(f"Warning: Skipping unpublished scan for {md_file} — {e}", file=sys.stderr)
+            continue
+
+        metadata = post.metadata or {}
+        reasons = []
+
+        if bool(metadata.get("draft", False)):
+            reasons.append("draft")
+
+        publish_value = metadata.get("publishDate") or metadata.get("publishdate")
+        publish_dt = _coerce_datetime(publish_value)
+        if publish_dt and publish_dt > now:
+            reasons.append("scheduled")
+
+        expiry_value = metadata.get("expiryDate") or metadata.get("expirydate")
+        expiry_dt = _coerce_datetime(expiry_value)
+        if expiry_dt and expiry_dt <= now:
+            reasons.append("expired")
+
+        if not reasons:
+            continue
+
+        rel_path = md_file.relative_to(content_dir.parent).as_posix()
+        entries.append({
+            "title": metadata.get("title", md_file.stem),
+            "type": _infer_type_label(md_file, content_dir),
+            "path": rel_path,
+            "reasons": reasons,
+        })
+
+    entries.sort(key=lambda item: (item["type"], item["title"].lower(), item["path"]))
+    return entries
+
+
+def generate_unpublished_report(entries, source_commit, output_path):
+    IST = timezone(timedelta(hours=5, minutes=30))
+    now_iso = datetime.now(tz=IST).strftime("%Y-%m-%dT%H:%M:%S+05:30")
+
+    fm = {
+        "title": "Drafts and Unpublished Content",
+        "entry_type": "status",
+        "generated": True,
+        "generated_at": now_iso,
+        "source_commit": source_commit,
+        "draft": False,
+    }
+
+    lines = [
+        "---",
+        "",
+        "## Summary",
+        "",
+        f"- **Total unpublished items:** {len(entries)}",
+        f"- **Types represented:** {len({entry['type'] for entry in entries}) if entries else 0}",
+        "",
+    ]
+
+    if entries:
+        counts = {}
+        for entry in entries:
+            counts[entry["type"]] = counts.get(entry["type"], 0) + 1
+
+        lines += [
+            "## Counts by Type",
+            "",
+            "| Type | Count |",
+            "|---|---:|",
+        ]
+        for type_label, count in sorted(counts.items()):
+            lines.append(f"| {type_label} | {count} |")
+        lines.append("")
+
+        lines += [
+            "## Details",
+            "",
+            "These entries are source-visible but not publish-visible under the current Hugo build rules.",
+            "",
+        ]
+
+        current_type = None
+        for entry in entries:
+            if entry["type"] != current_type:
+                current_type = entry["type"]
+                lines += [f"### {current_type}s", ""]
+            reasons = ", ".join(entry["reasons"])
+            lines.append(f"- **{entry['title']}** — `{entry['path']}` *({reasons})*")
+        lines.append("")
+    else:
+        lines += [
+            "## Counts by Type",
+            "",
+            "No unpublished items found.",
+            "",
+        ]
+
+    body_content = "\n".join(lines)
+    post = frontmatter.Post(body_content, **fm)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(frontmatter.dumps(post))
+
+    print(f"  Generated {output_path}")
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -537,6 +696,7 @@ def main():
 
     source_commit = get_git_commit()
     output_path = output_dir / "report.md"
+    drafts_output_path = output_dir / "drafts.md"
 
     print("Writing report...")
     generate_report(
@@ -545,6 +705,17 @@ def main():
         content_analyses,
         source_commit,
         output_path,
+    )
+
+    print("Scanning drafts and unpublished content...")
+    unpublished_entries = scan_unpublished_content(content_dir)
+    print(f"  Unpublished items: {len(unpublished_entries)}")
+
+    print("Writing drafts report...")
+    generate_unpublished_report(
+        unpublished_entries,
+        source_commit,
+        drafts_output_path,
     )
 
     print("✓ Done!")

@@ -40,7 +40,7 @@
           <details class="nav-group">
             <summary class="nav-group-trigger">Manage</summary>
             <div class="nav-dropdown">
-              <a href="{{ "admin/" | absURL }}" class="nav-link">Admin</a>
+              <a href="{{ "admin/" | absURL }}" class="nav-link" target="_blank" rel="noopener noreferrer">Admin</a>
               <a href="https://github.com/Ashish-Sites/sensemaker-site/actions/workflows/deploy.yml" class="nav-link" target="_blank" rel="noopener noreferrer">Publish</a>
               <a href="{{ "status/" | absURL }}" class="nav-link {{ if hasPrefix $.RelPermalink "/status/" }}active{{ end }}">Status</a>
             </div>

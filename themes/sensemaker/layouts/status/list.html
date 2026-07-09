@@ -1,11 +1,13 @@
 {{ define "content" }}
 {{/* Redirect /status/ straight to the single report page */}}
-{{ range .Pages }}
-  {{ if eq .File.BaseFileName "report" }}
-    <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
-    <script>window.location.href = "{{ .Permalink }}";</script>
-    <p>Redirecting to <a href="{{ .Permalink }}">Status Report</a>…</p>
-    {{ return }}
+{{ if eq (len .Pages) 1 }}
+  {{ range .Pages }}
+    {{ if eq .File.BaseFileName "report" }}
+      <meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+      <script>window.location.href = "{{ .Permalink }}";</script>
+      <p>Redirecting to <a href="{{ .Permalink }}">Status Report</a>…</p>
+      {{ return }}
+    {{ end }}
   {{ end }}
 {{ end }}
 
