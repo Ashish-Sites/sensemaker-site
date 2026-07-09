@@ -1,0 +1,7 @@
+{{ $sectionPage := site.GetPage "section" .Section }}
+{{ if $sectionPage }}
+  <a class="section-back-link" href="{{ $sectionPage.RelPermalink }}" aria-label="Back to {{ $sectionPage.Title }}">
+    <span class="section-back-link-arrow" aria-hidden="true">&larr;</span>
+    <span>Back to {{ $sectionPage.Title }}</span>
+  </a>
+{{ end }}

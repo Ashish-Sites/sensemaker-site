@@ -1,6 +1,7 @@
 {{ define "content" }}
 <article class="help-guide">
   <section class="help-hero">
+    {{ partial "section-back-link.html" . }}
     <h1>{{ .Title }}</h1>
     {{ with .Params.description }}
       <p>{{ . }}</p>
