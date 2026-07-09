@@ -58,7 +58,7 @@ Runs on pull requests to `main` (and manually on demand). Does not deploy. Fails
 Steps:
 1. Checkout repository
 2. Install Hugo
-3. Run `scripts/build-with-validation.ps1` (taxonomy check → content quality check → Hugo build → built-link check)
+3. Run `scripts/build-with-validation.ps1` (taxonomy check → optional content quality check → Hugo build → optional built-link check)
 4. Verify `public/` directory exists
 
 ### deploy.yml
@@ -94,11 +94,11 @@ cd C:\projects\wiki-site
 powershell -File .\scripts\build-with-validation.ps1 -BaseUrl "https://ashish-sites.github.io/sensemaker-site/" -OutputDir "public"
 ```
 
-This runs the same four-stage pipeline that CI runs:
+This runs the same current pipeline that CI runs:
 1. Taxonomy validation
-2. Content quality validation
+2. Optional content quality validation if `scripts/validate-content-quality.ps1` exists
 3. Hugo build
-4. Built-link validation on generated HTML
+4. Optional built-link validation on generated HTML if `scripts/validate-built-links.ps1` exists
 
 ---
 

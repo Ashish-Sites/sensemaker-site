@@ -112,10 +112,9 @@ Validation scripts:
 
 1. scripts/validate-taxonomy.ps1
    Ensures taxonomy structure, canonical term files, and required entry_type values.
-2. scripts/validate-content-quality.ps1
-   Enforces markdown/content invariants such as balanced fences and image/link safety rules.
-3. scripts/validate-built-links.ps1
-   Scans generated HTML in public and fails on broken internal href/src references.
+2. build-with-validation.ps1 can optionally invoke scripts/validate-content-quality.ps1 if that validator is present.
+3. build-with-validation.ps1 can optionally invoke scripts/validate-built-links.ps1 if that validator is present.
+4. Hugo build itself remains a required gate and fails on template/content errors.
 
 Validation philosophy:
 
@@ -132,9 +131,9 @@ Single entrypoint:
 Execution order:
 
 1. Taxonomy validation.
-2. Content-quality validation.
+2. Optional content-quality validation when script is present.
 3. Hugo production build.
-4. Built-link validation.
+4. Optional built-link validation when script is present.
 
 CI wiring:
 
@@ -151,7 +150,7 @@ CI wiring:
 ## Trade-Offs
 
 1. Strong validation may occasionally block deploys for minor issues, but reduces production regressions.
-2. Built-link checks focus on internal assets/routes and do not validate remote URL uptime.
+2. Optional validators can be absent without breaking deploys, but that reduces the strength of the release gate.
 3. Sticky side-panel behavior optimizes readability but uses JS measurement logic for robustness.
 
 ## Extension Points

@@ -58,8 +58,6 @@ wiki-site/
 │   └── help/
 ├── scripts/                     # Build/validation scripts
 │   ├── validate-taxonomy.ps1
-│   ├── validate-content-quality.ps1
-│   ├── validate-built-links.ps1
 │   └── build-with-validation.ps1
 ├── themes/
 │   └── sensemaker/              # Custom minimal theme
@@ -247,14 +245,16 @@ Related investigations appear as a linked list at the bottom of each page with t
 
 ## Build Validation Pipeline
 
-The build pipeline includes three validation gates before deployment:
+The current build pipeline has one implemented hard validation gate before deployment and two optional hook points:
 
 1. `scripts/validate-taxonomy.ps1`
   Checks taxonomy integrity (required `_index.md` files, canonical term files, and required `entry_type`).
-2. `scripts/validate-content-quality.ps1`
-  Checks markdown quality rules (balanced fences, safe root links, image references, and investigation template ordering).
-3. `scripts/validate-built-links.ps1`
-  Checks generated HTML in `public/` for broken internal links and missing assets.
+2. Optional content-quality validator
+  `scripts/build-with-validation.ps1` will run `scripts/validate-content-quality.ps1` if that script is later added.
+3. Optional built-link validator
+  `scripts/build-with-validation.ps1` will run `scripts/validate-built-links.ps1` if that script is later added.
+4. Hugo production build
+  Generates the final site into `public/`.
 
 Run the full local pipeline with one command:
 
