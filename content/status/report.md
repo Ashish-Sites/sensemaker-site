@@ -2,8 +2,8 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-07-09T16:11:16+05:30'
-source_commit: 69670521bba74673a87054be2212eb4e3c42c321
+generated_at: '2026-07-12T08:57:12+05:30'
+source_commit: 7be3e749162393c17448916a970c283d857b00be
 title: Status Report
 ---
 
@@ -31,26 +31,24 @@ None found.
 
 ## Content Analysis
 
-*Preserved from the most recent successful Gemini-backed run because this run had no available Gemini client.*
-
 Per-item analysis: does the content match its title? What is its tone? What does it actually say?
 
 ### Investigations
 
 #### [Direction of my career](/investigations/direction-of-my-career/)
 
-**Title match:** ✓ Good — The body directly addresses the current dissatisfaction with the direction of the author's career, perfectly aligning with the title and description.
+**Title match:** ✓ Good — The body directly addresses the direction of the author's career and their dissatisfaction with it, perfectly aligning with the title and description.
 
-**Tone:** reflective, concerned
+**Tone:** reflective, concerned, personal
 
-**Summary:** The author is expressing deep unhappiness and dissatisfaction with the current trajectory of their career. They feel they have lost sight of their long-term career goals or 'north star', prompting a personal reflection on this misalignment.
+**Summary:** The author is expressing significant dissatisfaction with the current direction their career is heading. They feel a sense of having lost their guiding purpose or 'north star' and are unhappy with its present trajectory.
 
 ### Articles
 
 #### [The north start of my career](/articles/the-north-start-of-my-career/)
 
-**Title match:** ❌ Poor — The body only expresses a desire for a north star, rather than defining or discussing it.
+**Title match:** ✓ Good — The body directly states the intention of finding a career north star, aligning perfectly with the title and description.
 
-**Tone:** Exploratory, searching
+**Tone:** Uncertain, seeking direction
 
-**Summary:** This piece is a short, direct response acknowledging the need for career direction. The author explicitly states their desire to find a guiding "north star" for their professional path, indicating a current state of uncertainty about their future.
+**Summary:** This piece expresses the author's current lack of clear direction in their career. They are actively seeking a guiding 'north star' to help them determine their future professional path.
