@@ -2,8 +2,8 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-07-26T08:58:40+05:30'
-source_commit: 55adb96665a46558ccd305aabbee01e2a6ca3272
+generated_at: '2026-08-02T08:56:35+05:30'
+source_commit: 5c1e59f71ad53ba68da994b0807d90319afb484a
 title: Status Report
 ---
 
@@ -37,18 +37,18 @@ Per-item analysis: does the content match its title? What is its tone? What does
 
 #### [Direction of my career](/investigations/direction-of-my-career/)
 
-**Title match:** ✓ Good — The body directly addresses the title and description by expressing dissatisfaction with the current career direction.
+**Title match:** ✓ Good — The body directly addresses the dissatisfaction with the current direction of the author's career, aligning perfectly with the title and description.
 
-**Tone:** reflective, concerned, self-critical
+**Tone:** reflective, concerned, personal
 
-**Summary:** This piece expresses the author's unhappiness and concern regarding the current direction of their career. They feel they have lost their guiding purpose, metaphorically stating they've 'missed the north star'.
+**Summary:** This piece expresses the author's growing unhappiness with their career's current direction. They feel a sense of having lost their guiding purpose, likening it to missing their 'north star'.
 
 ### Articles
 
 #### [The north start of my career](/articles/the-north-start-of-my-career/)
 
-**Title match:** ✓ Good — The body directly states the need to find a 'north star,' perfectly aligning with the title and description's aim of figuring out a career direction.
+**Title match:** ✓ Good — The body directly articulates the user's quest to find the 'north star' mentioned in the title and description, aligning perfectly with the stated intent.
 
-**Tone:** direct, concise, seeking
+**Tone:** seeking, direct, concise
 
-**Summary:** This piece serves as a very brief declaration of the author's immediate need to identify a clear 'north star' for their career. It articulates a fundamental desire to find direction amidst current professional uncertainty.
+**Summary:** This brief entry directly responds to a career question by stating the author's current imperative. It concisely expresses a fundamental need to identify a clear, guiding direction or 'north star' for their professional journey.
