@@ -2,8 +2,8 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-09-06T09:24:46+05:30'
-source_commit: 996e184a612deed7e30b2e6d03fe600611459774
+generated_at: '2026-09-20T09:49:51+05:30'
+source_commit: fa1cfe584c9dee9ac228c7a26c97b4ca20ad0892
 title: Status Report
 ---
 
@@ -27,8 +27,8 @@ Links declared in one direction but not reciprocated:
 
 Not updated for 30+ days:
 
-- [Direction of my career](/investigations/direction-of-my-career/) — last updated 2026-07-08 (60 days ago)
-- [The north start of my career](/articles/the-north-start-of-my-career/) — last updated 2026-07-08 (60 days ago)
+- [Direction of my career](/investigations/direction-of-my-career/) — last updated 2026-07-08 (74 days ago)
+- [The north start of my career](/articles/the-north-start-of-my-career/) — last updated 2026-07-08 (74 days ago)
 
 ---
 
@@ -40,18 +40,18 @@ Per-item analysis: does the content match its title? What is its tone? What does
 
 #### [Direction of my career](/investigations/direction-of-my-career/)
 
-**Title match:** ✓ Good — The body directly states dissatisfaction with the direction the career is taking, aligning perfectly with the title and description.
+**Title match:** ✓ Good — The body directly addresses the stated title and description by expressing dissatisfaction with the current career direction.
 
 **Tone:** Reflective, concerned, personal
 
-**Summary:** This piece expresses the author's unhappiness and dissatisfaction with the current direction of their career. They feel they have lost their sense of purpose, likening it to missing their "north star."
+**Summary:** The author is expressing significant unhappiness and concern about the current trajectory of their career. They feel they have deviated from their core objectives or 'north star' and are reflecting on this deviation.
 
 ### Articles
 
 #### [The north start of my career](/articles/the-north-start-of-my-career/)
 
-**Title match:** ✓ Good — The body directly articulates the need to find a 'north star,' fulfilling the premise set by the title and description.
+**Title match:** ✓ Good — The body perfectly articulates the central theme presented in the title and description: the author's quest for a guiding direction in their career.
 
-**Tone:** exploratory, searching, reflective
+**Tone:** seeking, concise, direct
 
-**Summary:** This brief entry expresses the author's current struggle to define a clear direction or 'north star' for their professional life. It highlights a personal quest to find purpose and guidance within their career path, responding to a fundamental question about their future trajectory.
+**Summary:** This very brief piece is a direct response to a question about career trajectory. The author clearly states their current predicament, expressing an urgent need to identify a defining 'north star' to guide their professional path.
