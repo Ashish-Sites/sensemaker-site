@@ -2,8 +2,8 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-09-20T09:49:51+05:30'
-source_commit: fa1cfe584c9dee9ac228c7a26c97b4ca20ad0892
+generated_at: '2026-09-27T10:10:57+05:30'
+source_commit: 5d40f0bb1756f2c42aed4552e2b56e7626486bc6
 title: Drafts and Unpublished Content
 ---
 
