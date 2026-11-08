@@ -2,8 +2,8 @@
 draft: false
 entry_type: status
 generated: true
-generated_at: '2026-11-01T10:52:51+05:30'
-source_commit: a3897bda2241eda4a9d8a6d1963e4894dc06dad4
+generated_at: '2026-11-08T10:55:51+05:30'
+source_commit: 2349a47c263100efdf000a358df88b6302380d4b
 title: Status Report
 ---
 
@@ -27,8 +27,8 @@ Links declared in one direction but not reciprocated:
 
 Not updated for 30+ days:
 
-- [Direction of my career](/investigations/direction-of-my-career/) — last updated 2026-07-08 (116 days ago)
-- [The north start of my career](/articles/the-north-start-of-my-career/) — last updated 2026-07-08 (116 days ago)
+- [Direction of my career](/investigations/direction-of-my-career/) — last updated 2026-07-08 (123 days ago)
+- [The north start of my career](/articles/the-north-start-of-my-career/) — last updated 2026-07-08 (123 days ago)
 
 ---
 
@@ -40,18 +40,18 @@ Per-item analysis: does the content match its title? What is its tone? What does
 
 #### [Direction of my career](/investigations/direction-of-my-career/)
 
-**Title match:** ✓ Good — The body directly addresses the author's dissatisfaction with their career direction, fully aligning with the title and description.
+**Title match:** ✓ Good — The body directly addresses the dissatisfaction with the current direction of the author's career, aligning perfectly with the title and description.
 
-**Tone:** reflective, concerned
+**Tone:** reflective, concerned, personal
 
-**Summary:** The author expresses a strong sense of dissatisfaction and unhappiness with the current trajectory of their career. They feel they have lost sight of their ultimate career goals, likening this to missing a 'north star'.
+**Summary:** The author expresses deep dissatisfaction with their career's current trajectory, feeling they have lost sight of their primary goals or 'north star.' This piece is a reflection on their current unhappiness and a recognition that their career is not progressing in a desired direction.
 
 ### Articles
 
 #### [The north start of my career](/articles/the-north-start-of-my-career/)
 
-**Title match:** ❌ Poor — The title suggests the piece will define a 'north star,' but the body merely states a need to find one without any exploration or definition.
+**Title match:** ✓ Good — The body perfectly aligns with the title and description, as it expresses the writer's need to find their career's north star.
 
-**Tone:** aspirational, unformed
+**Tone:** exploratory, uncertain, seeking
 
-**Summary:** This piece expresses a personal need to identify a clear direction or 'north star' for the author's career. It highlights a current state of uncertainty regarding future professional path, indicating a desire for guidance and purpose.
+**Summary:** This short piece responds to a question about career direction, expressing the author's current state of uncertainty. It highlights a clear need to identify a guiding 'north star' for their professional path.
